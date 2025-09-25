@@ -1,4 +1,5 @@
 [![CI Status](https://github.com/AY2526S1-CS2103T-T08-2/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2526S1-CS2103T-T08-2/tp/workflows/Java%20CI/badge.svg)
+[![codecov](https://codecov.io/gh/AY2526S1-CS2103T-T08-2/tp/graph/badge.svg?token=9LRCCBVF2H)](https://codecov.io/gh/AY2526S1-CS2103T-T08-2/tp)
 
 # OnlySales
 
@@ -8,13 +9,13 @@
 
 ### Minimal Viable Product
 
-- **Add Customer** - Add new customer contact information
-- **Edit Customer** - Edit existing customer information  
-- **Delete Customer** - Delete the customer from the app
-- **List Customer** - View all customers
-- **Set Status** - Update customer contact status (eg. uncontacted, rejected, etc.)
-- **Find Customer** - Search by tag, status, or name
-- **Create Email Template** - Generate email templates to copy for communication
+* **Add Customer** - Add new customer contact information
+* **Edit Customer** - Edit existing customer information  
+* **Delete Customer** - Delete the customer from the app
+* **List Customer** - View all customers
+* **Set Status** - Update customer contact status (eg. uncontacted, rejected, etc.)
+* **Find Customer** - Search by tag, status, or name
+* **Create Email Template** - Generate email templates to copy for communication
 
 ## Documentation
 
