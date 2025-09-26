@@ -51,11 +51,10 @@ public class AppParameters {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AppParameters)) {
+        if (!(other instanceof AppParameters otherAppParameters)) {
             return false;
         }
 
-        AppParameters otherAppParameters = (AppParameters) other;
         return Objects.equals(configPath, otherAppParameters.configPath);
     }
 

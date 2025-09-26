@@ -35,7 +35,7 @@ public class PersonTest {
 
         // same name, all other attributes different -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
-                .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
+                                     .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
         // different name, all other attributes same -> returns false
@@ -47,7 +47,8 @@ public class PersonTest {
         assertFalse(BOB.isSamePerson(editedBob));
 
         // name has trailing spaces, all other attributes same -> returns false
-        String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
+        String nameWithTrailingSpaces = VALID_NAME_BOB
+                                                + " ";
         editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).build();
         assertFalse(BOB.isSamePerson(editedBob));
     }
@@ -93,8 +94,21 @@ public class PersonTest {
 
     @Test
     public void toStringMethod() {
-        String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags() + ", remark=" + ALICE.getRemark() + "}";
+        String expected = Person.class.getCanonicalName()
+                                  + "{name="
+                                  + ALICE.getName()
+                                  + ", phone="
+                                  + ALICE.getPhone()
+                                  + ", email="
+                                  + ALICE.getEmail()
+                                  + ", address="
+                                  + ALICE.getAddress()
+                                  + ", tags="
+                                  + ALICE.getTags()
+                                  +
+                                  ", remark="
+                                  + ALICE.getRemark()
+                                  + "}";
         assertEquals(expected, ALICE.toString());
     }
 }
