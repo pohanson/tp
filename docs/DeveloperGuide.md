@@ -277,14 +277,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
 | -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| `* * *`  | salesperson                               | add contacts                   | see their details in the future                                       |
+| `* * *`  | salesperson                               | add multiple contacts from the team IC easily | see their details in the future                          |
+| `* * *`  | salesperson                               | delete contacts                | don't over clutter my contact book                                     |
+| `* * *`  | careless salesperson                      | edit typos                     | ensure the data is accurate                                            |
+| `* * *`  | salesperson                               | search by name                 | easily find by name due to the large number of contacts               |
+| `* * *`  | salesperson                               | list all contacts              | know what contacts I have saved                                        |
+| `* * *`  | forgetful user                            | autosave edits                 | data won't be lost if I forget to save it                            |
+| `* *`    | salesperson                               | delete multiple contact        | ensure that PDPA retention limitation is adhered to                   |
+| `* *`    | salesperson team IC                       | export and share the contacts I have with others easily | don't need my team to use each others' accounts |
+| `* *`    | salesperson                               | set priority level to each contact | see which contact has a higher priority for my sales             |
+| `* *`    | salesperson                               | add labels to contacts         | categorise them for filtering                                          |
+| `* *`    | salesperson                               | search by labels               | easily find by labels due to the large number of contacts             |
+| `* *`    | salesperson                               | filter by priority level       | see all clients of each priority level                                |
+| `* *`    | salesperson                               | filter by labels               | see all clients of each label                                          |
+| `* *`    | salesperson                               | add notes for each contact     | remember some particular characteristics that they have                |
+| `* *`    | careless salesperson                      | edit notes for each contact    | the data would be correct and updated                                  |
+| `* *`    | salesperson                               | view all previous messages sent to a customer | prevent myself from spamming or unnecessarily messaging them |
+| `* *`    | salesperson                               | check history of customer purchases | better choose products to recommend that the customer will be more likely to purchase again |
+| `*`      | salesperson                               | save the contacts to my phone book | access them easily                                                |
+| `*`      | salesperson                               | copy the contact number to call directly | not make mistake in keying the wrong phone number           |
+| `*`      | lazy salesperson                          | add contacts from .vcf files  | don't need to add existing contacts one-by-one                        |
+| `*`      | lazy salesperson                          | copy a preformatted template message | it is efficient                                              |
+| `*`      | lazy salesperson                          | copy a preformatted message based on certain tags the user has | it sounds personalised          |
+| `*`      | salesperson                               | create templates that can be sent to a particular type of customer | save time from writing up the same outreach materials over and over again |
+| `*`      | salesperson team IC                       | edit a preformatted message    | edit the message when needed                                           |
+| `*`      | salesperson                               | tag each customer              | better remember what preference the customer has                       |
+| `*`      | salesperson                               | find a way to quickly identify clients who have been called and rejected | wouldn't waste time calling them again |
+| `*`      | busy salesperson                          | find a way to quickly mark clients based on how receptive they are | focus my limited time on those likely to buy the product |
+| `*`      | salesperson team IC                       | view statistic of how the members are performing easily | adjust their provide targeted training if need be |
+| `*`      | salesperson                               | view a list of my clients that respond the fastest | focus on clients that have the highest conversion rates |
+| `*`      | salesperson                               | set reminders for follow-up    | remember to get back to customers who were not available to speak at the time of contact, but wish to know more when they are free |
 
 ### Use cases
 
