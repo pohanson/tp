@@ -288,32 +288,246 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+#### Use case: UC01 - Add new customer  
 
-**Use case: Delete a person**
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative  
 
-**MSS**
+**Guarantees:**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+* Customer is created only if all required fields are valid.
+* On validation error, no customers are added.
 
-    Use case ends.
+**MSS:**
 
-**Extensions**
+1. Sales representative chooses to add a new customer.
+2. Sales representative enters the add command with customer details.
+3. Sales representative submits the command.
+4. CMS validates the details.
+5. CMS creates the customer and displays a confirmation message.  
+   Use case ends.
 
-* 2a. The list is empty.
+**Extensions:**  
 
-  Use case ends.
+4a. CMS detects an error in the entered data.  
+   4a1. CMS indicates an error has happened.  
+   Use case resumes from step 2.
 
-* 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+#### Use case: UC02 - Add multiple customers
 
-      Use case resumes at step 2.
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
 
-*{More to be added}*
+**Guarantees:**
+
+* If any entry is invalid, none of the customers are added.
+* No existing customers are modified by this operation.
+
+**MSS:**
+
+1. Sales representative chooses to import many customers.
+2. Sales representative enters the add command with multiple customers separated by "|||", then submits the command.
+3. CMS validates all entries.
+4. CMS creates the customers and displays a summary confirmation.  
+   Use case ends.
+
+**Extensions:**  
+
+3a. CMS detects an error in the entered data.  
+   3a1. CMS indicates an error has happened.  
+   Use case resumes from step 2.
+
+
+#### Use case: UC03 - List all customers
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Listing does not modify any data.
+* The latest saved state of customers is displayed.
+
+**MSS:**
+
+1. Sales representative chooses to view all customers.
+2. Sales representative enters the list command.
+3. CMS displays all customers.  
+   Use case ends.
+
+**Extensions:**
+
+3a. The customer list is empty.  
+   3a1. CMS indicates that no customers are found.
+   Use case ends.
+
+
+#### Use case: UC04 - Find customer by name
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Search does not modify customer data.
+
+**MSS:**
+
+1. Sales representative chooses to find a specific customer by name.
+2. Sales representative enters the search command.
+3. CMS searches for customers whose names contain the keyword(s) (case-insensitive).
+4. CMS displays the matching customers.  
+   Use case ends.
+
+**Extensions:**
+
+3a. No customers match the search criteria.  
+   3a1. CMS indicates that no customers are found.  
+   Use case ends.
+
+
+#### Use case: UC05 - Find customer by status
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Filtering does not modify customer data.
+
+**MSS:**
+
+1. Sales representative chooses to find customers by status.
+2. Sales representative specifies the status.
+3. CMS searches for customers with the specified status.
+4. CMS displays the matching customers.  
+   Use case ends.
+
+**Extensions:**
+
+2a. The specified status does not exist.  
+   2a1. CMS indicates that an error has happened.  
+   Use case ends.
+
+4a. No customers match the specified status.  
+   4a1. CMS indicates that no customers are found.  
+   Use case ends.
+
+
+#### Use case: UC06 - Create email template
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Generating a template or preview does not modify any customer records.
+* If template input is canceled, no template content is saved or applied.
+
+**MSS:**
+
+1. Sales representative chooses to create an email template.
+2. Sales representative specifies the target tag(s) and/or status.
+3. CMS prompts for the email content.
+4. Sales representative enters the email template and submits.
+5. CMS saves the personalised email template.  
+   Use case ends.
+
+**Extensions:**
+
+*a. At any time during template input, Sales representative chooses to cancel his input.  
+   *a1. CMS requests confirmation of the cancellation.  
+   *a2. Sales representative confirms the cancellation.  
+   Use case ends.
+
+
+#### Use case: UC07 - Edit customer
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Only the specified fields are updated, the other fields remain unchanged.
+* On validation error, no changes are applied.
+
+**MSS:**
+
+1. Sales representative chooses to edit a customer's information.
+2. Sales representative specifies the customer ID and fields to edit.
+3. CMS validates the updated details.
+4. CMS updates the customer information.  
+   Use case ends.
+
+**Extensions:**
+
+2a. The specified customer ID does not exist.  
+   2a1. CMS indicates that an error has happened.    
+   Use case resumes from step 2.
+
+3a. CMS detects an error in the entered data.  
+   3a1. CMS indicates that an error has happened.    
+   Use case resumes from step 2.
+
+
+#### Use case: UC08 - Delete customer
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Deletion removes only the specified customer without modifying other data.
+* Deletion is irreversible once confirmed.
+* On failure, no deletion occurs.
+
+**MSS:**
+
+1. Sales representative chooses to delete a customer.
+2. Sales representative specifies the customer ID to delete.
+3. CMS deletes the customer and displays a confirmation.  
+   Use case ends.
+
+**Extensions:**
+
+3a. The given customer ID is invalid.  
+   3a1. CMS indicates that an error has happened.  
+   Use case resumes at step 2.
+
+3b. CMS requests for confirmation before deletion.  
+   3b1. Sales representative confirms the deletion.  
+   3b2. CMS proceeds with deletion.  
+   Use case ends.
+
+
+#### Use case: UC09 - Set customer status
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* If an invalid status is provided, no changes are made.
+
+**MSS:**
+
+1. Sales representative chooses to update a customer's status.
+2. Sales representative specifies the customer ID and new status.
+3. CMS validates the customer ID and status.
+4. CMS updates the customer's status and displays a confirmation message.  
+   Use case ends.
+
+**Extensions:**
+
+2b. No status is specified.  
+   2b1. CMS indicates that an error has happened.  
+   Use case ends.
+
+3a. The specified status is invalid.  
+   3a1. CMS indicates that an error has happened.  
+   Use case ends.
+
 
 ### Non-Functional Requirements
 
