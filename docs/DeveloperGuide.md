@@ -277,12 +277,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
 | -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
+| `* * *`  | salesperson                               | add a new customer             | track potential leads and their contact information                     |
+| `* * *`  | salesperson                               | add multiple customers at once | efficiently import many contacts assigned by my sales manager          |
+| `* * *`  | salesperson                               | edit customer information      | keep customer data accurate and up-to-date                            |
+| `* * *`  | salesperson                               | delete a customer              | remove contacts I no longer need to reduce clutter                     |
+| `* * *`  | salesperson                               | list all customers             | view all my contacts and scroll through them                          |
+| `* * *`  | salesperson                               | find customers by name         | quickly locate specific customers without searching the entire list     |
+| `* * *`  | salesperson                               | find customers by tag          | filter customers based on product categories or characteristics         |
+| `* * *`  | salesperson                               | find customers by status       | focus on customers at specific stages of the sales process             |
+| `* * *`  | salesperson                               | set customer status            | track whether customers have been contacted, rejected, or accepted      |
+| `* * *`  | salesperson                               | create email templates         | send consistent messages to customers with similar characteristics      |
+| `* *`    | salesperson                               | categorize customers with tags | organize customers by product interest or other characteristics         |
+| `* *`    | salesperson                               | add jottings to customers      | remember additional context about each customer                        |
+| `* *`    | salesperson                               | use keyboard-only commands     | work more efficiently than using mouse-driven interfaces              |
+| `*`      | salesperson with many customers           | remove tags from customers     | clean up outdated or incorrect categorizations                        |
 
 *{More to be added}*
 
