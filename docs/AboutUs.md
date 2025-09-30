@@ -57,3 +57,13 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: UI
+
+### Zhao Ruixuan
+
+<img src="images/rotarykirby.png" width="200px">
+
+[[github](http://github.com/rotarykirby)]
+[[portfolio](team/rotarykirby.md)]
+
+* Role: Developer
+* Responsibilities: UI
