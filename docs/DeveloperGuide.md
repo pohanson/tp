@@ -262,14 +262,48 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+- Sales representatives who manage a large number of leads/customers
+- Prefer desktop apps over other types
+- Can type fast and prefer typing to mouse interactions for efficiency
+- Need to categorize leads by tags and track sales-specific statuses (e.g., Contacted, Rejected, Accepted)
+- Occasionally need to import many contacts at once (e.g., from sales manager assignments)
+- Are reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: An address book tailored for salespeople to manage contacts significantly faster than a typical mouse/GUI driven app, with support for bulk additions, powerful filtering by name/tag/status, status tracking to streamline outreach workflows, and templated email generation for selected customer cohorts.
 
+**Key features**:
+
+- Add Customer: Add single or multiple customers in one command
+- Edit Customer: Update any field, add/remove tags, set status
+- Delete Customer: Remove customers by index
+- List Customer: Display all customers
+- Find Customer: Filter by name, tag, and/or status (case-insensitive, exact match)
+- Create Email Template: Generate email templates for selected tag/status cohorts
+- Set Status: Quickly update a customer's status
+
+**Command format conventions**:
+
+- Named parameters use `key:value` format and may appear in any order
+- Optional parameters are denoted with square brackets `[]`
+- Repeating parameters are denoted with `...`
+- Leading/trailing whitespace is trimmed for all fields
+- Each named parameter continues till the end of the line or till another parameter
+
+**Field validations**:
+
+- Phone number: Must contain only digits and `+`
+- Email: Must contain `@` symbol
+- Status: Must be one of the valid statuses (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted)
+- Name and Address: No validation to allow flexibility
+
+**Valid customer statuses**:
+
+- **Uncontacted**: Default status when a customer is added (indicates not yet contacted)
+- **Contacted**: Customer has been contacted
+- **Rejected**: Customer has rejected the sale
+- **Accepted**: Customer has accepted the sale
+- **Unreachable**: Customer could not be reached
+- **Busy**: Customer is busy and should be contacted later
 
 ### User stories
 
