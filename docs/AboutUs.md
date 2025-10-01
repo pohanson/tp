@@ -19,7 +19,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 - Role: Project Advisor
 
-### Jane Doe
+### Sean Richardson Hardjanto
 
 <img src="images/seanrh34.png" width="200px">
 
@@ -29,7 +29,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 - Role: Team Lead
 - Responsibilities: UI
 
-### Johnny Doe
+### Nihaal Manaf
 
 <img src="images/nihaalmanaf.png" width="200px">
 
@@ -54,6 +54,16 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](http://github.com/pohanson)]
 [[portfolio](team/pohanson.md)]
+
+- Role: Developer
+- Responsibilities: UI
+
+### Zhao Ruixuan
+
+<img src="images/rotarykirby.png" width="200px">
+
+[[github](http://github.com/rotarykirby)]
+[[portfolio](team/rotarykirby.md)]
 
 - Role: Developer
 - Responsibilities: UI
