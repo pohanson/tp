@@ -345,10 +345,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-#### Use case: UC01 - Add new customer  
+#### Use case: UC01 - Add new customer<br/>
 
-**System:** Customer Management System (CMS)  
-**Actor:** Sales Representative  
+**System:** Customer Management System (CMS)
+
+**Actor:** Sales Representative<br/>
 
 **Guarantees:**
 
@@ -361,19 +362,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. Sales representative enters the add command with customer details.
 3. Sales representative submits the command.
 4. CMS validates the details.
-5. CMS creates the customer and displays a confirmation message.  
+5. CMS creates the customer and displays a confirmation message.<br/>
    Use case ends.
 
-**Extensions:**  
+**Extensions:**<br/>
 
-4a. CMS detects an error in the entered data.  
-   4a1. CMS indicates an error has happened.  
+4a. CMS detects an error in the entered data.<br/>
+   4a1. CMS indicates an error has happened.<br/>
    Use case resumes from step 2.
 
 
 #### Use case: UC02 - Add multiple customers
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -386,19 +388,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. Sales representative chooses to import many customers.
 2. Sales representative enters the add command with multiple customers separated by "|||", then submits the command.
 3. CMS validates all entries.
-4. CMS creates the customers and displays a summary confirmation.  
+4. CMS creates the customers and displays a summary confirmation.<br/>
    Use case ends.
 
-**Extensions:**  
+**Extensions:**<br/>
 
-3a. CMS detects an error in the entered data.  
-   3a1. CMS indicates an error has happened.  
+3a. CMS detects an error in the entered data.<br/>
+   3a1. CMS indicates an error has happened.<br/>
    Use case resumes from step 2.
 
 
 #### Use case: UC03 - List all customers
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -410,19 +413,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. Sales representative chooses to view all customers.
 2. Sales representative enters the list command.
-3. CMS displays all customers.  
+3. CMS displays all customers.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. The customer list is empty.  
+3a. The customer list is empty.<br/>
    3a1. CMS indicates that no customers are found.
    Use case ends.
 
 
 #### Use case: UC04 - Find customer by name
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -434,19 +438,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. Sales representative chooses to find a specific customer by name.
 2. Sales representative enters the search command.
 3. CMS searches for customers whose names contain the keyword(s) (case-insensitive).
-4. CMS displays the matching customers.  
+4. CMS displays the matching customers.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. No customers match the search criteria.  
-   3a1. CMS indicates that no customers are found.  
+3a. No customers match the search criteria.<br/>
+   3a1. CMS indicates that no customers are found.<br/>
    Use case ends.
 
 
 #### Use case: UC05 - Find customer by status
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -458,23 +463,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. Sales representative chooses to find customers by status.
 2. Sales representative specifies the status.
 3. CMS searches for customers with the specified status.
-4. CMS displays the matching customers.  
+4. CMS displays the matching customers.<br/>
    Use case ends.
 
 **Extensions:**
 
-2a. The specified status does not exist.  
-   2a1. CMS indicates that an error has happened.  
+2a. The specified status does not exist.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
-4a. No customers match the specified status.  
-   4a1. CMS indicates that no customers are found.  
+4a. No customers match the specified status.<br/>
+   4a1. CMS indicates that no customers are found.<br/>
    Use case ends.
 
 
 #### Use case: UC06 - Create email template
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -488,20 +494,21 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. Sales representative specifies the target tag(s) and/or status.
 3. CMS prompts for the email content.
 4. Sales representative enters the email template and submits.
-5. CMS saves the personalised email template.  
+5. CMS saves the personalised email template.<br/>
    Use case ends.
 
 **Extensions:**
 
-*a. At any time during template input, Sales representative chooses to cancel his input.  
-   *a1. CMS requests confirmation of the cancellation.  
-   *a2. Sales representative confirms the cancellation.  
+*a. At any time during template input, Sales representative chooses to cancel his input.<br/>
+   *a1. CMS requests confirmation of the cancellation.<br/>
+   *a2. Sales representative confirms the cancellation.<br/>
    Use case ends.
 
 
 #### Use case: UC07 - Edit customer
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -514,23 +521,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. Sales representative chooses to edit a customer's information.
 2. Sales representative specifies the customer ID and fields to edit.
 3. CMS validates the updated details.
-4. CMS updates the customer information.  
+4. CMS updates the customer information.<br/>
    Use case ends.
 
 **Extensions:**
 
-2a. The specified customer ID does not exist.  
-   2a1. CMS indicates that an error has happened.    
+2a. The specified customer ID does not exist.<br/>
+   2a1. CMS indicates that an error has happened.  <br/>
    Use case resumes from step 2.
 
-3a. CMS detects an error in the entered data.  
-   3a1. CMS indicates that an error has happened.    
+3a. CMS detects an error in the entered data.<br/>
+   3a1. CMS indicates that an error has happened.  <br/>
    Use case resumes from step 2.
 
 
 #### Use case: UC08 - Delete customer
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -543,24 +551,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. Sales representative chooses to delete a customer.
 2. Sales representative specifies the customer ID to delete.
-3. CMS deletes the customer and displays a confirmation.  
+3. CMS deletes the customer and displays a confirmation.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. The given customer ID is invalid.  
-   3a1. CMS indicates that an error has happened.  
+3a. The given customer ID is invalid.<br/>
+   3a1. CMS indicates that an error has happened.<br/>
    Use case resumes at step 2.
 
-3b. CMS requests for confirmation before deletion.  
-   3b1. Sales representative confirms the deletion.  
-   3b2. CMS proceeds with deletion.  
+3b. CMS requests for confirmation before deletion.<br/>
+   3b1. Sales representative confirms the deletion.<br/>
+   3b2. CMS proceeds with deletion.<br/>
    Use case ends.
 
 
 #### Use case: UC09 - Set customer status
 
-**System:** Customer Management System (CMS)  
+**System:** Customer Management System (CMS)
+
 **Actor:** Sales Representative
 
 **Guarantees:**
@@ -572,17 +581,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. Sales representative chooses to update a customer's status.
 2. Sales representative specifies the customer ID and new status.
 3. CMS validates the customer ID and status.
-4. CMS updates the customer's status and displays a confirmation message.  
+4. CMS updates the customer's status and displays a confirmation message.<br/>
    Use case ends.
 
 **Extensions:**
 
-2b. No status is specified.  
-   2b1. CMS indicates that an error has happened.  
+2b. No status is specified.<br/>
+   2b1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
-3a. The specified status is invalid.  
-   3a1. CMS indicates that an error has happened.  
+3a. The specified status is invalid.<br/>
+   3a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
 
