@@ -262,14 +262,48 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+- Sales representatives who manage a large number of leads/customers
+- Prefer desktop apps over other types
+- Can type fast and prefer typing to mouse interactions for efficiency
+- Need to categorize leads by tags and track sales-specific statuses (e.g., Contacted, Rejected, Accepted)
+- Occasionally need to import many contacts at once (e.g., from sales manager assignments)
+- Are reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: An address book tailored for salespeople to manage contacts significantly faster than a typical mouse/GUI driven app, with support for bulk additions, powerful filtering by name/tag/status, status tracking to streamline outreach workflows, and templated email generation for selected customer cohorts.
 
+**Key features**:
+
+- Add Customer: Add single or multiple customers in one command
+- Edit Customer: Update any field, add/remove tags, set status
+- Delete Customer: Remove customers by index
+- List Customer: Display all customers
+- Find Customer: Filter by name, tag, and/or status (case-insensitive, exact match)
+- Create Email Template: Generate email templates for selected tag/status cohorts
+- Set Status: Quickly update a customer's status
+
+**Command format conventions**:
+
+- Named parameters use `key:value` format and may appear in any order
+- Optional parameters are denoted with square brackets `[]`
+- Repeating parameters are denoted with `...`
+- Leading/trailing whitespace is trimmed for all fields
+- Each named parameter continues till the end of the line or till another parameter
+
+**Field validations**:
+
+- Phone number: Must contain only digits and `+`
+- Email: Must contain `@` symbol
+- Status: Must be one of the valid statuses (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted)
+- Name and Address: No validation to allow flexibility
+
+**Valid customer statuses**:
+
+- **Uncontacted**: Default status when a customer is added (indicates not yet contacted)
+- **Contacted**: Customer has been contacted
+- **Rejected**: Customer has rejected the sale
+- **Accepted**: Customer has accepted the sale
+- **Unreachable**: Customer could not be reached
+- **Busy**: Customer is busy and should be contacted later
 
 ### User stories
 
@@ -277,43 +311,280 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
 | -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| `* * *`  | salesperson                               | add contacts                   | see their details in the future                                       |
+| `* * *`  | salesperson                               | add multiple contacts from the team IC easily | see their details in the future                          |
+| `* * *`  | salesperson                               | delete contacts                | don't over clutter my contact book                                     |
+| `* * *`  | careless salesperson                      | edit typos                     | ensure the data is accurate                                            |
+| `* * *`  | salesperson                               | search by name                 | easily find by name due to the large number of contacts               |
+| `* * *`  | salesperson                               | list all contacts              | know what contacts I have saved                                        |
+| `* * *`  | forgetful user                            | autosave edits                 | data won't be lost if I forget to save it                            |
+| `* *`    | salesperson                               | delete multiple contact        | ensure that PDPA retention limitation is adhered to                   |
+| `* *`    | salesperson team IC                       | export and share the contacts I have with others easily | don't need my team to use each others' accounts |
+| `* *`    | salesperson                               | set priority level to each contact | see which contact has a higher priority for my sales             |
+| `* *`    | salesperson                               | add labels to contacts         | categorise them for filtering                                          |
+| `* *`    | salesperson                               | search by labels               | easily find by labels due to the large number of contacts             |
+| `* *`    | salesperson                               | filter by priority level       | see all clients of each priority level                                |
+| `* *`    | salesperson                               | filter by labels               | see all clients of each label                                          |
+| `* *`    | salesperson                               | add notes for each contact     | remember some particular characteristics that they have                |
+| `* *`    | careless salesperson                      | edit notes for each contact    | the data would be correct and updated                                  |
+| `* *`    | salesperson                               | view all previous messages sent to a customer | prevent myself from spamming or unnecessarily messaging them |
+| `* *`    | salesperson                               | check history of customer purchases | better choose products to recommend that the customer will be more likely to purchase again |
+| `*`      | salesperson                               | save the contacts to my phone book | access them easily                                                |
+| `*`      | salesperson                               | copy the contact number to call directly | not make mistake in keying the wrong phone number           |
+| `*`      | lazy salesperson                          | add contacts from .vcf files  | don't need to add existing contacts one-by-one                        |
+| `*`      | lazy salesperson                          | copy a preformatted template message | it is efficient                                              |
+| `*`      | lazy salesperson                          | copy a preformatted message based on certain tags the user has | it sounds personalised          |
+| `*`      | salesperson                               | create templates that can be sent to a particular type of customer | save time from writing up the same outreach materials over and over again |
+| `*`      | salesperson team IC                       | edit a preformatted message    | edit the message when needed                                           |
+| `*`      | salesperson                               | tag each customer              | better remember what preference the customer has                       |
+| `*`      | salesperson                               | find a way to quickly identify clients who have been called and rejected | wouldn't waste time calling them again |
+| `*`      | busy salesperson                          | find a way to quickly mark clients based on how receptive they are | focus my limited time on those likely to buy the product |
+| `*`      | salesperson team IC                       | view statistic of how the members are performing easily | adjust their provide targeted training if need be |
+| `*`      | salesperson                               | view a list of my clients that respond the fastest | focus on clients that have the highest conversion rates |
+| `*`      | salesperson                               | set reminders for follow-up    | remember to get back to customers who were not available to speak at the time of contact, but wish to know more when they are free |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+#### Use case: UC01 - Add new customer  
 
-**Use case: Delete a person**
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative  
 
-**MSS**
+**Guarantees:**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+* Customer is created only if all required fields are valid.
+* On validation error, no customers are added.
 
-    Use case ends.
+**MSS:**
 
-**Extensions**
+1. Sales representative chooses to add a new customer.
+2. Sales representative enters the add command with customer details.
+3. Sales representative submits the command.
+4. CMS validates the details.
+5. CMS creates the customer and displays a confirmation message.  
+   Use case ends.
 
-* 2a. The list is empty.
+**Extensions:**  
 
-  Use case ends.
+4a. CMS detects an error in the entered data.  
+   4a1. CMS indicates an error has happened.  
+   Use case resumes from step 2.
 
-* 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+#### Use case: UC02 - Add multiple customers
 
-      Use case resumes at step 2.
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
 
-*{More to be added}*
+**Guarantees:**
+
+* If any entry is invalid, none of the customers are added.
+* No existing customers are modified by this operation.
+
+**MSS:**
+
+1. Sales representative chooses to import many customers.
+2. Sales representative enters the add command with multiple customers separated by "|||", then submits the command.
+3. CMS validates all entries.
+4. CMS creates the customers and displays a summary confirmation.  
+   Use case ends.
+
+**Extensions:**  
+
+3a. CMS detects an error in the entered data.  
+   3a1. CMS indicates an error has happened.  
+   Use case resumes from step 2.
+
+
+#### Use case: UC03 - List all customers
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Listing does not modify any data.
+* The latest saved state of customers is displayed.
+
+**MSS:**
+
+1. Sales representative chooses to view all customers.
+2. Sales representative enters the list command.
+3. CMS displays all customers.  
+   Use case ends.
+
+**Extensions:**
+
+3a. The customer list is empty.  
+   3a1. CMS indicates that no customers are found.
+   Use case ends.
+
+
+#### Use case: UC04 - Find customer by name
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Search does not modify customer data.
+
+**MSS:**
+
+1. Sales representative chooses to find a specific customer by name.
+2. Sales representative enters the search command.
+3. CMS searches for customers whose names contain the keyword(s) (case-insensitive).
+4. CMS displays the matching customers.  
+   Use case ends.
+
+**Extensions:**
+
+3a. No customers match the search criteria.  
+   3a1. CMS indicates that no customers are found.  
+   Use case ends.
+
+
+#### Use case: UC05 - Find customer by status
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Filtering does not modify customer data.
+
+**MSS:**
+
+1. Sales representative chooses to find customers by status.
+2. Sales representative specifies the status.
+3. CMS searches for customers with the specified status.
+4. CMS displays the matching customers.  
+   Use case ends.
+
+**Extensions:**
+
+2a. The specified status does not exist.  
+   2a1. CMS indicates that an error has happened.  
+   Use case ends.
+
+4a. No customers match the specified status.  
+   4a1. CMS indicates that no customers are found.  
+   Use case ends.
+
+
+#### Use case: UC06 - Create email template
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Generating a template or preview does not modify any customer records.
+* If template input is canceled, no template content is saved or applied.
+
+**MSS:**
+
+1. Sales representative chooses to create an email template.
+2. Sales representative specifies the target tag(s) and/or status.
+3. CMS prompts for the email content.
+4. Sales representative enters the email template and submits.
+5. CMS saves the personalised email template.  
+   Use case ends.
+
+**Extensions:**
+
+*a. At any time during template input, Sales representative chooses to cancel his input.  
+   *a1. CMS requests confirmation of the cancellation.  
+   *a2. Sales representative confirms the cancellation.  
+   Use case ends.
+
+
+#### Use case: UC07 - Edit customer
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Only the specified fields are updated, the other fields remain unchanged.
+* On validation error, no changes are applied.
+
+**MSS:**
+
+1. Sales representative chooses to edit a customer's information.
+2. Sales representative specifies the customer ID and fields to edit.
+3. CMS validates the updated details.
+4. CMS updates the customer information.  
+   Use case ends.
+
+**Extensions:**
+
+2a. The specified customer ID does not exist.  
+   2a1. CMS indicates that an error has happened.    
+   Use case resumes from step 2.
+
+3a. CMS detects an error in the entered data.  
+   3a1. CMS indicates that an error has happened.    
+   Use case resumes from step 2.
+
+
+#### Use case: UC08 - Delete customer
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* Deletion removes only the specified customer without modifying other data.
+* Deletion is irreversible once confirmed.
+* On failure, no deletion occurs.
+
+**MSS:**
+
+1. Sales representative chooses to delete a customer.
+2. Sales representative specifies the customer ID to delete.
+3. CMS deletes the customer and displays a confirmation.  
+   Use case ends.
+
+**Extensions:**
+
+3a. The given customer ID is invalid.  
+   3a1. CMS indicates that an error has happened.  
+   Use case resumes at step 2.
+
+3b. CMS requests for confirmation before deletion.  
+   3b1. Sales representative confirms the deletion.  
+   3b2. CMS proceeds with deletion.  
+   Use case ends.
+
+
+#### Use case: UC09 - Set customer status
+
+**System:** Customer Management System (CMS)  
+**Actor:** Sales Representative
+
+**Guarantees:**
+
+* If an invalid status is provided, no changes are made.
+
+**MSS:**
+
+1. Sales representative chooses to update a customer's status.
+2. Sales representative specifies the customer ID and new status.
+3. CMS validates the customer ID and status.
+4. CMS updates the customer's status and displays a confirmation message.  
+   Use case ends.
+
+**Extensions:**
+
+2b. No status is specified.  
+   2b1. CMS indicates that an error has happened.  
+   Use case ends.
+
+3a. The specified status is invalid.  
+   3a1. CMS indicates that an error has happened.  
+   Use case ends.
+
 
 ### Non-Functional Requirements
 

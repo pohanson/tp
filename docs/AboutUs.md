@@ -17,26 +17,26 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/johndoe)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Project Advisor
+- Role: Project Advisor
 
-### Jane Doe
+### Sean Richardson Hardjanto
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/seanrh34.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/seanrh34)]
+[[portfolio](team/seanrh34.md)]
 
-* Role: Team Lead
-* Responsibilities: UI
+- Role: Team Lead
+- Responsibilities: UI
 
-### Johnny Doe
+### Nihaal Manaf
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/nihaalmanaf.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/nihaalmanaf)] [[portfolio](team/nihaalmanaf.md)]
 
-* Role: Developer
-* Responsibilities: Data
+- Role: 10x Developer
+- Responsibilities: Whatever you need me to be
 
 ### Jean Doe
 
@@ -45,18 +45,18 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/johndoe)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
+- Role: Developer
+- Responsibilities: Dev Ops + Threading
 
-### James Doe
+### Poh Anson
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/pohanson.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/pohanson)]
+[[portfolio](team/pohanson.md)]
 
-* Role: Developer
-* Responsibilities: UI
+- Role: Developer
+- Responsibilities: UI
 
 ### Zhao Ruixuan
 
@@ -65,5 +65,5 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/rotarykirby)]
 [[portfolio](team/rotarykirby.md)]
 
-* Role: Developer
-* Responsibilities: UI
+- Role: Developer
+- Responsibilities: UI
