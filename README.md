@@ -10,7 +10,7 @@
 ### Minimal Viable Product
 
 * **Add Customer** - Add new customer contact information
-* **Edit Customer** - Edit existing customer information  
+* **Edit Customer** - Edit existing customer information
 * **Delete Customer** - Delete the customer from the app
 * **List Customer** - View all customers
 * **Set Status** - Update customer contact status (eg. uncontacted, rejected, etc.)
