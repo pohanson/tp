@@ -325,6 +325,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 6. The program should be able to be self-contained as a single JAR/ZIP file that should work without requiring any installer.
 7. The GUI should _work well_ for standard screen resolutions 1920x1080 and higher, and, for screen scales 100% and 125%, meaning that no clipping or obvious bugs show in the GUI.
 8. The GUI should be _usable_ (i.e., all functions can be used even if the user experience is not optimal) for resolutions 1280x720 and higher, and, for screen scales 150%.
+9. There should not be a server component. All data should be stored on the user's local machine.
 
 ### Glossary
 
