@@ -7,24 +7,14 @@ We are a team based in the [School of Computing, National University of Singapor
 
 ## Project team
 
-### Sean Richardson Hardjanto
-
-<img src="images/seanrh34.png" width="200px">
-
-[[github](http://github.com/seanrh34)]
-[[portfolio](team/seanrh34.md)]
-
-- Role: Team Lead
-- Responsibilities: UI
-
 ### Nihaal Manaf
 
 <img src="images/nihaalmanaf.png" width="200px">
 
 [[github](http://github.com/nihaalmanaf)] [[portfolio](team/nihaalmanaf.md)]
 
-- Role: 10x Developer
-- Responsibilities: Whatever you need me to be
+- Role: Team Lead
+- Responsibilities: DevOps + Leading
 
 ### Poh Anson
 
@@ -32,6 +22,16 @@ We are a team based in the [School of Computing, National University of Singapor
 
 [[github](http://github.com/pohanson)]
 [[portfolio](team/pohanson.md)]
+
+- Role: Developer
+- Responsibilities: Everything else
+
+### Sean Richardson Hardjanto
+
+<img src="images/seanrh34.png" width="200px">
+
+[[github](http://github.com/seanrh34)]
+[[portfolio](team/seanrh34.md)]
 
 - Role: Developer
 - Responsibilities: UI
@@ -44,4 +44,4 @@ We are a team based in the [School of Computing, National University of Singapor
 [[portfolio](team/rotarykirby.md)]
 
 - Role: Developer
-- Responsibilities: UI
+- Responsibilities: Logic
