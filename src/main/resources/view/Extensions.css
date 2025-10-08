@@ -18,3 +18,34 @@
 .tooltip-text {
     -fx-text-fill: white;
 }
+
+/* Status label styles */
+.status_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.status_uncontacted {
+    -fx-text-fill: #808080;
+}
+
+.status_contacted {
+    -fx-text-fill: #00AA00;
+}
+
+.status_rejected {
+    -fx-text-fill: #D70040;
+}
+
+.status_accepted {
+    -fx-text-fill: #00AAAA;
+}
+
+.status_busy {
+    -fx-text-fill: #FFAA00;
+}
+
+.status_unreachable {
+    -fx-text-fill: #000000;
+}
