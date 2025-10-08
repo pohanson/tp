@@ -8,7 +8,7 @@ import java.util.Locale;
 public class Status {
     public static final String MESSAGE_CONSTRAINTS = "Status should be one of the following: " + allowedValuesDescription();
     public static final String VALIDATION_REGEX = "^(Uncontacted|Contacted|Rejected|Accepted|Unreachable|Busy)$";
-    
+
     /**
      * Enum containing the constant status values.
      */
@@ -20,9 +20,9 @@ public class Status {
         UNREACHABLE,
         BUSY
     }
-    
+
     private final StatusValue value;
-    
+
     // Public constants for backward compatibility
     public static final Status UNCONTACTED = new Status(StatusValue.UNCONTACTED);
     public static final Status CONTACTED = new Status(StatusValue.CONTACTED);
@@ -30,15 +30,15 @@ public class Status {
     public static final Status ACCEPTED = new Status(StatusValue.ACCEPTED);
     public static final Status UNREACHABLE = new Status(StatusValue.UNREACHABLE);
     public static final Status BUSY = new Status(StatusValue.BUSY);
-    
+
     private Status(StatusValue value) {
         this.value = value;
     }
-    
+
     public StatusValue getValue() {
         return value;
     }
-    
+
     public String name() {
         return value.name();
     }
@@ -46,7 +46,7 @@ public class Status {
     public static boolean isValidStatus(String test) {
         return test.matches(VALIDATION_REGEX);
     }
-    
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -58,17 +58,17 @@ public class Status {
         Status otherStatus = (Status) other;
         return value.equals(otherStatus.value);
     }
-    
+
     @Override
     public int hashCode() {
         return value.hashCode();
     }
-    
+
     @Override
     public String toString() {
         return value.name();
     }
-    
+
     public static Status fromStringIgnoreCase(String value) {
         if (value == null) {
             return UNCONTACTED;
@@ -91,7 +91,7 @@ public class Status {
             throw new IllegalArgumentException("Invalid status: " + value);
         }
     }
-    
+
     public static String allowedValuesDescription() {
         return "Uncontacted, Contacted, Rejected, Accepted, Unreachable, Busy";
     }
