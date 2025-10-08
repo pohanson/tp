@@ -7,7 +7,6 @@ import java.util.List;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Status;
@@ -22,7 +21,8 @@ public class SetStatusCommand extends Command {
             + ": Sets the contact status of a person.\n"
             + "Parameters: INDEX [STATUS] (default: Uncontacted)\n"
             + "Allowed STATUS: " + Status.allowedValuesDescription() + "\n"
-            + "Examples:\nstatus 12 Contacted\nstatus 12 Rejected\nstatus 12 Accepted\nstatus 12 Unreachable\nstatus 12 Busy";
+            + "Examples:\nstatus 12 Contacted\nstatus 12 Rejected\nstatus 12 Accepted\n"
+            + "status 12 Unreachable\nstatus 12 Busy";
 
     public static final String MESSAGE_SET_STATUS_SUCCESS = "Status set for Person: %1$s";
     public static final String MESSAGE_INVALID_STATUS = "Invalid status. Allowed: "
@@ -31,6 +31,10 @@ public class SetStatusCommand extends Command {
     private final Index targetIndex;
     private final String statusInput;
 
+    /**
+     * @param targetIndex of the person in the filtered person list to change status
+     * @param statusInput is the status to be set
+     */
     public SetStatusCommand(Index targetIndex, String statusInput) {
         this.targetIndex = targetIndex;
         this.statusInput = statusInput;
@@ -87,5 +91,5 @@ public class SetStatusCommand extends Command {
     @Override
     public String toString() {
         return getClass().getCanonicalName() + "{index=" + targetIndex + ", status='" + statusInput + "'}";
-   }
+    }
 }
