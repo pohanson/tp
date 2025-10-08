@@ -6,6 +6,13 @@ import java.util.Locale;
  * Represents the contact status of a person.
  */
 public class Status {
+    public static final Status ACCEPTED = new Status(StatusValue.ACCEPTED);
+    public static final Status BUSY = new Status(StatusValue.BUSY);
+    public static final Status CONTACTED = new Status(StatusValue.CONTACTED);
+    public static final Status REJECTED = new Status(StatusValue.REJECTED);
+    public static final Status UNCONTACTED = new Status(StatusValue.UNCONTACTED);
+    public static final Status UNREACHABLE = new Status(StatusValue.UNREACHABLE);
+
     public static final String MESSAGE_CONSTRAINTS = "Status should be one of the following: "
             + allowedValuesDescription();
     public static final String VALIDATION_REGEX = "^(Uncontacted|Contacted|Rejected|Accepted|Unreachable|Busy)$";
@@ -23,13 +30,6 @@ public class Status {
     }
 
     private final StatusValue value;
-
-    public static final Status ACCEPTED = new Status(StatusValue.ACCEPTED);
-    public static final Status BUSY = new Status(StatusValue.BUSY);
-    public static final Status CONTACTED = new Status(StatusValue.CONTACTED);
-    public static final Status REJECTED = new Status(StatusValue.REJECTED);
-    public static final Status UNCONTACTED = new Status(StatusValue.UNCONTACTED);
-    public static final Status UNREACHABLE = new Status(StatusValue.UNREACHABLE);
 
     private Status(StatusValue value) {
         this.value = value;
