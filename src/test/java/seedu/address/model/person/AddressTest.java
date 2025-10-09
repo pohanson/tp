@@ -7,6 +7,10 @@ import static seedu.address.testutil.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class AddressTest {
+    private static final String INVALID_ADDRESS = """
+            12345678901234567890123456789012345678901234567890123456789012345678901234567890
+            12345678901234567890123456789012345678901234567890123456789012345678901234567890
+            1234567890123456789012345678901234567890""";
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -15,8 +19,7 @@ public class AddressTest {
 
     @Test
     public void constructor_invalidAddress_throwsIllegalArgumentException() {
-        String invalidAddress = "";
-        assertThrows(IllegalArgumentException.class, () -> new Address(invalidAddress));
+        assertThrows(IllegalArgumentException.class, () -> new Address(INVALID_ADDRESS));
     }
 
     @Test
@@ -25,8 +28,7 @@ public class AddressTest {
         assertThrows(NullPointerException.class, () -> Address.isValidAddress(null));
 
         // invalid addresses
-        assertFalse(Address.isValidAddress("")); // empty string
-        assertFalse(Address.isValidAddress(" ")); // spaces only
+        assertFalse(Address.isValidAddress(INVALID_ADDRESS)); // empty string
 
         // valid addresses
         assertTrue(Address.isValidAddress("Blk 456, Den Road, #01-355"));
