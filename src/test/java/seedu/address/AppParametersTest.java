@@ -1,8 +1,7 @@
 package seedu.address;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -42,7 +41,10 @@ public class AppParametersTest {
     @Test
     public void toStringMethod() {
         AppParameters appParameters = new AppParameters();
-        String expected = AppParameters.class.getCanonicalName() + "{configPath=" + appParameters.getConfigPath() + "}";
+        String expected = AppParameters.class.getCanonicalName()
+                                  + "{configPath="
+                                  + appParameters.getConfigPath()
+                                  + "}";
         assertEquals(expected, appParameters.toString());
     }
 
@@ -51,25 +53,25 @@ public class AppParametersTest {
         AppParameters appParameters = new AppParameters();
 
         // same values -> returns true
-        assertTrue(appParameters.equals(new AppParameters()));
+        assertEquals(appParameters, new AppParameters());
 
         // same object -> returns true
-        assertTrue(appParameters.equals(appParameters));
+        assertEquals(appParameters, appParameters);
 
         // null -> returns false
-        assertFalse(appParameters.equals(null));
+        assertNotEquals(null, appParameters);
 
         // different types -> returns false
-        assertFalse(appParameters.equals(5.0f));
+        assertNotEquals(5.0f, appParameters);
 
         // different config path -> returns false
         AppParameters otherAppParameters = new AppParameters();
         otherAppParameters.setConfigPath(Paths.get("configPath"));
-        assertFalse(appParameters.equals(otherAppParameters));
+        assertNotEquals(appParameters, otherAppParameters);
     }
 
     private static class ParametersStub extends Application.Parameters {
-        private Map<String, String> namedParameters = new HashMap<>();
+        private final Map<String, String> namedParameters = new HashMap<>();
 
         @Override
         public List<String> getRaw() {

@@ -34,16 +34,16 @@ public class Tag {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Tag)) {
+        if (!(other instanceof Tag otherTag)) {
             return false;
         }
 
-        Tag otherTag = (Tag) other;
         return tagName.equals(otherTag.tagName);
     }
 
@@ -56,7 +56,9 @@ public class Tag {
      * Format state as text for viewing.
      */
     public String toString() {
-        return '[' + tagName + ']';
+        return '['
+                       + tagName
+                       + ']';
     }
 
 }

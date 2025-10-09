@@ -22,21 +22,22 @@ public class Prefix {
 
     @Override
     public int hashCode() {
-        return prefix == null ? 0 : prefix.hashCode();
+        return prefix
+                       == null ? 0 : prefix.hashCode();
     }
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Prefix)) {
+        if (!(other instanceof Prefix otherPrefix)) {
             return false;
         }
 
-        Prefix otherPrefix = (Prefix) other;
         return prefix.equals(otherPrefix.prefix);
     }
 }

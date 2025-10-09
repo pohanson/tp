@@ -46,16 +46,16 @@ public class Name {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Name)) {
+        if (!(other instanceof Name otherName)) {
             return false;
         }
 
-        Name otherName = (Name) other;
         return fullName.equals(otherName.fullName);
     }
 

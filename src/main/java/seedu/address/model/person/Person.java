@@ -66,12 +66,14 @@ public class Person {
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
-        if (otherPerson == this) {
+        if (otherPerson
+                    == this) {
             return true;
         }
 
-        return otherPerson != null
-                && otherPerson.getName().equals(getName());
+        return otherPerson
+                       != null
+                       && otherPerson.getName().equals(getName());
     }
 
     /**
@@ -80,21 +82,21 @@ public class Person {
      */
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Person)) {
+        if (!(other instanceof Person otherPerson)) {
             return false;
         }
 
-        Person otherPerson = (Person) other;
         return name.equals(otherPerson.name)
-                && phone.equals(otherPerson.phone)
-                && email.equals(otherPerson.email)
-                && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags);
+                       && phone.equals(otherPerson.phone)
+                       && email.equals(otherPerson.email)
+                       && address.equals(otherPerson.address)
+                       && tags.equals(otherPerson.tags);
     }
 
     @Override
@@ -106,12 +108,12 @@ public class Person {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("tags", tags)
-                .toString();
+                       .add("name", name)
+                       .add("phone", phone)
+                       .add("email", email)
+                       .add("address", address)
+                       .add("tags", tags)
+                       .toString();
     }
 
 }

@@ -27,7 +27,7 @@ public class VersionTest {
         assertEquals(19, version.getMajor());
         assertEquals(10, version.getMinor());
         assertEquals(20, version.getPatch());
-        assertEquals(true, version.isEarlyAccess());
+        assertTrue(version.isEarlyAccess());
     }
 
     @Test
@@ -53,56 +53,65 @@ public class VersionTest {
         // Tests equality
         one = new Version(0, 0, 0, true);
         another = new Version(0, 0, 0, true);
-        assertTrue(one.compareTo(another) == 0);
+        assertEquals(0, one.compareTo(another));
 
         one = new Version(11, 12, 13, false);
         another = new Version(11, 12, 13, false);
-        assertTrue(one.compareTo(another) == 0);
+        assertEquals(0, one.compareTo(another));
 
         // Tests different patch
         one = new Version(0, 0, 5, false);
         another = new Version(0, 0, 0, false);
-        assertTrue(one.compareTo(another) > 0);
+        assertTrue(one.compareTo(another)
+                           > 0);
 
         // Tests different minor
         one = new Version(0, 0, 0, false);
         another = new Version(0, 5, 0, false);
-        assertTrue(one.compareTo(another) < 0);
+        assertTrue(one.compareTo(another)
+                           < 0);
 
         // Tests different major
         one = new Version(10, 0, 0, true);
         another = new Version(0, 0, 0, true);
-        assertTrue(one.compareTo(another) > 0);
+        assertTrue(one.compareTo(another)
+                           > 0);
 
         // Tests high major vs low minor
         one = new Version(10, 0, 0, true);
         another = new Version(0, 1, 0, true);
-        assertTrue(one.compareTo(another) > 0);
+        assertTrue(one.compareTo(another)
+                           > 0);
 
         // Tests high patch vs low minor
         one = new Version(0, 0, 10, false);
         another = new Version(0, 1, 0, false);
-        assertTrue(one.compareTo(another) < 0);
+        assertTrue(one.compareTo(another)
+                           < 0);
 
         // Tests same major minor different patch
         one = new Version(2, 15, 0, false);
         another = new Version(2, 15, 5, false);
-        assertTrue(one.compareTo(another) < 0);
+        assertTrue(one.compareTo(another)
+                           < 0);
 
         // Tests early access vs not early access on same version number
         one = new Version(2, 15, 0, true);
         another = new Version(2, 15, 0, false);
-        assertTrue(one.compareTo(another) < 0);
+        assertTrue(one.compareTo(another)
+                           < 0);
 
         // Tests early access lower version vs not early access higher version compare by version number first
         one = new Version(2, 15, 0, true);
         another = new Version(2, 15, 5, false);
-        assertTrue(one.compareTo(another) < 0);
+        assertTrue(one.compareTo(another)
+                           < 0);
 
         // Tests early access higher version vs not early access lower version compare by version number first
         one = new Version(2, 15, 0, false);
         another = new Version(2, 15, 5, true);
-        assertTrue(one.compareTo(another) < 0);
+        assertTrue(one.compareTo(another)
+                           < 0);
     }
 
     @Test
@@ -121,15 +130,15 @@ public class VersionTest {
 
         one = new Version(0, 0, 0, false);
         another = new Version(0, 0, 0, false);
-        assertTrue(one.equals(another));
+        assertEquals(one, another);
 
         one = new Version(100, 191, 275, true);
         another = new Version(100, 191, 275, true);
-        assertTrue(one.equals(another));
+        assertEquals(one, another);
     }
 
     private void verifyVersionParsedCorrectly(String versionString,
-            int major, int minor, int patch, boolean isEarlyAccess) {
+                                              int major, int minor, int patch, boolean isEarlyAccess) {
         assertEquals(new Version(major, minor, patch, isEarlyAccess), Version.fromString(versionString));
     }
 }
