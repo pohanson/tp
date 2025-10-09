@@ -35,10 +35,9 @@ public class JsonAddressBookStorageTest {
     }
 
     private Path addToTestDataPathIfNotNull(String prefsFileInTestDataFolder) {
-        return prefsFileInTestDataFolder
-                       != null
-                       ? TEST_DATA_FOLDER.resolve(prefsFileInTestDataFolder)
-                       : null;
+        return prefsFileInTestDataFolder != null
+                ? TEST_DATA_FOLDER.resolve(prefsFileInTestDataFolder)
+                : null;
     }
 
     @Test

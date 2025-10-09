@@ -44,16 +44,16 @@ public class Address {
 
     @Override
     public boolean equals(Object other) {
-        if (other
-                    == this) {
+        if (other == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Address otherAddress)) {
+        if (!(other instanceof Address)) {
             return false;
         }
 
+        Address otherAddress = (Address) other;
         return value.equals(otherAddress.value);
     }
 

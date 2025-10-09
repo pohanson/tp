@@ -28,8 +28,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons = new UniquePersonList();
     }
 
-    public AddressBook() {
-    }
+    public AddressBook() {}
 
     /**
      * Creates an AddressBook using the Persons in the {@code toBeCopied}
@@ -95,13 +94,13 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.remove(key);
     }
 
-    /// / util methods
+    //// util methods
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                       .add("persons", persons)
-                       .toString();
+                .add("persons", persons)
+                .toString();
     }
 
     @Override
@@ -111,16 +110,16 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public boolean equals(Object other) {
-        if (other
-                    == this) {
+        if (other == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddressBook otherAddressBook)) {
+        if (!(other instanceof AddressBook)) {
             return false;
         }
 
+        AddressBook otherAddressBook = (AddressBook) other;
         return persons.equals(otherAddressBook.persons);
     }
 

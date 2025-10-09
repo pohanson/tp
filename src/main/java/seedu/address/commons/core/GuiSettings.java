@@ -46,27 +46,24 @@ public class GuiSettings implements Serializable {
     }
 
     public Point getWindowCoordinates() {
-        return windowCoordinates
-                       != null ? new Point(windowCoordinates) : null;
+        return windowCoordinates != null ? new Point(windowCoordinates) : null;
     }
 
     @Override
     public boolean equals(Object other) {
-        if (other
-                    == this) {
+        if (other == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof GuiSettings otherGuiSettings)) {
+        if (!(other instanceof GuiSettings)) {
             return false;
         }
 
-        return windowWidth
-                       == otherGuiSettings.windowWidth
-                       && windowHeight
-                                  == otherGuiSettings.windowHeight
-                       && Objects.equals(windowCoordinates, otherGuiSettings.windowCoordinates);
+        GuiSettings otherGuiSettings = (GuiSettings) other;
+        return windowWidth == otherGuiSettings.windowWidth
+                && windowHeight == otherGuiSettings.windowHeight
+                && Objects.equals(windowCoordinates, otherGuiSettings.windowCoordinates);
     }
 
     @Override
@@ -77,9 +74,9 @@ public class GuiSettings implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                       .add("windowWidth", windowWidth)
-                       .add("windowHeight", windowHeight)
-                       .add("windowCoordinates", windowCoordinates)
-                       .toString();
+                .add("windowWidth", windowWidth)
+                .add("windowHeight", windowHeight)
+                .add("windowCoordinates", windowCoordinates)
+                .toString();
     }
 }

@@ -17,7 +17,7 @@ import seedu.address.model.person.exceptions.PersonNotFoundException;
  * persons uses Person#isSamePerson(Person) for equality so as to ensure that the person being added or updated is
  * unique in terms of identity in the UniquePersonList. However, the removal of a person uses Person#equals(Object) so
  * as to ensure that the person with exactly the same fields will be removed.
- * <p>
+ *
  * Supports a minimal set of list operations.
  *
  * @see Person#isSamePerson(Person)
@@ -57,13 +57,11 @@ public class UniquePersonList implements Iterable<Person> {
         requireAllNonNull(target, editedPerson);
 
         int index = internalList.indexOf(target);
-        if (index
-                    == -1) {
+        if (index == -1) {
             throw new PersonNotFoundException();
         }
 
-        if (!target.isSamePerson(editedPerson)
-                    && contains(editedPerson)) {
+        if (!target.isSamePerson(editedPerson) && contains(editedPerson)) {
             throw new DuplicatePersonException();
         }
 
@@ -113,16 +111,16 @@ public class UniquePersonList implements Iterable<Person> {
 
     @Override
     public boolean equals(Object other) {
-        if (other
-                    == this) {
+        if (other == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof UniquePersonList otherUniquePersonList)) {
+        if (!(other instanceof UniquePersonList)) {
             return false;
         }
 
+        UniquePersonList otherUniquePersonList = (UniquePersonList) other;
         return internalList.equals(otherUniquePersonList.internalList);
     }
 
@@ -140,12 +138,8 @@ public class UniquePersonList implements Iterable<Person> {
      * Returns true if {@code persons} contains only unique persons.
      */
     private boolean personsAreUnique(List<Person> persons) {
-        for (int i = 0; i
-                                < persons.size()
-                                          - 1; i++) {
-            for (int j = i
-                                 + 1; j
-                                              < persons.size(); j++) {
+        for (int i = 0; i < persons.size() - 1; i++) {
+            for (int j = i + 1; j < persons.size(); j++) {
                 if (persons.get(i).isSamePerson(persons.get(j))) {
                     return false;
                 }
