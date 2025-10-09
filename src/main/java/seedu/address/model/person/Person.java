@@ -67,6 +67,11 @@ public class Person {
         return status;
     }
 
+    public String getStatusText() {
+        String statusName = this.getStatus().name();
+        return statusName.charAt(0) + statusName.substring(1).toLowerCase();
+    }
+
     /**
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.

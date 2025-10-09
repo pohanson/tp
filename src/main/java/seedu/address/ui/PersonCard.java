@@ -54,12 +54,10 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
-        String statusName = person.getStatus().name();
-        String statusText = statusName.charAt(0) + statusName.substring(1).toLowerCase();
-        status.setText(statusText);
+        status.setText(person.getStatusText());
         status.getStyleClass().clear(); // need to clear first or else text remains white
         status.getStyleClass().add("status_label");
-        status.getStyleClass().add("status_" + statusName.toLowerCase());
+        status.getStyleClass().add("status_" + person.getStatus().name().toLowerCase());
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
