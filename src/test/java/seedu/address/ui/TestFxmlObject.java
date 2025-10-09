@@ -13,7 +13,8 @@ public class TestFxmlObject {
 
     private String text;
 
-    public TestFxmlObject() {}
+    public TestFxmlObject() {
+    }
 
     public TestFxmlObject(String text) {
         setText(text);
@@ -29,16 +30,16 @@ public class TestFxmlObject {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof TestFxmlObject)) {
+        if (!(other instanceof TestFxmlObject otherTestFxmlObject)) {
             return false;
         }
 
-        TestFxmlObject otherTestFxmlObject = (TestFxmlObject) other;
         return Objects.equals(text, otherTestFxmlObject.text);
     }
 

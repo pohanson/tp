@@ -13,10 +13,14 @@ public class CommandResult {
 
     private final String feedbackToUser;
 
-    /** Help information should be shown to the user. */
+    /**
+     * Help information should be shown to the user.
+     */
     private final boolean showHelp;
 
-    /** The application should exit. */
+    /**
+     * The application should exit.
+     */
     private final boolean exit;
 
     /**
@@ -50,19 +54,21 @@ public class CommandResult {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof CommandResult)) {
+        if (!(other instanceof CommandResult otherCommandResult)) {
             return false;
         }
 
-        CommandResult otherCommandResult = (CommandResult) other;
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
-                && showHelp == otherCommandResult.showHelp
-                && exit == otherCommandResult.exit;
+                       && showHelp
+                                  == otherCommandResult.showHelp
+                       && exit
+                                  == otherCommandResult.exit;
     }
 
     @Override
@@ -73,10 +79,10 @@ public class CommandResult {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("feedbackToUser", feedbackToUser)
-                .add("showHelp", showHelp)
-                .add("exit", exit)
-                .toString();
+                       .add("feedbackToUser", feedbackToUser)
+                       .add("showHelp", showHelp)
+                       .add("exit", exit)
+                       .toString();
     }
 
 }

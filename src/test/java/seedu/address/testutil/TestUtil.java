@@ -36,7 +36,8 @@ public class TestUtil {
      * Returns the middle index of the person in the {@code model}'s person list.
      */
     public static Index getMidIndex(Model model) {
-        return Index.fromOneBased(model.getFilteredPersonList().size() / 2);
+        return Index.fromOneBased(model.getFilteredPersonList().size()
+                                          / 2);
     }
 
     /**

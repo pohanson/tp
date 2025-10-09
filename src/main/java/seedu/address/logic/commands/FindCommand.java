@@ -15,10 +15,14 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+                                                       + ": Finds all persons whose names contain any of "
+                                                       + "the specified keywords (case-insensitive) and displays them"
+                                                       + " as a list with index numbers.\n"
+                                                       + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
+                                                       + "Example: "
+                                                       + COMMAND_WORD
+                                                       + " alice bob charlie";
 
     private final NameContainsKeywordsPredicate predicate;
 
@@ -36,23 +40,23 @@ public class FindCommand extends Command {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof FindCommand)) {
+        if (!(other instanceof FindCommand otherFindCommand)) {
             return false;
         }
 
-        FindCommand otherFindCommand = (FindCommand) other;
         return predicate.equals(otherFindCommand.predicate);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("predicate", predicate)
-                .toString();
+                       .add("predicate", predicate)
+                       .toString();
     }
 }

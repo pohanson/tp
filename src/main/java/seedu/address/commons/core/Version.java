@@ -50,6 +50,7 @@ public class Version implements Comparable<Version> {
 
     /**
      * Parses a version number string in the format V1.2.3.
+     *
      * @param versionString version number string
      * @return a Version object
      */
@@ -64,7 +65,8 @@ public class Version implements Comparable<Version> {
         return new Version(Integer.parseInt(versionMatcher.group(1)),
                 Integer.parseInt(versionMatcher.group(2)),
                 Integer.parseInt(versionMatcher.group(3)),
-                versionMatcher.group(4) == null ? false : true);
+                versionMatcher.group(4)
+                        != null);
     }
 
     @JsonValue
@@ -74,16 +76,23 @@ public class Version implements Comparable<Version> {
 
     @Override
     public int compareTo(Version other) {
-        if (major != other.major) {
-            return major - other.major;
+        if (major
+                    != other.major) {
+            return major
+                           - other.major;
         }
-        if (minor != other.minor) {
-            return minor - other.minor;
+        if (minor
+                    != other.minor) {
+            return minor
+                           - other.minor;
         }
-        if (patch != other.patch) {
-            return patch - other.patch;
+        if (patch
+                    != other.patch) {
+            return patch
+                           - other.patch;
         }
-        if (isEarlyAccess == other.isEarlyAccess()) {
+        if (isEarlyAccess
+                    == other.isEarlyAccess()) {
             return 0;
         }
         if (isEarlyAccess) {
@@ -94,27 +103,32 @@ public class Version implements Comparable<Version> {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
+        if (other
+                    == this) {
             return true;
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Version)) {
+        if (!(other instanceof Version otherVersion)) {
             return false;
         }
 
-        Version otherVersion = (Version) other;
-        return major == otherVersion.major
-                && minor == otherVersion.minor
-                && patch == otherVersion.patch
-                && isEarlyAccess == otherVersion.isEarlyAccess;
+        return major
+                       == otherVersion.major
+                       && minor
+                                  == otherVersion.minor
+                       && patch
+                                  == otherVersion.patch
+                       && isEarlyAccess
+                                  == otherVersion.isEarlyAccess;
     }
 
     @Override
     public int hashCode() {
         String hash = String.format("%03d%03d%03d", major, minor, patch);
         if (!isEarlyAccess) {
-            hash = "1" + hash;
+            hash = "1"
+                           + hash;
         }
         return Integer.parseInt(hash);
     }
