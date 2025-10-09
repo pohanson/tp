@@ -22,7 +22,11 @@ public class FindCommand extends Command {
             + "Parameters: n/[name] t/[tag] ..\n"
             + "Example: " + COMMAND_WORD + " n/alice"
             + "Example: " + COMMAND_WORD + " t/free";
-
+            + "Parameters: "
+            + "[" + PREFIX_NAME + "NAME] "
+            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free";
 
     private final PersonMatchesKeywordsPredicate predicate;
 
