@@ -39,6 +39,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label status;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -52,6 +54,10 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
+        status.setText(person.getStatusText());
+        status.getStyleClass().clear(); // need to clear first or else text remains white
+        status.getStyleClass().add("status_label");
+        status.getStyleClass().add("status_" + person.getStatus().name().toLowerCase());
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
