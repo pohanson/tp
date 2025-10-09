@@ -4,10 +4,12 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.function.Predicate;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.PersonMatchesKeywordsPredicate;
+import seedu.address.model.person.Person;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -28,9 +30,9 @@ public class FindCommand extends Command {
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free";
 
-    private final PersonMatchesKeywordsPredicate predicate;
+    private final Predicate<Person> predicate;
 
-    public FindCommand(PersonMatchesKeywordsPredicate predicate) {
+    public FindCommand(Predicate<Person> predicate) {
         this.predicate = predicate;
     }
 
