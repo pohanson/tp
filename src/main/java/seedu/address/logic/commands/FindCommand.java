@@ -21,7 +21,7 @@ public class FindCommand extends Command {
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: n/[name] t/[tag] ..\n"
             + "Example: " + COMMAND_WORD + " n/alice"
-            + "Example: " + COMMAND_WORD + " t/free";
+            + "Example: " + COMMAND_WORD + " t/free"
             + "Parameters: "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
