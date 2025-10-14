@@ -1,13 +1,15 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+
+import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PersonMatchesKeywordsPredicate;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -19,18 +21,18 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose name or tag matches any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: n/[name] t/[tag] ..\n"
-            + "Example: " + COMMAND_WORD + " n/alice"
-            + "Example: " + COMMAND_WORD + " t/free";
+            + "Parameters: n:[name] t:[tag] ..\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
             + "Parameters: "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free";
 
-    private final PersonMatchesKeywordsPredicate predicate;
+    private final Predicate<Person> predicate;
 
-    public FindCommand(PersonMatchesKeywordsPredicate predicate) {
+    public FindCommand(Predicate<Person> predicate) {
         this.predicate = predicate;
     }
 
