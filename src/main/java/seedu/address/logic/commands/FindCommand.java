@@ -21,9 +21,9 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose name or tag matches any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: n/[name] t/[tag] ..\n"
-            + "Example: " + COMMAND_WORD + " n/alice"
-            + "Example: " + COMMAND_WORD + " t/free"
+            + "Parameters: n:[name] t:[tag] ..\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
             + "Parameters: "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
