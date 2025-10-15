@@ -5,6 +5,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import seedu.address.model.Model;
 import seedu.address.model.StatusViewState;
+import seedu.address.model.TagsViewState;
 
 /**
  * Lists all persons in the address book to the user.
@@ -21,6 +22,7 @@ public class ListCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.setStatusViewState(StatusViewState.ALL_STATUSES);
+        model.setTagsViewState(TagsViewState.ALL_TAGS);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }
