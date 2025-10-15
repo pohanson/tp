@@ -43,21 +43,35 @@ public class FindCommandParserTest {
     @Test
     public void parse_validNamePrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice", "Bob"), List.of()));
+                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice", "Bob"), List.of(), null));
         assertParseSuccess(parser, " n:Alice Bob", expectedFindCommand);
     }
 
     @Test
     public void parse_validTagPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("big-spender", "colleague")));
+                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("big-spender", "colleague"), null));
         assertParseSuccess(parser, " t:big-spender colleague", expectedFindCommand);
     }
 
     @Test
     public void parse_validBothPrefixes_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice"), Arrays.asList("colleague")));
+                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice"), Arrays.asList("colleague"), null));
         assertParseSuccess(parser, " n:Alice t:colleague", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validStatusPrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand = new FindCommand(
+                new PersonMatchesKeywordsPredicate(List.of(), List.of(), "uncontacted"));
+        assertParseSuccess(parser, " s:uncontacted", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validAllPrefixes_returnsFindCommand() {
+        FindCommand expectedFindCommand = new FindCommand(
+                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice"), Arrays.asList("colleague"), "contacted"));
+        assertParseSuccess(parser, " n:Alice t:colleague s:contacted", expectedFindCommand);
     }
 }
