@@ -45,7 +45,7 @@
                             <buttons>
                                 <Button fx:id="pasteJsonButton" mnemonicParsing="false" onAction="#pasteJson"
                                         text="Paste JSON"/>
-                                <Button mnemonicParsing="false" text="Save"/>
+                                <Button mnemonicParsing="false" text="Save" onAction="#saveJson"/>
                             </buttons>
                         </ButtonBar>
                     </HBox>

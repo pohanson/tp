@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
@@ -37,6 +38,14 @@ public interface Logic {
      * Returns the user prefs' address book file path.
      */
     Path getAddressBookFilePath();
+
+    /**
+     * Imports address book data from a JSON string and replaces the current data.
+     *
+     * @param jsonString the JSON string containing address book data
+     * @throws IOException if there is an error reading the JSON string
+     */
+    void importJsonString(String jsonString) throws IOException;
 
     /**
      * Returns the user prefs' GUI settings.

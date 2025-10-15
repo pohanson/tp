@@ -74,7 +74,7 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
-        importWindow = new ImportWindow();
+        importWindow = new ImportWindow(logic);
     }
 
     public Stage getPrimaryStage() {
