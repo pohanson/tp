@@ -95,4 +95,14 @@ public interface Model {
      * Sets the current status view state.
      */
     void setStatusViewState(StatusViewState state);
+
+    /**
+     * Returns the tags view state property for observing changes.
+     */
+    ReadOnlyObjectProperty<TagsViewState> getTagsViewStateProperty();
+
+    /**
+     * Sets the current tags view state.
+     */
+    void setTagsViewState(TagsViewState state);
 }

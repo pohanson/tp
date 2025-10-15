@@ -26,6 +26,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final ObjectProperty<StatusViewState> statusViewState;
+    private final ObjectProperty<TagsViewState> tagsViewState;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -39,6 +40,7 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         statusViewState = new SimpleObjectProperty<>(StatusViewState.ALL_STATUSES);
+        tagsViewState = new SimpleObjectProperty<>(TagsViewState.ALL_TAGS);
     }
 
     public ModelManager() {
@@ -144,6 +146,19 @@ public class ModelManager implements Model {
     public void setStatusViewState(StatusViewState state) {
         requireNonNull(state);
         statusViewState.set(state);
+    }
+
+    //=========== Tags View State ============================================================================
+
+    @Override
+    public ReadOnlyObjectProperty<TagsViewState> getTagsViewStateProperty() {
+        return tagsViewState;
+    }
+
+    @Override
+    public void setTagsViewState(TagsViewState state) {
+        requireNonNull(state);
+        tagsViewState.set(state);
     }
 
     @Override
