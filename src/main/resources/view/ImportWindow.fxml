@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -7,12 +8,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.Scene?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import javafx.stage.Stage?>
-<fx:root resizable="false" title="Import Contacts" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17"
+<fx:root resizable="true" title="Import Contacts" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17"
          xmlns:fx="http://javafx.com/fxml/1">
     <icons>
         <Image url="@/images/address_book_32.png"/>
@@ -22,45 +25,58 @@
             <stylesheets>
                 <URL value="@Window.css"/>
             </stylesheets>
-            <ScrollPane>
-                <VBox alignment="CENTER" styleClass="windowMessageContainer">
-                    <AnchorPane>
-                        <HBox fx:id="importMessageContainer" alignment="CENTER">
-                            <opaqueInsets>
-                                <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
-                            </opaqueInsets>
-                            <padding>
-                                <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
-                            </padding>
-                            <VBox>
-                                <Label fx:id="helpMessage" styleClass="message"
-                                       text="1. Paste the exported JSON text from your clipboard by clicking on Paste JSON button."
-                                       wrapText="true"/>
-                                <Label fx:id="helpMessage1" styleClass="message"
-                                       text="2. When you save, it will replace the current data."
-                                       wrapText="true"/>
-                            </VBox>
-                            <ButtonBar prefHeight="40.0">
-                                <buttons>
-                                    <Button fx:id="pasteJsonButton" mnemonicParsing="false"
-                                            onAction="#pasteJson" text="Paste JSON"/>
-                                    <Button mnemonicParsing="false" text="Save"/>
-                                </buttons>
-                            </ButtonBar>
-                        </HBox>
-                    </AnchorPane>
-                    <Label fx:id="jsonPreview" maxWidth="1.7976931348623157E308" prefHeight="100.0"
-                           styleClass="message, jsonPreviewLabel" text="ASDF" textAlignment="JUSTIFY"
-                           wrapText="true">
+            <BorderPane>
+                <top>
+                    <HBox fx:id="importMessageContainer" alignment="CENTER" styleClass="windowMessageContainer">
                         <opaqueInsets>
                             <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
                         </opaqueInsets>
                         <padding>
-                            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+                            <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
                         </padding>
-                    </Label>
-                </VBox>
-            </ScrollPane>
+                        <VBox>
+                            <Label fx:id="helpMessage" styleClass="message"
+                                   text="1. Paste the exported JSON text from your clipboard by clicking on Paste JSON button."
+                                   wrapText="true"/>
+                            <Label fx:id="helpMessage1" styleClass="message"
+                                   text="2. When you save, it will replace the current data." wrapText="true"/>
+                        </VBox>
+                        <ButtonBar prefHeight="40.0">
+                            <buttons>
+                                <Button fx:id="pasteJsonButton" mnemonicParsing="false" onAction="#pasteJson"
+                                        text="Paste JSON"/>
+                                <Button mnemonicParsing="false" text="Save"/>
+                            </buttons>
+                        </ButtonBar>
+                    </HBox>
+                </top>
+                <center>
+                    <VBox>
+                        <children>
+                            <Label maxWidth="1.7976931348623157E308" style="-fx-font-weight: 800;"
+                                   styleClass="jsonPreviewLabel" text="JSON Preview:" textFill="WHITE">
+                                <font>
+                                    <Font size="14.0"/>
+                                </font>
+                            </Label>
+                            <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="windowMessageContainer">
+                                <content>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="jsonPreviewLabel">
+                                        <center>
+                                            <Text fx:id="jsonPreview" fill="WHITE" BorderPane.alignment="CENTER">
+                                                <styleClass>
+                                                    <String fx:value="message"/>
+                                                    <String fx:value="jsonPreviewLabel"/>
+                                                </styleClass>
+                                            </Text>
+                                        </center>
+                                    </BorderPane>
+                                </content>
+                            </ScrollPane>
+                        </children>
+                    </VBox>
+                </center>
+            </BorderPane>
         </Scene>
     </scene>
 </fx:root>

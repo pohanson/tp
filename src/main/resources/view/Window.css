@@ -1,4 +1,4 @@
-.button, .message{
+.button, .message, .jsonPreviewLabel {
     -fx-text-fill: white;
 }
 
@@ -19,5 +19,5 @@
 }
 
 .jsonPreviewLabel {
-    -fx-background-color: derive(#1d1d1d, 50%);
+    -fx-background-color: derive(#1d1d1d, 40%);
 }

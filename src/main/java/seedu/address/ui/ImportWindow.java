@@ -3,7 +3,8 @@ package seedu.address.ui;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.input.Clipboard;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
 
@@ -14,7 +15,7 @@ public class ImportWindow extends UiPart<Stage> {
     private static final String FXML_FILE = "ImportWindow.fxml";
 
     @FXML
-    private Label jsonPreview;
+    private Text jsonPreview;
 
     /**
      * Creates a new ImportWindow.
@@ -80,6 +81,9 @@ public class ImportWindow extends UiPart<Stage> {
     }
 
     public void pasteJson() {
-        System.out.println("Paste JSON button clicked");
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        if (clipboard.hasString()) {
+            jsonPreview.setText(clipboard.getString());
+        }
     }
 }
