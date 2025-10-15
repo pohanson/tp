@@ -50,6 +50,15 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
         return statusKeyword;
     }
 
+    /**
+     * Returns the tag keywords used for filtering.
+     *
+     * @return The list of tag keywords.
+     */
+    public List<String> getTagKeywords() {
+        return tagKeywords;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
