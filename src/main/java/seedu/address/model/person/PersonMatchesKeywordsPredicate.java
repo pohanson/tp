@@ -41,6 +41,15 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
         return matchesName && matchesTag && matchesStatus;
     }
 
+    /**
+     * Returns the status keyword used for filtering.
+     *
+     * @return The status keyword, or null if no status filter is applied.
+     */
+    public String getStatusKeyword() {
+        return statusKeyword;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
