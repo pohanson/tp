@@ -32,7 +32,7 @@ public class SetStatusCommandTest {
     }
 
     @Test
-    public void execute_validIndex_validStatus_success() {
+    public void execute_validIndexAndStatus_success() {
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person updated = new PersonBuilder(target).withStatus("Contacted").build();
         SetStatusCommand command = new SetStatusCommand(INDEX_FIRST_PERSON, "Contacted");
@@ -45,7 +45,7 @@ public class SetStatusCommandTest {
     }
 
     @Test
-    public void execute_validIndex_blankStatus_defaultsToUncontacted_success() {
+    public void execute_validIndexBlankStatusDefaultsToUncontacted_success() {
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person updated = new PersonBuilder(target).withStatus("Uncontacted").build();
         SetStatusCommand command = new SetStatusCommand(INDEX_FIRST_PERSON, "      ");
