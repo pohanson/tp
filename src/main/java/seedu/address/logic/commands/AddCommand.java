@@ -13,6 +13,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.StatusViewState;
+import seedu.address.model.TagsViewState;
 import seedu.address.model.person.Person;
 
 /**
@@ -62,6 +63,7 @@ public class AddCommand extends Command {
 
         model.addPerson(toAdd);
         model.setStatusViewState(StatusViewState.ALL_STATUSES);
+        model.setTagsViewState(TagsViewState.ALL_TAGS);
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 

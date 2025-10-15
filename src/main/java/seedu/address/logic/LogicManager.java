@@ -17,6 +17,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.StatusViewState;
+import seedu.address.model.TagsViewState;
 import seedu.address.model.person.Person;
 import seedu.address.storage.Storage;
 
@@ -91,5 +92,10 @@ public class LogicManager implements Logic {
     @Override
     public ReadOnlyObjectProperty<StatusViewState> getStatusViewStateProperty() {
         return model.getStatusViewStateProperty();
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<TagsViewState> getTagsViewStateProperty() {
+        return model.getTagsViewStateProperty();
     }
 }

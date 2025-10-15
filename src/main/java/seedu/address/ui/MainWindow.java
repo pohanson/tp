@@ -127,7 +127,7 @@ public class MainWindow extends UiPart<Stage> {
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
-        sidebarPanel = new SidebarPanel(logic.getStatusViewStateProperty());
+        sidebarPanel = new SidebarPanel(logic.getStatusViewStateProperty(), logic.getTagsViewStateProperty());
         sidebarPanelPlaceholder.getChildren().add(sidebarPanel.getRoot());
     }
 

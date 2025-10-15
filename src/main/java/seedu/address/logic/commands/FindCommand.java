@@ -5,12 +5,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.StatusViewState;
+import seedu.address.model.TagsViewState;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonMatchesKeywordsPredicate;
 import seedu.address.model.person.Status;
@@ -48,8 +50,9 @@ public class FindCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
 
-        // Update status view state based on whether status filter is applied
+        // Update view states based on filters applied
         updateStatusViewState(model);
+        updateTagsViewState(model);
 
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
@@ -79,6 +82,27 @@ public class FindCommand extends Command {
         } else {
             // For other predicates (e.g., NameContainsKeywordsPredicate), show all statuses
             model.setStatusViewState(StatusViewState.ALL_STATUSES);
+        }
+    }
+
+    /**
+     * Updates the tags view state in the model based on the predicate used for filtering.
+     *
+     * @param model The model to update the tags view state in.
+     */
+    private void updateTagsViewState(Model model) {
+        if (predicate instanceof PersonMatchesKeywordsPredicate) {
+            PersonMatchesKeywordsPredicate pred = (PersonMatchesKeywordsPredicate) predicate;
+            List<String> tagKeywords = pred.getTagKeywords();
+
+            if (!tagKeywords.isEmpty()) {
+                model.setTagsViewState(new TagsViewState(tagKeywords));
+            } else {
+                model.setTagsViewState(TagsViewState.ALL_TAGS);
+            }
+        } else {
+            // For other predicates (e.g., NameContainsKeywordsPredicate), show all tags
+            model.setTagsViewState(TagsViewState.ALL_TAGS);
         }
     }
 
