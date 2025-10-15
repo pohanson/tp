@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.function.Predicate;
@@ -9,7 +10,10 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.StatusViewState;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonMatchesKeywordsPredicate;
+import seedu.address.model.person.Status;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -24,11 +28,14 @@ public class FindCommand extends Command {
             + "Parameters: n:[name] t:[tag] ..\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_STATUS + "uncontacted\n"
             + "Parameters: "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_STATUS + "STATUS]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_STATUS + "uncontacted";
 
     private final Predicate<Person> predicate;
 
@@ -40,8 +47,39 @@ public class FindCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
+
+        // Update status view state based on whether status filter is applied
+        updateStatusViewState(model);
+
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+    }
+
+    /**
+     * Updates the status view state in the model based on the predicate used for filtering.
+     *
+     * @param model The model to update the status view state in.
+     */
+    private void updateStatusViewState(Model model) {
+        if (predicate instanceof PersonMatchesKeywordsPredicate) {
+            PersonMatchesKeywordsPredicate pred = (PersonMatchesKeywordsPredicate) predicate;
+            String statusKeyword = pred.getStatusKeyword();
+
+            if (statusKeyword != null && !statusKeyword.isEmpty()) {
+                try {
+                    Status status = Status.fromStringIgnoreCase(statusKeyword);
+                    model.setStatusViewState(new StatusViewState(status));
+                } catch (IllegalArgumentException e) {
+                    // If status parsing fails, default to showing all statuses
+                    model.setStatusViewState(StatusViewState.ALL_STATUSES);
+                }
+            } else {
+                model.setStatusViewState(StatusViewState.ALL_STATUSES);
+            }
+        } else {
+            // For other predicates (e.g., NameContainsKeywordsPredicate), show all statuses
+            model.setStatusViewState(StatusViewState.ALL_STATUSES);
+        }
     }
 
     @Override

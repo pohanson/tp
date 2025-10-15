@@ -3,6 +3,7 @@ package seedu.address.model;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
@@ -84,4 +85,14 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Returns the status view state property for observing changes.
+     */
+    ReadOnlyObjectProperty<StatusViewState> getStatusViewStateProperty();
+
+    /**
+     * Sets the current status view state.
+     */
+    void setStatusViewState(StatusViewState state);
 }

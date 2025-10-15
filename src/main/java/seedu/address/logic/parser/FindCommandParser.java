@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Arrays;
@@ -26,15 +27,16 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     public FindCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
+        ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_STATUS);
 
         String preamble = map.getPreamble();
 
         boolean hasName = arePrefixesPresent(map, PREFIX_NAME);
         boolean hasTag = arePrefixesPresent(map, PREFIX_TAG);
+        boolean hasStatus = arePrefixesPresent(map, PREFIX_STATUS);
 
         // Non-prefixed mode: no prefixes, use preamble as name keywords
-        if (!hasName && !hasTag) {
+        if (!hasName && !hasTag && !hasStatus) {
             String trimmed = preamble.trim();
             if (trimmed.isEmpty()) {
                 throw new ParseException(
@@ -64,8 +66,13 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .map(s -> Arrays.asList(s.split("\\s+")))
                 .orElse(List.of());
 
+        // Get status keyword
+        String statusKeyword = map.getValue(PREFIX_STATUS)
+                .map(String::trim)
+                .orElse(null);
 
-        return new FindCommand(new PersonMatchesKeywordsPredicate(nameKeywords, tagKeywords));
+
+        return new FindCommand(new PersonMatchesKeywordsPredicate(nameKeywords, tagKeywords, statusKeyword));
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
