@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.Scene?>
+<?import javafx.stage.Stage?>
+<fx:root resizable="false" title="Import Contacts" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <icons>
+        <Image url="@/images/address_book_32.png"/>
+    </icons>
+    <scene>
+        <Scene>
+            <stylesheets>
+                <URL value="@Window.css"/>
+            </stylesheets>
+            <ScrollPane>
+                <VBox alignment="CENTER" styleClass="windowMessageContainer">
+                    <AnchorPane>
+                        <HBox fx:id="importMessageContainer" alignment="CENTER">
+                            <opaqueInsets>
+                                <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
+                            </padding>
+                            <VBox>
+                                <Label fx:id="helpMessage" styleClass="message"
+                                       text="1. Paste the exported JSON text from your clipboard by clicking on Paste JSON button."
+                                       wrapText="true"/>
+                                <Label fx:id="helpMessage1" styleClass="message"
+                                       text="2. When you save, it will replace the current data."
+                                       wrapText="true"/>
+                            </VBox>
+                            <ButtonBar prefHeight="40.0">
+                                <buttons>
+                                    <Button fx:id="pasteJsonButton" mnemonicParsing="false"
+                                            onAction="#pasteJson" text="Paste JSON"/>
+                                    <Button mnemonicParsing="false" text="Save"/>
+                                </buttons>
+                            </ButtonBar>
+                        </HBox>
+                    </AnchorPane>
+                    <Label fx:id="jsonPreview" maxWidth="1.7976931348623157E308" prefHeight="100.0"
+                           styleClass="message, jsonPreviewLabel" text="ASDF" textAlignment="JUSTIFY"
+                           wrapText="true">
+                        <opaqueInsets>
+                            <Insets bottom="10.0" left="5.0" right="10.0" top="5.0"/>
+                        </opaqueInsets>
+                        <padding>
+                            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0"/>
+                        </padding>
+                    </Label>
+                </VBox>
+            </ScrollPane>
+        </Scene>
+    </scene>
+</fx:root>
