@@ -44,7 +44,12 @@ public class Status {
     }
 
     public static boolean isValidStatus(String test) {
-        return test.matches(VALIDATION_REGEX);
+        try {
+            fromStringIgnoreCase(test);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override
