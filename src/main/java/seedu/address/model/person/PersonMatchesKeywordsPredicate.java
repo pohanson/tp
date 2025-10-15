@@ -12,6 +12,7 @@ import seedu.address.commons.util.ToStringBuilder;
 public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
     private final List<String> nameKeywords;
     private final List<String> tagKeywords;
+    private final String statusKeyword;
 
     /**
      * Constructs a predicate that matches a {@code Person}
@@ -19,9 +20,10 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
      * @param nameKeywords keywords to check against the person's name
      * @param tagKeywords keywords to check against the person's tags
      */
-    public PersonMatchesKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords) {
+    public PersonMatchesKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords, String statusKeyword) {
         this.nameKeywords = nameKeywords;
         this.tagKeywords = tagKeywords;
+        this.statusKeyword = statusKeyword;
     }
 
     @Override
@@ -33,7 +35,10 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
                 .anyMatch(keyword -> person.getTags().stream()
                         .anyMatch(tag -> StringUtil.containsWordIgnoreCase(tag.tagName, keyword)));
 
-        return matchesName && matchesTag;
+        boolean matchesStatus = statusKeyword == null || statusKeyword.isEmpty()
+                || statusKeyword.equalsIgnoreCase(person.getStatus().name());
+
+        return matchesName && matchesTag && matchesStatus;
     }
 
     @Override
@@ -48,7 +53,9 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
 
         PersonMatchesKeywordsPredicate otherPredicate = (PersonMatchesKeywordsPredicate) other;
         return nameKeywords.equals(otherPredicate.nameKeywords)
-                && tagKeywords.equals(otherPredicate.tagKeywords);
+                && tagKeywords.equals(otherPredicate.tagKeywords)
+                && (statusKeyword == null ? otherPredicate.statusKeyword == null
+                    : statusKeyword.equals(otherPredicate.statusKeyword));
     }
 
     @Override
@@ -56,6 +63,7 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
         return new ToStringBuilder(this)
                 .add("nameKeywords", nameKeywords)
                 .add("tagKeywords", tagKeywords)
+                .add("statusKeyword", statusKeyword)
                 .toString();
     }
 

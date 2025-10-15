@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.function.Predicate;
@@ -24,11 +25,14 @@ public class FindCommand extends Command {
             + "Parameters: n:[name] t:[tag] ..\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_STATUS + "uncontacted\n"
             + "Parameters: "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_STATUS + "STATUS]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_STATUS + "uncontacted";
 
     private final Predicate<Person> predicate;
 
