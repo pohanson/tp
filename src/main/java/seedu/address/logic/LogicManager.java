@@ -18,6 +18,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.StatusViewState;
 import seedu.address.model.TagsViewState;
+import seedu.address.model.TemplateViewState;
 import seedu.address.model.person.Person;
 import seedu.address.storage.Storage;
 
@@ -42,7 +43,7 @@ public class LogicManager implements Logic {
     public LogicManager(Model model, Storage storage) {
         this.model = model;
         this.storage = storage;
-        addressBookParser = new AddressBookParser();
+        addressBookParser = new AddressBookParser(storage);
     }
 
     @Override
@@ -97,5 +98,15 @@ public class LogicManager implements Logic {
     @Override
     public ReadOnlyObjectProperty<TagsViewState> getTagsViewStateProperty() {
         return model.getTagsViewStateProperty();
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty() {
+        return model.getTemplateViewStateProperty();
+    }
+
+    @Override
+    public Model getModel() {
+        return model;
     }
 }

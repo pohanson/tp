@@ -8,9 +8,11 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.StatusViewState;
 import seedu.address.model.TagsViewState;
+import seedu.address.model.TemplateViewState;
 import seedu.address.model.person.Person;
 
 /**
@@ -60,4 +62,14 @@ public interface Logic {
      * Returns the tags view state property for observing changes.
      */
     ReadOnlyObjectProperty<TagsViewState> getTagsViewStateProperty();
+
+    /**
+     * Returns the template view state property for observing changes.
+     */
+    ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty();
+
+    /**
+     * Returns the Model.
+     */
+    Model getModel();
 }

@@ -32,6 +32,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
+    private TemplateViewPanel templateViewPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
     private SidebarPanel sidebarPanel;
@@ -118,6 +119,8 @@ public class MainWindow extends UiPart<Stage> {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
+        templateViewPanel = new TemplateViewPanel(logic.getTemplateViewStateProperty());
+
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
@@ -129,6 +132,15 @@ public class MainWindow extends UiPart<Stage> {
 
         sidebarPanel = new SidebarPanel(logic.getStatusViewStateProperty(), logic.getTagsViewStateProperty());
         sidebarPanelPlaceholder.getChildren().add(sidebarPanel.getRoot());
+
+        // Listen for template view state changes
+        logic.getTemplateViewStateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                showTemplateView();
+            } else {
+                showPersonListView();
+            }
+        });
     }
 
     /**
@@ -182,12 +194,20 @@ public class MainWindow extends UiPart<Stage> {
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
+            // Before executing command, update template content if in template view
+            updateTemplateContentInModel();
+
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
+            }
+
+            if (!commandResult.isShowTemplate()) {
+                // Any non-template command exits template view
+                logic.getModel().setTemplateViewState(null);
             }
 
             if (commandResult.isExit()) {
@@ -199,6 +219,36 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("An error occurred while executing command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
+        }
+    }
+
+    /**
+     * Shows the template view and hides the person list.
+     */
+    private void showTemplateView() {
+        personListPanelPlaceholder.getChildren().clear();
+        personListPanelPlaceholder.getChildren().add(templateViewPanel.getRoot());
+    }
+
+    /**
+     * Shows the person list view and hides the template view.
+     */
+    private void showPersonListView() {
+        personListPanelPlaceholder.getChildren().clear();
+        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+    }
+
+    /**
+     * Updates the template content in the model from the text area.
+     */
+    private void updateTemplateContentInModel() {
+        seedu.address.model.TemplateViewState currentState = 
+            logic.getModel().getTemplateViewStateProperty().getValue();
+        if (currentState != null) {
+            String currentContent = templateViewPanel.getTemplateContent();
+            seedu.address.model.TemplateViewState updatedState = 
+                new seedu.address.model.TemplateViewState(currentState.getStatus(), currentContent);
+            logic.getModel().setTemplateViewState(updatedState);
         }
     }
 }
