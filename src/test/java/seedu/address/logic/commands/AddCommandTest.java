@@ -24,6 +24,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.StatusViewState;
+import seedu.address.model.TagsViewState;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -169,6 +170,16 @@ public class AddCommandTest {
         public void setStatusViewState(StatusViewState state) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public ReadOnlyObjectProperty<TagsViewState> getTagsViewStateProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setTagsViewState(TagsViewState state) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -214,6 +225,11 @@ public class AddCommandTest {
 
         @Override
         public void setStatusViewState(StatusViewState state) {
+            // Do nothing - stub implementation
+        }
+
+        @Override
+        public void setTagsViewState(TagsViewState state) {
             // Do nothing - stub implementation
         }
     }
