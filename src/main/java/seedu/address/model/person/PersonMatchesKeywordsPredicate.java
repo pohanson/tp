@@ -35,8 +35,8 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
                 .anyMatch(keyword -> person.getTags().stream()
                         .anyMatch(tag -> StringUtil.containsWordIgnoreCase(tag.tagName, keyword)));
 
-        boolean matchesStatus = statusKeyword == null || statusKeyword.isEmpty() || 
-                statusKeyword.equalsIgnoreCase(person.getStatus().name());
+        boolean matchesStatus = statusKeyword == null || statusKeyword.isEmpty()
+                || statusKeyword.equalsIgnoreCase(person.getStatus().name());
 
         return matchesName && matchesTag && matchesStatus;
     }
@@ -54,7 +54,7 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
         PersonMatchesKeywordsPredicate otherPredicate = (PersonMatchesKeywordsPredicate) other;
         return nameKeywords.equals(otherPredicate.nameKeywords)
                 && tagKeywords.equals(otherPredicate.tagKeywords)
-                && (statusKeyword == null ? otherPredicate.statusKeyword == null 
+                && (statusKeyword == null ? otherPredicate.statusKeyword == null
                     : statusKeyword.equals(otherPredicate.statusKeyword));
     }
 
