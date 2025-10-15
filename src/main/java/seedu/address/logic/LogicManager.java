@@ -86,7 +86,7 @@ public class LogicManager implements Logic {
             logger.info("Successfully imported address book from JSON string");
         } catch (DataLoadingException e) {
             logger.warning("Failed to import JSON string: " + e.getMessage());
-            throw new IOException("Failed to import address book data: " + e.getMessage(), e);
+            throw new IOException("Failed to import address book data: ", e);
         }
     }
 

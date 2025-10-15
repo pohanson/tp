@@ -6,6 +6,10 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
@@ -34,6 +38,7 @@ public class ImportWindow extends UiPart<Stage> {
         super(FXML_FILE, root);
         this.logic = logic;
         jsonPreview.setText(DEFAULT_PREVIEW_TEXT);
+        setupKeyboardShortcuts();
     }
 
     /**
@@ -41,6 +46,26 @@ public class ImportWindow extends UiPart<Stage> {
      */
     public ImportWindow(Logic logic) {
         this(new Stage(), logic);
+    }
+
+    /**
+     * Sets up keyboard shortcuts for the import window.
+     * Ctrl+V: Paste JSON from clipboard
+     * Ctrl+S: Save and import data
+     */
+    private void setupKeyboardShortcuts() {
+        KeyCombination pasteKeyCombination = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
+        KeyCombination saveKeyCombination = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (pasteKeyCombination.match(event)) {
+                pasteJson();
+                event.consume();
+            } else if (saveKeyCombination.match(event)) {
+                saveJson();
+                event.consume();
+            }
+        });
     }
 
     /**
@@ -125,8 +150,8 @@ public class ImportWindow extends UiPart<Stage> {
 
         } catch (IOException e) {
             logger.warning("Failed to import JSON: " + e.getMessage());
-            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, "Import Failed", "Failed to import data: ",
-                    e.getMessage());
+            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, "Import Failed", "Import Failed",
+                    "Please ensure that you only paste the content of the entire address book JSON file.");
         }
     }
 }
