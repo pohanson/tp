@@ -1,8 +1,10 @@
 package seedu.address.ui;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import seedu.address.model.StatusViewState;
 
 /**
  * Panel containing the sidebar with status and tags sections.
@@ -17,10 +19,17 @@ public class SidebarPanel extends UiPart<Region> {
     private StackPane tagsSectionPlaceholder;
 
     /**
-     * Creates a {@code SidebarPanel}.
+     * Creates a {@code SidebarPanel} with the given status view state property.
+     *
+     * @param statusViewStateProperty The property containing the current status view state.
      */
-    public SidebarPanel() {
+    public SidebarPanel(ReadOnlyObjectProperty<StatusViewState> statusViewStateProperty) {
         super(FXML);
+
+        // Create and add the StatusViewPanel
+        StatusViewPanel statusViewPanel = new StatusViewPanel(statusViewStateProperty);
+        statusSectionPlaceholder.getChildren().clear();
+        statusSectionPlaceholder.getChildren().add(statusViewPanel.getRoot());
     }
 
     /**

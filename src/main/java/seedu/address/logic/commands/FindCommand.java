@@ -10,7 +10,10 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.StatusViewState;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonMatchesKeywordsPredicate;
+import seedu.address.model.person.Status;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -44,8 +47,39 @@ public class FindCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
+
+        // Update status view state based on whether status filter is applied
+        updateStatusViewState(model);
+
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+    }
+
+    /**
+     * Updates the status view state in the model based on the predicate used for filtering.
+     *
+     * @param model The model to update the status view state in.
+     */
+    private void updateStatusViewState(Model model) {
+        if (predicate instanceof PersonMatchesKeywordsPredicate) {
+            PersonMatchesKeywordsPredicate pred = (PersonMatchesKeywordsPredicate) predicate;
+            String statusKeyword = pred.getStatusKeyword();
+
+            if (statusKeyword != null && !statusKeyword.isEmpty()) {
+                try {
+                    Status status = Status.fromStringIgnoreCase(statusKeyword);
+                    model.setStatusViewState(new StatusViewState(status));
+                } catch (IllegalArgumentException e) {
+                    // If status parsing fails, default to showing all statuses
+                    model.setStatusViewState(StatusViewState.ALL_STATUSES);
+                }
+            } else {
+                model.setStatusViewState(StatusViewState.ALL_STATUSES);
+            }
+        } else {
+            // For other predicates (e.g., NameContainsKeywordsPredicate), show all statuses
+            model.setStatusViewState(StatusViewState.ALL_STATUSES);
+        }
     }
 
     @Override

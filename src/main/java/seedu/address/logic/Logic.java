@@ -2,12 +2,14 @@ package seedu.address.logic;
 
 import java.nio.file.Path;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.StatusViewState;
 import seedu.address.model.person.Person;
 
 /**
@@ -47,4 +49,9 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Returns the status view state property for observing changes.
+     */
+    ReadOnlyObjectProperty<StatusViewState> getStatusViewStateProperty();
 }
