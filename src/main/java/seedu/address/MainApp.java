@@ -27,6 +27,8 @@ import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
+import seedu.address.storage.TemplateStorage;
+import seedu.address.storage.TemplateStorageManager;
 import seedu.address.storage.UserPrefsStorage;
 import seedu.address.ui.Ui;
 import seedu.address.ui.UiManager;
@@ -58,8 +60,10 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
-        storage = new StorageManager(addressBookStorage, userPrefsStorage);
-
+        // Initialize template storage in the data directory (same as addressbook.json)
+        Path templateDirPath = userPrefs.getAddressBookFilePath().getParent();
+        TemplateStorage templateStorage = new TemplateStorageManager(templateDirPath);
+        storage = new StorageManager(addressBookStorage, userPrefsStorage, templateStorage);
         model = initModelManager(storage, userPrefs);
 
         logic = new LogicManager(model, storage);

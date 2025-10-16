@@ -20,7 +20,9 @@ import seedu.address.logic.commands.ImportCommand;
 import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SetStatusCommand;
+import seedu.address.logic.commands.TemplateCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.storage.Storage;
 
 /**
  * Parses user input.
@@ -32,6 +34,15 @@ public class AddressBookParser {
      */
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
+
+    private final Storage storage;
+
+    /**
+     * Creates an AddressBookParser with the given storage.
+     */
+    public AddressBookParser(Storage storage) {
+        this.storage = storage;
+    }
 
     /**
      * Parses user input into command for execution.
@@ -88,6 +99,9 @@ public class AddressBookParser {
 
         case ExportCommand.COMMAND_WORD:
             return new ExportCommand();
+            
+        case TemplateCommand.COMMAND_WORD:
+            return new TemplateCommandParser(storage).parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

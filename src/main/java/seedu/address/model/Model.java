@@ -105,4 +105,15 @@ public interface Model {
      * Sets the current tags view state.
      */
     void setTagsViewState(TagsViewState state);
+
+    /**
+     * Returns the template view state property for observing changes.
+     */
+    ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty();
+
+    /**
+     * Sets the current template view state.
+     * Set to null to exit template view mode.
+     */
+    void setTemplateViewState(TemplateViewState state);
 }
