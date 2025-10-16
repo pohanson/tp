@@ -14,6 +14,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import seedu.address.commons.exceptions.DataLoadingException;
+import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Status;
 
 public class TemplateStorageManagerTest {
@@ -22,10 +26,11 @@ public class TemplateStorageManagerTest {
     public Path temporaryFolder;
 
     @Test
-    public void readTemplate_nonExistentFile_returnsEmpty() throws IOException {
+    public void readTemplate_nonExistentFile_returnsDefaultTemplate() throws IOException {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
-        Optional<String> result = storage.readTemplate(Status.CONTACTED);
-        assertFalse(result.isPresent());
+        String result = storage.readTemplate(Status.CONTACTED);
+        // Should return default template
+        assertEquals("Template for Contacted contacts", result);
     }
 
     @Test
@@ -35,9 +40,8 @@ public class TemplateStorageManagerTest {
         Path templateFile = temporaryFolder.resolve("contactedTemplate.txt");
         Files.writeString(templateFile, expectedContent);
 
-        Optional<String> result = storage.readTemplate(Status.CONTACTED);
-        assertTrue(result.isPresent());
-        assertEquals(expectedContent, result.get());
+        String result = storage.readTemplate(Status.CONTACTED);
+        assertEquals(expectedContent, result);
     }
 
     @Test
@@ -68,48 +72,42 @@ public class TemplateStorageManagerTest {
     public void getDefaultTemplate_contacted_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.CONTACTED);
-        assertTrue(template.contains("CONTACTED"));
-        assertTrue(template.contains("contacted"));
+        assertEquals("Template for Contacted contacts", template);
     }
 
     @Test
     public void getDefaultTemplate_uncontacted_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.UNCONTACTED);
-        assertTrue(template.contains("UNCONTACTED"));
-        assertTrue(template.contains("uncontacted"));
+        assertEquals("Template for Uncontacted contacts", template);
     }
 
     @Test
     public void getDefaultTemplate_rejected_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.REJECTED);
-        assertTrue(template.contains("REJECTED"));
-        assertTrue(template.contains("rejected"));
+        assertEquals("Template for Rejected contacts", template);
     }
 
     @Test
     public void getDefaultTemplate_accepted_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.ACCEPTED);
-        assertTrue(template.contains("ACCEPTED"));
-        assertTrue(template.contains("accepted"));
+        assertEquals("Template for Accepted contacts", template);
     }
 
     @Test
     public void getDefaultTemplate_unreachable_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.UNREACHABLE);
-        assertTrue(template.contains("UNREACHABLE"));
-        assertTrue(template.contains("unreachable"));
+        assertEquals("Template for Unreachable contacts", template);
     }
 
     @Test
     public void getDefaultTemplate_busy_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.BUSY);
-        assertTrue(template.contains("BUSY"));
-        assertTrue(template.contains("busy"));
+        assertEquals("Template for Busy contacts", template);
     }
 
     @Test
@@ -120,9 +118,9 @@ public class TemplateStorageManagerTest {
         storage.saveTemplate(Status.REJECTED, "Rejected template");
         storage.saveTemplate(Status.ACCEPTED, "Accepted template");
         
-        assertEquals("Contacted template", storage.readTemplate(Status.CONTACTED).get());
-        assertEquals("Rejected template", storage.readTemplate(Status.REJECTED).get());
-        assertEquals("Accepted template", storage.readTemplate(Status.ACCEPTED).get());
+        assertEquals("Contacted template", storage.readTemplate(Status.CONTACTED));
+        assertEquals("Rejected template", storage.readTemplate(Status.REJECTED));
+        assertEquals("Accepted template", storage.readTemplate(Status.ACCEPTED));
     }
 
     @Test
@@ -131,9 +129,8 @@ public class TemplateStorageManagerTest {
         
         storage.saveTemplate(Status.CONTACTED, "");
         
-        Optional<String> result = storage.readTemplate(Status.CONTACTED);
-        assertTrue(result.isPresent());
-        assertEquals("", result.get());
+        String result = storage.readTemplate(Status.CONTACTED);
+        assertEquals("", result);
     }
 
     @Test
@@ -143,24 +140,30 @@ public class TemplateStorageManagerTest {
         
         storage.saveTemplate(Status.CONTACTED, multilineContent);
         
-        Optional<String> result = storage.readTemplate(Status.CONTACTED);
-        assertTrue(result.isPresent());
-        assertEquals(multilineContent, result.get());
+        String result = storage.readTemplate(Status.CONTACTED);
+        assertEquals(multilineContent, result);
     }
 
     /**
      * A Storage stub that stores templates in memory for testing purposes.
      */
-    public static class StorageStub implements TemplateStorage {
+    public static class StorageStub implements Storage {
         private final Map<Status, String> templates = new HashMap<>();
 
+        // TemplateStorage methods
         @Override
-        public Optional<String> readTemplate(Status status) {
-            return Optional.ofNullable(templates.get(status));
+        public Path getTemplateDirectoryPath() {
+            return null; // Not used in tests
         }
 
         @Override
-        public void saveTemplate(Status status, String content) {
+        public String readTemplate(Status status) throws IOException {
+            String template = templates.get(status);
+            return template != null ? template : getDefaultTemplate(status);
+        }
+
+        @Override
+        public void saveTemplate(Status status, String content) throws IOException {
             templates.put(status, content);
         }
 
@@ -171,6 +174,48 @@ public class TemplateStorageManagerTest {
 
         public String getSavedTemplate(Status status) {
             return templates.get(status);
+        }
+
+        // AddressBookStorage methods (stubs)
+        @Override
+        public Path getAddressBookFilePath() {
+            return null;
+        }
+
+        @Override
+        public Optional<ReadOnlyAddressBook> readAddressBook() throws DataLoadingException {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
+            return Optional.empty();
+        }
+
+        @Override
+        public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
+            // Do nothing
+        }
+
+        @Override
+        public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+            // Do nothing
+        }
+
+        // UserPrefsStorage methods (stubs)
+        @Override
+        public Path getUserPrefsFilePath() {
+            return null;
+        }
+
+        @Override
+        public Optional<UserPrefs> readUserPrefs() throws DataLoadingException {
+            return Optional.empty();
+        }
+
+        @Override
+        public void saveUserPrefs(ReadOnlyUserPrefs userPrefs) throws IOException {
+            // Do nothing
         }
     }
 }

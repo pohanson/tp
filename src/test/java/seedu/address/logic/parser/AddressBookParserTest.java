@@ -108,14 +108,14 @@ public class AddressBookParserTest {
     public void parseCommand_template() throws Exception {
         TemplateCommand command = (TemplateCommand) parser.parseCommand(
                 TemplateCommand.COMMAND_WORD + " s:CONTACTED");
-        assertEquals(new TemplateCommand(Status.CONTACTED, false), command);
+        assertEquals(new TemplateCommand(Status.CONTACTED, storageStub), command);
     }
 
     @Test
     public void parseCommand_templateSave() throws Exception {
         TemplateCommand command = (TemplateCommand) parser.parseCommand(
                 TemplateCommand.COMMAND_WORD + " save");
-        assertEquals(new TemplateCommand(null, true), command);
+        assertEquals(new TemplateCommand(storageStub), command);
     }
 
     @Test

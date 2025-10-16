@@ -242,11 +242,11 @@ public class MainWindow extends UiPart<Stage> {
      * Updates the template content in the model from the text area.
      */
     private void updateTemplateContentInModel() {
-        seedu.address.model.TemplateViewState currentState = 
+        seedu.address.model.TemplateViewState currentState =
             logic.getModel().getTemplateViewStateProperty().getValue();
         if (currentState != null) {
             String currentContent = templateViewPanel.getTemplateContent();
-            seedu.address.model.TemplateViewState updatedState = 
+            seedu.address.model.TemplateViewState updatedState =
                 new seedu.address.model.TemplateViewState(currentState.getStatus(), currentContent);
             logic.getModel().setTemplateViewState(updatedState);
         }

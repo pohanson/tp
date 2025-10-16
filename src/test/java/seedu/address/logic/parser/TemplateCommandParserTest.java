@@ -8,69 +8,71 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.TemplateCommand;
 import seedu.address.model.person.Status;
+import seedu.address.storage.TemplateStorageManagerTest.StorageStub;
 
 public class TemplateCommandParserTest {
 
-    private TemplateCommandParser parser = new TemplateCommandParser();
+    private final StorageStub storageStub = new StorageStub();
+    private TemplateCommandParser parser = new TemplateCommandParser(storageStub);
 
     @Test
     public void parse_validContactedStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:CONTACTED", 
-                new TemplateCommand(Status.CONTACTED, false));
+                new TemplateCommand(Status.CONTACTED, storageStub));
     }
 
     @Test
     public void parse_validUncontactedStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:UNCONTACTED",
-                new TemplateCommand(Status.UNCONTACTED, false));
+                new TemplateCommand(Status.UNCONTACTED, storageStub));
     }
 
     @Test
     public void parse_validRejectedStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:REJECTED",
-                new TemplateCommand(Status.REJECTED, false));
+                new TemplateCommand(Status.REJECTED, storageStub));
     }
 
     @Test
     public void parse_validAcceptedStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:ACCEPTED",
-                new TemplateCommand(Status.ACCEPTED, false));
+                new TemplateCommand(Status.ACCEPTED, storageStub));
     }
 
     @Test
     public void parse_validUnreachableStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:UNREACHABLE",
-                new TemplateCommand(Status.UNREACHABLE, false));
+                new TemplateCommand(Status.UNREACHABLE, storageStub));
     }
 
     @Test
     public void parse_validBusyStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:BUSY",
-                new TemplateCommand(Status.BUSY, false));
+                new TemplateCommand(Status.BUSY, storageStub));
     }
 
     @Test
     public void parse_validSaveCommand_returnsTemplateCommand() {
         assertParseSuccess(parser, " save",
-                new TemplateCommand(null, true));
+                new TemplateCommand(storageStub));
     }
 
     @Test
     public void parse_lowercaseStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:contacted",
-                new TemplateCommand(Status.CONTACTED, false));
+                new TemplateCommand(Status.CONTACTED, storageStub));
     }
 
     @Test
     public void parse_mixedCaseStatus_returnsTemplateCommand() {
         assertParseSuccess(parser, " s:CoNtAcTeD",
-                new TemplateCommand(Status.CONTACTED, false));
+                new TemplateCommand(Status.CONTACTED, storageStub));
     }
 
     @Test
     public void parse_invalidStatus_throwsParseException() {
         assertParseFailure(parser, " s:INVALID",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+                TemplateCommand.MESSAGE_INVALID_STATUS);
     }
 
     @Test
@@ -94,7 +96,7 @@ public class TemplateCommandParserTest {
     @Test
     public void parse_missingStatusValue_throwsParseException() {
         assertParseFailure(parser, " s:",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+                TemplateCommand.MESSAGE_INVALID_STATUS);
     }
 
     @Test

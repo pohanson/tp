@@ -43,15 +43,39 @@ public class TemplateCommandParser implements Parser<TemplateCommand> {
             return new TemplateCommand(storage);
         }
 
+        // Check for extra arguments after save keyword
+        if (trimmedArgs.toLowerCase().startsWith(SAVE_KEYWORD + " ")) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+        }
+
         // Otherwise, parse as status command
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_STATUS);
+
+        // Check for preamble (extra text before s:)
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+        }
 
         if (!argMultimap.getValue(PREFIX_STATUS).isPresent()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
         }
 
+        // Check for multiple status values
+        if (argMultimap.getAllValues(PREFIX_STATUS).size() > 1) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+        }
+
         String statusString = argMultimap.getValue(PREFIX_STATUS).get();
+
+        // Validate that status string doesn't contain extra arguments (spaces)
+        if (statusString.contains(" ")) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+        }
 
         try {
             Status status = Status.fromStringIgnoreCase(statusString);
