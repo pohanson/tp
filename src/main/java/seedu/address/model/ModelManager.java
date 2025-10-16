@@ -27,6 +27,7 @@ public class ModelManager implements Model {
     private final FilteredList<Person> filteredPersons;
     private final ObjectProperty<StatusViewState> statusViewState;
     private final ObjectProperty<TagsViewState> tagsViewState;
+    private final ObjectProperty<TemplateViewState> templateViewState;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -41,6 +42,7 @@ public class ModelManager implements Model {
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         statusViewState = new SimpleObjectProperty<>(StatusViewState.ALL_STATUSES);
         tagsViewState = new SimpleObjectProperty<>(TagsViewState.ALL_TAGS);
+        templateViewState = new SimpleObjectProperty<>(null); // null means not in template view mode
     }
 
     public ModelManager() {
@@ -159,6 +161,19 @@ public class ModelManager implements Model {
     public void setTagsViewState(TagsViewState state) {
         requireNonNull(state);
         tagsViewState.set(state);
+    }
+
+    //=========== Template View State ========================================================================
+
+    @Override
+    public ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty() {
+        return templateViewState;
+    }
+
+    @Override
+    public void setTemplateViewState(TemplateViewState state) {
+        // state can be null to exit template view mode
+        templateViewState.set(state);
     }
 
     @Override

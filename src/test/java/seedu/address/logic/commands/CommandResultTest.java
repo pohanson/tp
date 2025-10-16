@@ -15,6 +15,7 @@ public class CommandResultTest {
         // same values -> returns true
         assertTrue(commandResult.equals(new CommandResult("feedback")));
         assertTrue(commandResult.equals(new CommandResult("feedback", false, false)));
+        assertTrue(commandResult.equals(new CommandResult("feedback", false, false, false)));
 
         // same object -> returns true
         assertTrue(commandResult.equals(commandResult));
@@ -33,6 +34,9 @@ public class CommandResultTest {
 
         // different exit value -> returns false
         assertFalse(commandResult.equals(new CommandResult("feedback", false, true)));
+
+        // different showTemplate value -> returns false
+        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, true)));
     }
 
     @Test
@@ -50,6 +54,9 @@ public class CommandResultTest {
 
         // different exit value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, true).hashCode());
+
+        // different showTemplate value -> returns different hashcode
+        assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, false, true).hashCode());
     }
 
     @Test
@@ -57,7 +64,25 @@ public class CommandResultTest {
         CommandResult commandResult = new CommandResult("feedback");
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
-                + ", exit=" + commandResult.isExit() + "}";
+                + ", exit=" + commandResult.isExit() + ", showTemplate=" + commandResult.isShowTemplate() + "}";
         assertEquals(expected, commandResult.toString());
+    }
+
+    @Test
+    public void isShowTemplate_defaultConstructor_returnsFalse() {
+        CommandResult commandResult = new CommandResult("feedback");
+        assertFalse(commandResult.isShowTemplate());
+    }
+
+    @Test
+    public void isShowTemplate_explicitlySetTrue_returnsTrue() {
+        CommandResult commandResult = new CommandResult("feedback", false, false, true);
+        assertTrue(commandResult.isShowTemplate());
+    }
+
+    @Test
+    public void isShowTemplate_explicitlySetFalse_returnsFalse() {
+        CommandResult commandResult = new CommandResult("feedback", false, false, false);
+        assertFalse(commandResult.isShowTemplate());
     }
 }

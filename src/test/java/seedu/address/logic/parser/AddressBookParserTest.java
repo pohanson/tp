@@ -22,16 +22,20 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.TemplateCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Status;
+import seedu.address.storage.TemplateStorageManagerTest.StorageStub;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
 
 public class AddressBookParserTest {
 
-    private final AddressBookParser parser = new AddressBookParser();
+    private final StorageStub storageStub = new StorageStub();
+    private final AddressBookParser parser = new AddressBookParser(storageStub);
 
     @Test
     public void parseCommand_add() throws Exception {
@@ -98,6 +102,20 @@ public class AddressBookParserTest {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD
                                                + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_template() throws Exception {
+        TemplateCommand command = (TemplateCommand) parser.parseCommand(
+                TemplateCommand.COMMAND_WORD + " s:CONTACTED");
+        assertEquals(new TemplateCommand(Status.CONTACTED, storageStub), command);
+    }
+
+    @Test
+    public void parseCommand_templateSave() throws Exception {
+        TemplateCommand command = (TemplateCommand) parser.parseCommand(
+                TemplateCommand.COMMAND_WORD + " save");
+        assertEquals(new TemplateCommand(storageStub), command);
     }
 
     @Test

@@ -49,3 +49,28 @@
 .status_unreachable {
     -fx-text-fill: #000000;
 }
+
+/* Template view panel styles */
+.template-view-panel {
+    -fx-background-color: derive(#1d1d1d, 20%);
+}
+
+.template-title {
+    -fx-text-fill: #3e7b91;
+    -fx-font-weight: bold;
+}
+
+.template-instruction {
+    -fx-text-fill: derive(white, -20%);
+    -fx-font-style: italic;
+}
+
+.template-text-area {
+    -fx-background-color: derive(#383838, 10%);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: derive(white, -50%);
+}
+
+.template-text-area .content {
+    -fx-background-color: derive(#383838, 10%);
+}

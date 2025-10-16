@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="template-view-panel" spacing="10" fillWidth="true">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <!-- Title Label -->
+    <Label fx:id="statusLabel" text="Template for Status" styleClass="template-title">
+        <font>
+            <Font size="18" />
+        </font>
+    </Label>
+
+    <!-- Instruction Label -->
+    <Label fx:id="instructionLabel"
+           text="Edit the template below. Use 'template save' to save your changes."
+           styleClass="template-instruction" wrapText="true">
+        <font>
+            <Font size="12" />
+        </font>
+    </Label>
+
+    <!-- Template Text Area -->
+    <TextArea fx:id="templateTextArea" wrapText="true" VBox.vgrow="ALWAYS"
+              styleClass="template-text-area" promptText="Enter template content here...">
+        <font>
+            <Font name="Monospaced" size="13" />
+        </font>
+    </TextArea>
+</VBox>

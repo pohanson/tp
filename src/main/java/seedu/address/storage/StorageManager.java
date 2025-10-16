@@ -10,6 +10,7 @@ import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Status;
 
 /**
  * Manages storage of AddressBook data in local storage.
@@ -19,13 +20,16 @@ public class StorageManager implements Storage {
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
     private AddressBookStorage addressBookStorage;
     private UserPrefsStorage userPrefsStorage;
+    private TemplateStorage templateStorage;
 
     /**
      * Creates a {@code StorageManager} with the given {@code AddressBookStorage} and {@code UserPrefStorage}.
      */
-    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage,
+                          TemplateStorage templateStorage) {
         this.addressBookStorage = addressBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.templateStorage = templateStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -79,6 +83,29 @@ public class StorageManager implements Storage {
     public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
         addressBookStorage.saveAddressBook(addressBook, filePath);
+    }
+
+    // ================ Template methods ==============================
+
+    @Override
+    public Path getTemplateDirectoryPath() {
+        return templateStorage.getTemplateDirectoryPath();
+    }
+
+    @Override
+    public String readTemplate(Status status) throws IOException {
+        return templateStorage.readTemplate(status);
+    }
+
+    @Override
+    public void saveTemplate(Status status, String content) throws IOException {
+        logger.fine("Saving template for status: " + status);
+        templateStorage.saveTemplate(status, content);
+    }
+
+    @Override
+    public String getDefaultTemplate(Status status) {
+        return templateStorage.getDefaultTemplate(status);
     }
 
 }
