@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -90,6 +91,9 @@ public class SetStatusCommand extends Command {
 
     @Override
     public String toString() {
-        return getClass().getCanonicalName() + "{index=" + targetIndex + ", status='" + statusInput + "'}";
+        return new ToStringBuilder(this)
+                .add("index", targetIndex.getOneBased())
+                .add("status", "'" + statusInput + "'")
+                .toString();
     }
 }
