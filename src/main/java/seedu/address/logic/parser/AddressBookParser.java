@@ -99,7 +99,7 @@ public class AddressBookParser {
 
         case ExportCommand.COMMAND_WORD:
             return new ExportCommand();
-            
+
         case TemplateCommand.COMMAND_WORD:
             return new TemplateCommandParser(storage).parse(arguments);
 

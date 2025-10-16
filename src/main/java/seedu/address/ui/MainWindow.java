@@ -37,7 +37,7 @@ public class MainWindow extends UiPart<Stage> {
     private HelpWindow helpWindow;
     private ImportWindow importWindow;
     private SidebarPanel sidebarPanel;
-    
+
     @FXML
     private StackPane commandBoxPlaceholder;
 
@@ -46,7 +46,7 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private MenuItem importMenuItem;
-    
+
     @FXML
     private MenuItem exportMenuItem;
 

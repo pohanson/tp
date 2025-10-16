@@ -20,12 +20,12 @@ public class ExportCommandTest {
 
         @Override
         public String getString() {
-            return value; 
+            return value;
         }
 
         @Override
         public void setString(String v) {
-            value = v; 
+            value = v;
         }
     }
 
