@@ -65,7 +65,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .flatMap(s -> Arrays.stream(s.split("\\s+")))
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
 
         // Get status keyword
         String statusKeyword = map.getValue(PREFIX_STATUS)
