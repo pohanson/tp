@@ -262,6 +262,7 @@ public class MainWindow extends UiPart<Stage> {
     private void showTemplateView() {
         personListPanelPlaceholder.getChildren().clear();
         personListPanelPlaceholder.getChildren().add(templateViewPanel.getRoot());
+        this.hideSidebar();
     }
 
     /**
@@ -270,6 +271,21 @@ public class MainWindow extends UiPart<Stage> {
     private void showPersonListView() {
         personListPanelPlaceholder.getChildren().clear();
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+        this.showSidebar();
+    }
+
+    /**
+     * Hides the sidebar.
+     */
+    private void hideSidebar() {
+        sidebarPanelPlaceholder.setVisible(false);
+    }
+
+    /**
+     * Shows the sidebar.
+     */
+    private void showSidebar() {
+        sidebarPanelPlaceholder.setVisible(true);
     }
 
     /**

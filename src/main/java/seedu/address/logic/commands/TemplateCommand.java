@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.StatusViewState;
 import seedu.address.model.TemplateViewState;
 import seedu.address.model.person.Status;
 import seedu.address.storage.Storage;
@@ -84,7 +83,6 @@ public class TemplateCommand extends Command {
             String content = storage.readTemplate(status);
             TemplateViewState state = new TemplateViewState(status, content);
             model.setTemplateViewState(state);
-            model.setStatusViewState(new StatusViewState(status));
 
             return new CommandResult(
                     String.format(MESSAGE_OPEN_TEMPLATE_SUCCESS, formatStatusName(status)),
@@ -106,7 +104,6 @@ public class TemplateCommand extends Command {
 
         try {
             storage.saveTemplate(currentState.getStatus(), currentState.getContent());
-            model.setStatusViewState(StatusViewState.ALL_STATUSES);
             return new CommandResult(
                     String.format(MESSAGE_SAVE_TEMPLATE_SUCCESS, formatStatusName(currentState.getStatus())));
         } catch (IOException e) {
