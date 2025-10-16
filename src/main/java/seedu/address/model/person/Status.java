@@ -43,8 +43,19 @@ public class Status {
         return value.name();
     }
 
+    /**
+     * Returns true if the provided string corresponds to a valid {@code Status}, ignoring case.
+     *
+     * @param test the status string to validate
+     * @return true if {@code test} maps to a known status value
+     */
     public static boolean isValidStatus(String test) {
-        return test.matches(VALIDATION_REGEX);
+        try {
+            fromStringIgnoreCase(test);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override
