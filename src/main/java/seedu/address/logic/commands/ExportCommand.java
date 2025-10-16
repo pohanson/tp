@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import seedu.address.commons.exceptions.DataLoadingException;
-import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.clipboard.ClipboardProvider;
 import seedu.address.logic.clipboard.SystemClipboardProvider;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.files.FileSystemProvider;
 import seedu.address.logic.files.SystemFileSystemProvider;
 import seedu.address.model.Model;
@@ -23,8 +23,8 @@ public class ExportCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Copied address book data to clipboard.";
     public static final String MESSAGE_FILE_MISSING = "Export failed: Address book file not found.";
     public static final String MESSAGE_FILE_READ_ERROR = "Export failed: Could not read address book file.";
-    public static final String MESSAGE_INVALID_JSON = "Export failed: stored file contains invalid JSON.";
-    public static final String MESSAGE_FILEPATH_NOT_CONFIGURED = "Export failed: address book file path not configured.";
+    public static final String MESSAGE_INVALID_JSON = "Export failed: Stored file contains invalid JSON.";
+    public static final String MESSAGE_FILEPATH_NOT_CONFIGURED = "Export failed: File path not configured.";
 
     private final ClipboardProvider clipboardProvider;
     private final FileSystemProvider fileSystemProvider;
@@ -37,6 +37,14 @@ public class ExportCommand extends Command {
         this(clipboardProvider, new SystemFileSystemProvider());
     }
 
+    /**
+     * This constructor is primarily intended for testing, where a fake clipboard
+     * and fake filesystem can be provided to avoid side effects. 
+     *
+     * @param clipboardProvider provider used to place the exported JSON on the clipboard
+     * @param fileSystemProvider provider used to check for file existence and read file contents
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public ExportCommand(ClipboardProvider clipboardProvider, FileSystemProvider fileSystemProvider) {
         this.clipboardProvider = requireNonNull(clipboardProvider);
         this.fileSystemProvider = requireNonNull(fileSystemProvider);

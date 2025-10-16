@@ -10,8 +10,6 @@ import seedu.address.storage.AddressBookJson;
 import seedu.address.logic.clipboard.ClipboardProvider;
 import seedu.address.logic.clipboard.SystemClipboardProvider;
 
-import java.nio.file.Path;
-
 /**
  * Imports address book data from the user's clipboard.
  */
@@ -20,7 +18,8 @@ public class ImportCommand extends Command {
     public static final String COMMAND_WORD = "import";
     public static final String MESSAGE_SUCCESS = "Imported address book data from clipboard.";
     public static final String MESSAGE_EMPTY_CLIPBOARD = "Clipboard does not contain any text to import.";
-    public static final String MESSAGE_INVALID_JSON = "Failed to import: Clipboard does not contain a valid address book JSON.";
+    public static final String MESSAGE_INVALID_JSON = "Failed to import: "
+            + "Clipboard does not contain valid address book JSON.";
 
     private final ClipboardProvider clipboardProvider;
 
