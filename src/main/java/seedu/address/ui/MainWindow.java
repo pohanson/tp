@@ -36,7 +36,7 @@ public class MainWindow extends UiPart<Stage> {
     private HelpWindow helpWindow;
     private ImportWindow importWindow;
     private SidebarPanel sidebarPanel;
-
+    
     @FXML
     private StackPane commandBoxPlaceholder;
 
@@ -45,6 +45,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private MenuItem importMenuItem;
+    
+    @FXML
+    private MenuItem exportMenuItem;
 
     @FXML
     private StackPane personListPanelPlaceholder;
@@ -84,6 +87,7 @@ public class MainWindow extends UiPart<Stage> {
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
         setAccelerator(importMenuItem, KeyCombination.valueOf("F7"));
+        setAccelerator(exportMenuItem, KeyCombination.valueOf("F8"));
     }
 
     /**
@@ -185,6 +189,19 @@ public class MainWindow extends UiPart<Stage> {
             importWindow.show();
         } else {
             importWindow.focus();
+        }
+    }
+
+    /**
+     * Handles exporting the address book JSON to clipboard.
+     */
+    @FXML
+    public void handleExport() {
+        try {
+            CommandResult result = logic.execute("export");
+            resultDisplay.setFeedbackToUser(result.getFeedbackToUser());
+        } catch (CommandException | ParseException e) {
+            resultDisplay.setFeedbackToUser(e.getMessage());
         }
     }
 
