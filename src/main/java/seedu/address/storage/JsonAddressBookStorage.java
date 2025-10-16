@@ -60,6 +60,23 @@ public class JsonAddressBookStorage implements AddressBookStorage {
     }
 
     @Override
+    public ReadOnlyAddressBook readAddressBookFromJsonString(String jsonString) throws DataLoadingException {
+        requireNonNull(jsonString);
+
+        try {
+            JsonSerializableAddressBook jsonAddressBook = JsonUtil.fromJsonString(
+                    jsonString, JsonSerializableAddressBook.class);
+            return jsonAddressBook.toModelType();
+        } catch (IOException e) {
+            logger.info("Failed to parse JSON string: " + e.getMessage());
+            throw new DataLoadingException(e);
+        } catch (IllegalValueException ive) {
+            logger.info("Illegal values found in JSON string: " + ive.getMessage());
+            throw new DataLoadingException(ive);
+        }
+    }
+
+    @Override
     public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         saveAddressBook(addressBook, filePath);
     }
