@@ -49,14 +49,14 @@
         </StackPane>
 
         <HBox styleClass="background" VBox.vgrow="ALWAYS">
-          <VBox fx:id="personList" minWidth="340" prefWidth="340" styleClass="pane-with-border" HBox.hgrow="ALWAYS">
+          <VBox fx:id="personList" minWidth="340" prefWidth="340" styleClass="pane-with-border" HBox.hgrow="SOMETIMES">
             <padding>
               <Insets bottom="10" left="10" right="10" top="10"/>
             </padding>
             <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
           </VBox>
 
-          <StackPane fx:id="sidebarPanelPlaceholder" styleClass="pane-with-border" />
+          <StackPane fx:id="sidebarPanelPlaceholder" prefWidth="300" styleClass="pane-with-border" />
         </HBox>
 
         <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
