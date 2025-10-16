@@ -40,7 +40,7 @@ public class ImportCommandTest {
     }
 
     private static class FakeClipboard implements ClipboardProvider {
-        String value;
+        private String value;
 
         @Override
         public String getString() {

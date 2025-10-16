@@ -47,7 +47,7 @@ public class ExportCommandTest {
     }
 
     private static class FakeClipboard implements ClipboardProvider {
-        String value;
+        private String value;
 
         @Override
         public String getString() {
@@ -61,9 +61,8 @@ public class ExportCommandTest {
     }
 
     private static class FakeFileSystem implements seedu.address.logic.files.FileSystemProvider {
-        Path expectedPath;
-        String fileContent;
-        boolean exists = true;
+        private String fileContent;
+        private boolean exists = true;
 
         @Override
         public boolean exists(Path path) {
