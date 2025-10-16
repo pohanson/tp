@@ -136,22 +136,57 @@ public class ImportWindow extends UiPart<Stage> {
     public void saveJson() {
         String text = jsonPreview.getText();
 
-        if (text == null || text.trim().isEmpty() || text.equals(DEFAULT_PREVIEW_TEXT)) {
-            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, "No Data", "Error:",
-                    "Please paste JSON data before saving.");
+        if (this.isEmptyText(text)) {
+            this.showEmptyTextAlertDialog();
             return;
         }
 
         try {
-            logic.importJsonString(text);
-            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.INFORMATION, "Success", "Successfully imported data!",
-                    "Address book data imported successfully!");
-            hide();
-
+            this.importData(text);
         } catch (IOException e) {
-            logger.warning("Failed to import JSON: " + e.getMessage());
-            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, "Import Failed", "Import Failed",
-                    "Please ensure that you only paste the content of the entire address book JSON file.");
+            this.handleImportError(e);
         }
+    }
+
+    /**
+     * Imports the JSON data using the logic layer.
+     */
+    private void importData(String jsonData) throws IOException {
+        logic.importJsonString(jsonData);
+        this.showSuccessAlertAndClose();
+    }
+
+    /**
+     * Shows success alert and closes the import window.
+     */
+    private void showSuccessAlertAndClose() {
+        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.INFORMATION, "Success", "Successfully imported data!",
+                "Address book data imported successfully!");
+        hide();
+    }
+
+    /**
+     * Handles import error by logging and showing error alert.
+     */
+    private void handleImportError(IOException e) {
+        logger.warning("Failed to import JSON: " + e.getMessage());
+        this.showImportFailedAlertDialog();
+    }
+
+    /**
+     * Checks if the provided text is empty or default preview text.
+     */
+    private boolean isEmptyText(String text) {
+        return text == null || text.trim().isEmpty() || text.equals(DEFAULT_PREVIEW_TEXT);
+    }
+
+    private void showEmptyTextAlertDialog() {
+        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, "No Data", "Error:",
+                "Please paste JSON data before saving.");
+    }
+
+    private void showImportFailedAlertDialog() {
+        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, "Import Failed", "Import Failed",
+                "Please ensure that you only paste the content of the entire address book JSON file.");
     }
 }
