@@ -39,7 +39,7 @@ public class ExportCommand extends Command {
 
     /**
      * This constructor is primarily intended for testing, where a fake clipboard
-     * and fake filesystem can be provided to avoid side effects. 
+     * and fake filesystem can be provided to avoid side effects.
      *
      * @param clipboardProvider provider used to place the exported JSON on the clipboard
      * @param fileSystemProvider provider used to check for file existence and read file contents
