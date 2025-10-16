@@ -19,10 +19,10 @@ import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ImportCommand;
-import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.TemplateCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -133,14 +133,14 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    HelpCommand.MESSAGE_USAGE), (
-                                                ) -> parser.parseCommand(""));
+                HelpCommand.MESSAGE_USAGE), (
+        ) -> parser.parseCommand(""));
     }
 
     @Test
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class,
                 MESSAGE_UNKNOWN_COMMAND, (
-                                        ) -> parser.parseCommand("unknownCommand"));
+                ) -> parser.parseCommand("unknownCommand"));
     }
 }

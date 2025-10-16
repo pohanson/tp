@@ -3,47 +3,17 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.clipboard.ClipboardProvider;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 
 public class ExportCommandTest {
-
-    private static class FakeClipboard implements ClipboardProvider {
-        String value;
-
-        @Override
-        public String getString() {
-            return value;
-        }
-
-        @Override
-        public void setString(String v) {
-            value = v;
-        }
-    }
-
-    private static class FakeFileSystem implements seedu.address.logic.files.FileSystemProvider {
-        Path expectedPath;
-        String fileContent;
-        boolean exists = true;
-
-        @Override
-        public boolean exists(Path path) {
-            return exists;
-        }
-
-        @Override
-        public String readFile(Path path) {
-            return fileContent;
-        }
-    }
 
     @Test
     public void execute_fileMissing_throws() {
@@ -74,6 +44,36 @@ public class ExportCommandTest {
 
         assertEquals("Copied address book data to clipboard.", result.getFeedbackToUser());
         assertEquals(json, fake.getString());
+    }
+
+    private static class FakeClipboard implements ClipboardProvider {
+        String value;
+
+        @Override
+        public String getString() {
+            return value;
+        }
+
+        @Override
+        public void setString(String v) {
+            value = v;
+        }
+    }
+
+    private static class FakeFileSystem implements seedu.address.logic.files.FileSystemProvider {
+        Path expectedPath;
+        String fileContent;
+        boolean exists = true;
+
+        @Override
+        public boolean exists(Path path) {
+            return exists;
+        }
+
+        @Override
+        public String readFile(Path path) {
+            return fileContent;
+        }
     }
 }
 
