@@ -3,11 +3,11 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.exceptions.DataLoadingException;
+import seedu.address.logic.clipboard.ClipboardProvider;
+import seedu.address.logic.clipboard.SystemClipboardProvider;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.logic.clipboard.ClipboardProvider;
-import seedu.address.logic.clipboard.SystemClipboardProvider;
 import seedu.address.storage.AddressBookJson;
 
 /**
