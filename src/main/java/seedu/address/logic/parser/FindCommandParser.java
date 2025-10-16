@@ -60,11 +60,12 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .orElse(List.of());
 
         // Get tag keywords
-        List<String> tagKeywords = map.getValue(PREFIX_TAG)
+        List<String> tagKeywords = map.getAllValues(PREFIX_TAG)
+                .stream()
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
-                .map(s -> Arrays.asList(s.split("\\s+")))
-                .orElse(List.of());
+                .flatMap(s -> Arrays.stream(s.split("\\s+")))
+                .collect(Collectors.toList());
 
         // Get status keyword
         String statusKeyword = map.getValue(PREFIX_STATUS)
