@@ -54,7 +54,7 @@ public class LogicManagerTest {
         JsonAddressBookStorage addressBookStorage =
                 new JsonAddressBookStorage(temporaryFolder.resolve(ADDRESS_BOOK_FILE));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve(USER_PREFS_FILE));
-        TemplatesStorageManager templateStorage = new TemplateStorageManager(temporaryFolder.resolve("templates"));
+        TemplateStorageManager templateStorage = new TemplateStorageManager(temporaryFolder.resolve("templates"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, templateStorage);
         logic = new LogicManager(model, storage);
     }
@@ -167,7 +167,8 @@ public class LogicManagerTest {
 
         JsonUserPrefsStorage userPrefsStorage =
                 new JsonUserPrefsStorage(temporaryFolder.resolve(EXCEPTION_USER_PREFS_FILE));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        TemplateStorageManager templateStorage = new TemplateStorageManager(temporaryFolder.resolve("templates"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, templateStorage);
 
         logic = new LogicManager(model, storage);
 
