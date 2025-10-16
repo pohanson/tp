@@ -44,6 +44,7 @@ task coverage(type: JacocoReport) {
 dependencies {
     String jUnitVersion = '5.4.0'
     String javaFxVersion = '17.0.7'
+    String testFxVersion = '4.0.18'
 
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
@@ -64,6 +65,11 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
 
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
+
+    testImplementation group: 'org.testfx', name: 'testfx-core', version: testFxVersion
+    testImplementation group: 'org.testfx', name: 'testfx-junit5', version: testFxVersion
+    testImplementation  'org.testfx:openjfx-monocle:17.0.10'
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 }
 
 shadowJar {

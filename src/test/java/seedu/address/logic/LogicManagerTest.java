@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
@@ -28,6 +29,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
@@ -37,6 +39,9 @@ import seedu.address.testutil.PersonBuilder;
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
     private static final IOException DUMMY_AD_EXCEPTION = new AccessDeniedException("dummy access denied exception");
+    private static final String ADDRESS_BOOK_FILE = "addressBook.json";
+    private static final String USER_PREFS_FILE = "userPrefs.json";
+    private static final String EXCEPTION_USER_PREFS_FILE = "ExceptionUserPrefs.json";
 
     @TempDir
     public Path temporaryFolder;
@@ -47,10 +52,9 @@ public class LogicManagerTest {
     @BeforeEach
     public void setUp() {
         JsonAddressBookStorage addressBookStorage =
-                new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
-        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
-        TemplateStorageManager templateStorage = new TemplateStorageManager(temporaryFolder.resolve("templates"));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, templateStorage);
+                new JsonAddressBookStorage(temporaryFolder.resolve(ADDRESS_BOOK_FILE));
+        JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve(USER_PREFS_FILE));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
         logic = new LogicManager(model, storage);
     }
 
@@ -149,7 +153,7 @@ public class LogicManagerTest {
      * @param expectedMessage the message expected inside exception thrown by the Logic component
      */
     private void assertCommandFailureForExceptionFromStorage(IOException e, String expectedMessage) {
-        Path prefPath = temporaryFolder.resolve("ExceptionUserPrefs.json");
+        Path prefPath = temporaryFolder.resolve(EXCEPTION_USER_PREFS_FILE);
 
         // Inject LogicManager with an AddressBookStorage that throws the IOException e when saving
         JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(prefPath) {
@@ -161,10 +165,8 @@ public class LogicManagerTest {
         };
 
         JsonUserPrefsStorage userPrefsStorage =
-                new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
-        TemplateStorageManager templateStorage =
-                new TemplateStorageManager(temporaryFolder.resolve("templates"));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, templateStorage);
+                new JsonUserPrefsStorage(temporaryFolder.resolve(EXCEPTION_USER_PREFS_FILE));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
         logic = new LogicManager(model, storage);
 
@@ -175,5 +177,104 @@ public class LogicManagerTest {
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void importJsonString_validJson_success() throws Exception {
+        String validJson = "{"
+                                   + "\"persons\": ["
+                                   + "{"
+                                   + "\"name\": \"Alice Pauline\","
+                                   + "\"phone\": \"94351253\","
+                                   + "\"email\": \"alice@example.com\","
+                                   + "\"address\": \"123, Jurong West Ave 6, #08-111\","
+                                   + "\"tags\": [\"friends\"]"
+                                   + "}"
+                                   + "]"
+                                   + "}";
+
+        logic.importJsonString(validJson);
+        Person currentPerson = model.getFilteredPersonList().get(0);
+        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals("Alice Pauline", currentPerson.getName().toString());
+        assertEquals("94351253", currentPerson.getPhone().toString());
+        assertEquals("alice@example.com", currentPerson.getEmail().toString());
+        assertEquals("123, Jurong West Ave 6, #08-111", currentPerson.getAddress().toString());
+        assertTrue(currentPerson.getTags().contains(new Tag("friends")));
+    }
+
+    @Test
+    public void importJsonString_invalidJson_throwsException() {
+        String invalidJson = "{ not valid json }";
+        assertThrows(Exception.class, () -> logic.importJsonString(invalidJson));
+    }
+
+    @Test
+    public void importJsonString_replacesExistingData_success() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                                    + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        logic.execute(addCommand);
+        assertEquals(1, model.getFilteredPersonList().size());
+
+        String validJson = "{"
+                                   + "\"persons\": ["
+                                   + "{"
+                                   + "\"name\": \"Alice Pauline\","
+                                   + "\"phone\": \"94351253\","
+                                   + "\"email\": \"alice@example.com\","
+                                   + "\"address\": \"123, Jurong West Ave 6, #08-111\","
+                                   + "\"tags\": [\"friends\"]"
+                                   + "}"
+                                   + "]"
+                                   + "}";
+
+        logic.importJsonString(validJson);
+        Person currentPerson = model.getFilteredPersonList().get(0);
+        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals("Alice Pauline", currentPerson.getName().toString());
+        assertEquals("94351253", currentPerson.getPhone().toString());
+        assertEquals("alice@example.com", currentPerson.getEmail().toString());
+        assertEquals("123, Jurong West Ave 6, #08-111", currentPerson.getAddress().toString());
+
+        assertTrue(currentPerson.getTags().contains(new Tag("friends")));
+    }
+
+    @Test
+    public void importJsonString_emptyJson_clearsAddressBook() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                                    + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        logic.execute(addCommand);
+        assertEquals(1, model.getFilteredPersonList().size());
+
+        String emptyJson = "{\"persons\": []}";
+        logic.importJsonString(emptyJson);
+        assertEquals(0, model.getFilteredPersonList().size());
+    }
+
+    @Test
+    public void importJsonString_multiplePersons_success() throws Exception {
+        String multiplePersonsJson = "{"
+                                             + "\"persons\": ["
+                                             + "{"
+                                             + "\"name\": \"Alice Pauline\","
+                                             + "\"phone\": \"94351253\","
+                                             + "\"email\": \"alice@example.com\","
+                                             + "\"address\": \"123, Jurong West Ave 6, #08-111\","
+                                             + "\"tags\": [\"friends\"]"
+                                             + "},"
+                                             + "{"
+                                             + "\"name\": \"Hoon Meier\","
+                                             + "\"phone\": \"8482424\","
+                                             + "\"email\": \"stefan@example.com\","
+                                             + "\"address\": \"little india\","
+                                             + "\"tags\": []"
+                                             + "}"
+                                             + "]"
+                                             + "}";
+
+        logic.importJsonString(multiplePersonsJson);
+        assertEquals(2, model.getFilteredPersonList().size());
+        assertEquals("Alice Pauline", model.getFilteredPersonList().get(0).getName().toString());
+        assertEquals("Hoon Meier", model.getFilteredPersonList().get(1).getName().toString());
     }
 }
