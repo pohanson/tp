@@ -192,6 +192,11 @@ public class TemplateStorageManagerTest {
         }
 
         @Override
+        public ReadOnlyAddressBook readAddressBookFromJsonString(String jsonString) throws DataLoadingException {
+            return null;
+        }
+
+        @Override
         public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
             // Do nothing
         }

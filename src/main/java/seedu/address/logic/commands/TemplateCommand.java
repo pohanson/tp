@@ -84,7 +84,6 @@ public class TemplateCommand extends Command {
             String content = storage.readTemplate(status);
             TemplateViewState state = new TemplateViewState(status, content);
             model.setTemplateViewState(state);
-            
             model.setStatusViewState(new StatusViewState(status));
 
             return new CommandResult(
