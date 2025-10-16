@@ -17,7 +17,7 @@ public class TemplateCommandParserTest {
 
     @Test
     public void parse_validContactedStatus_returnsTemplateCommand() {
-        assertParseSuccess(parser, " s:CONTACTED", 
+        assertParseSuccess(parser, " s:CONTACTED",
                 new TemplateCommand(Status.CONTACTED, storageStub));
     }
 

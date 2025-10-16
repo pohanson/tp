@@ -1,7 +1,6 @@
 package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -48,9 +47,9 @@ public class TemplateStorageManagerTest {
     public void saveTemplate_newFile_createsFile() throws IOException {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String content = "New template";
-        
+
         storage.saveTemplate(Status.CONTACTED, content);
-        
+
         Path templateFile = temporaryFolder.resolve("contactedTemplate.txt");
         assertTrue(Files.exists(templateFile));
         assertEquals(content, Files.readString(templateFile));
@@ -61,10 +60,10 @@ public class TemplateStorageManagerTest {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         Path templateFile = temporaryFolder.resolve("contactedTemplate.txt");
         Files.writeString(templateFile, "Old content");
-        
+
         String newContent = "Updated content";
         storage.saveTemplate(Status.CONTACTED, newContent);
-        
+
         assertEquals(newContent, Files.readString(templateFile));
     }
 
@@ -113,11 +112,11 @@ public class TemplateStorageManagerTest {
     @Test
     public void saveAndReadTemplate_multipleStatuses_worksCorrectly() throws IOException {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
-        
+
         storage.saveTemplate(Status.CONTACTED, "Contacted template");
         storage.saveTemplate(Status.REJECTED, "Rejected template");
         storage.saveTemplate(Status.ACCEPTED, "Accepted template");
-        
+
         assertEquals("Contacted template", storage.readTemplate(Status.CONTACTED));
         assertEquals("Rejected template", storage.readTemplate(Status.REJECTED));
         assertEquals("Accepted template", storage.readTemplate(Status.ACCEPTED));
@@ -126,9 +125,9 @@ public class TemplateStorageManagerTest {
     @Test
     public void saveTemplate_emptyContent_savesEmptyFile() throws IOException {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
-        
+
         storage.saveTemplate(Status.CONTACTED, "");
-        
+
         String result = storage.readTemplate(Status.CONTACTED);
         assertEquals("", result);
     }
@@ -137,9 +136,9 @@ public class TemplateStorageManagerTest {
     public void saveTemplate_multilineContent_preservesNewlines() throws IOException {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String multilineContent = "Line 1\nLine 2\nLine 3";
-        
+
         storage.saveTemplate(Status.CONTACTED, multilineContent);
-        
+
         String result = storage.readTemplate(Status.CONTACTED);
         assertEquals(multilineContent, result);
     }

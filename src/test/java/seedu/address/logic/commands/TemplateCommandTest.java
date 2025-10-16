@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -13,8 +15,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.ModelManager;
 import seedu.address.model.person.Status;
 import seedu.address.storage.TemplateStorageManagerTest.StorageStub;
-
-import java.nio.file.Path;
 
 public class TemplateCommandTest {
 
@@ -44,9 +44,9 @@ public class TemplateCommandTest {
         StorageStub storageStub = new StorageStub();
         ModelManager model = new ModelManager();
         TemplateCommand command = new TemplateCommand(Status.CONTACTED, storageStub);
-        
+
         CommandResult result = command.execute(model);
-        
+
         assertEquals(String.format(TemplateCommand.MESSAGE_OPEN_TEMPLATE_SUCCESS, "Contacted"),
                 result.getFeedbackToUser());
         assertTrue(result.isShowTemplate());
@@ -58,9 +58,9 @@ public class TemplateCommandTest {
         StorageStub storageStub = new StorageStub();
         ModelManager model = new ModelManager();
         TemplateCommand command = new TemplateCommand(Status.UNCONTACTED, storageStub);
-        
+
         CommandResult result = command.execute(model);
-        
+
         assertEquals(String.format(TemplateCommand.MESSAGE_OPEN_TEMPLATE_SUCCESS, "Uncontacted"),
                 result.getFeedbackToUser());
         assertTrue(result.isShowTemplate());
@@ -71,14 +71,14 @@ public class TemplateCommandTest {
     public void execute_saveTemplate_success() throws Exception {
         StorageStub storageStub = new StorageStub();
         ModelManager model = new ModelManager();
-        
+
         // First open a template
         model.setTemplateViewState(new seedu.address.model.TemplateViewState(Status.CONTACTED, "Test content"));
-        
+
         // Then save it
         TemplateCommand saveCommand = new TemplateCommand(storageStub);
         CommandResult result = saveCommand.execute(model);
-        
+
         assertEquals(String.format(TemplateCommand.MESSAGE_SAVE_TEMPLATE_SUCCESS, "Contacted"),
                 result.getFeedbackToUser());
         assertFalse(result.isShowTemplate());
@@ -90,7 +90,7 @@ public class TemplateCommandTest {
         StorageStub storageStub = new StorageStub();
         ModelManager model = new ModelManager();
         TemplateCommand saveCommand = new TemplateCommand(storageStub);
-        
+
         assertThrows(CommandException.class,
                 TemplateCommand.MESSAGE_NO_TEMPLATE_TO_SAVE, () -> saveCommand.execute(model));
     }
@@ -99,17 +99,17 @@ public class TemplateCommandTest {
     public void execute_allStatuses_success() throws Exception {
         StorageStub storageStub = new StorageStub();
         ModelManager model = new ModelManager();
-        
-        Status[] allStatuses = {Status.UNCONTACTED, Status.CONTACTED, Status.REJECTED, 
+
+        Status[] allStatuses = {Status.UNCONTACTED, Status.CONTACTED, Status.REJECTED,
                                 Status.ACCEPTED, Status.UNREACHABLE, Status.BUSY};
         String[] statusNames = {"Uncontacted", "Contacted", "Rejected", "Accepted", "Unreachable", "Busy"};
-        
+
         for (int i = 0; i < allStatuses.length; i++) {
             Status status = allStatuses[i];
             String statusName = statusNames[i];
             TemplateCommand command = new TemplateCommand(status, storageStub);
             CommandResult result = command.execute(model);
-            
+
             assertEquals(String.format(TemplateCommand.MESSAGE_OPEN_TEMPLATE_SUCCESS, statusName),
                     result.getFeedbackToUser());
             assertTrue(result.isShowTemplate());

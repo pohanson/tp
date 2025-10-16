@@ -162,7 +162,7 @@ public class LogicManagerTest {
 
         JsonUserPrefsStorage userPrefsStorage =
                 new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
-        TemplateStorageManager templateStorage = 
+        TemplateStorageManager templateStorage =
                 new TemplateStorageManager(temporaryFolder.resolve("templates"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, templateStorage);
 

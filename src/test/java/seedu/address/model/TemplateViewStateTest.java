@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +21,7 @@ public class TemplateViewStateTest {
 
     @Test
     public void constructor_nullContent_throwsNullPointerException() {
-        // TemplateViewState constructor doesn't validate null - remove this test or update implementation  
+        // TemplateViewState constructor doesn't validate null - remove this test or update implementation
         // For now, we'll just create the object and verify it doesn't crash
         TemplateViewState state = new TemplateViewState(Status.CONTACTED, null);
         // If we want null checking, we need to add it to the TemplateViewState constructor
@@ -115,7 +114,7 @@ public class TemplateViewStateTest {
 
     @Test
     public void allStatuses_createValidStates() {
-        Status[] allStatuses = {Status.UNCONTACTED, Status.CONTACTED, Status.REJECTED, 
+        Status[] allStatuses = {Status.UNCONTACTED, Status.CONTACTED, Status.REJECTED,
                                 Status.ACCEPTED, Status.UNREACHABLE, Status.BUSY};
         for (Status status : allStatuses) {
             TemplateViewState state = new TemplateViewState(status, "content");
