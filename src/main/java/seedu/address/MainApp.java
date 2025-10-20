@@ -88,9 +88,14 @@ public class MainApp extends Application {
                         + " populated with a sample AddressBook.");
             }
             initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
+            // To deal with the edge case where the file is missing, we save the sample data to the file.
+            storage.saveAddressBook(initialData);
         } catch (DataLoadingException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty AddressBook.");
+            initialData = new AddressBook();
+        } catch (IOException e) {
+            logger.warning("Problem while writing AddressBook to file. Will be starting with an empty AddressBook.");
             initialData = new AddressBook();
         }
 
