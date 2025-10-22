@@ -94,4 +94,17 @@ public class JsonAddressBookStorage implements AddressBookStorage {
         JsonUtil.saveJsonFile(new JsonSerializableAddressBook(addressBook), filePath);
     }
 
+
+    /**
+     * Parses a JSON string into a ReadOnlyAddressBook.
+     * @throws DataLoadingException if parsing fails or values are illegal
+     */
+    public static ReadOnlyAddressBook parse(String jsonString) throws DataLoadingException {
+        try {
+            JsonSerializableAddressBook json = JsonUtil.fromJsonString(jsonString, JsonSerializableAddressBook.class);
+            return json.toModelType();
+        } catch (IOException | IllegalValueException e) {
+            throw new DataLoadingException(e);
+        }
+    }
 }
