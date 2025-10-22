@@ -41,49 +41,107 @@ public class DeleteCommand extends Command {
         this.targetIndices = targetIndices;
     }
 
+    /**
+     * Executes the delete command to remove one or more persons from the address book.
+     *
+     * @param model The model containing the address book data.
+     * @return A CommandResult with a success message.
+     * @throws CommandException If any of the target indices are invalid.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        // Validate all indices first
+        validateAllIndices(lastShownList);
+        List<Person> personsToDelete = collectPersonsToDelete(lastShownList);
+        deletePersonsFromModel(model, personsToDelete);
+        String successMessage = formatSuccessMessage(personsToDelete);
+
+        return new CommandResult(successMessage);
+    }
+
+    /**
+     * Validates that all target indices are within the bounds of the list.
+     *
+     * @param personList The list of persons to check against.
+     * @throws CommandException If any index is out of bounds.
+     */
+    private void validateAllIndices(List<Person> personList) throws CommandException {
         for (Index index : targetIndices) {
-            if (index.getZeroBased()
-                        >= lastShownList.size()) {
+            if (index.getZeroBased() >= personList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
         }
+    }
 
-        // Sort indices in descending order to avoid index shifting issues when deleting
+    /**
+     * Collects the persons to be deleted based on the target indices.
+     * Indices are processed in descending order to avoid shifting issues.
+     *
+     * @param personList The current filtered list of persons.
+     * @return A list of persons to delete.
+     */
+    private List<Person> collectPersonsToDelete(List<Person> personList) {
         List<Index> sortedIndices = new ArrayList<>(targetIndices);
         sortedIndices.sort(Comparator.comparingInt(Index::getZeroBased).reversed());
 
-        // Collect persons to delete
         List<Person> personsToDelete = new ArrayList<>();
         for (Index index : sortedIndices) {
-            personsToDelete.add(lastShownList.get(index.getZeroBased()));
+            personsToDelete.add(personList.get(index.getZeroBased()));
         }
+        return personsToDelete;
+    }
 
-        // Delete all persons
+    /**
+     * Deletes all persons in the list from the model.
+     *
+     * @param model The model to delete from.
+     * @param personsToDelete The list of persons to delete.
+     */
+    private void deletePersonsFromModel(Model model, List<Person> personsToDelete) {
         for (Person person : personsToDelete) {
             model.deletePerson(person);
         }
+    }
 
-        // Format success message
-        if (personsToDelete.size()
-                    == 1) {
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
-                    Messages.format(personsToDelete.get(0))));
+    /**
+     * Formats the success message based on the number of persons deleted.
+     *
+     * @param deletedPersons The list of persons that were deleted.
+     * @return A formatted success message.
+     */
+    private String formatSuccessMessage(List<Person> deletedPersons) {
+        if (deletedPersons.size() == 1) {
+            return String.format(MESSAGE_DELETE_PERSON_SUCCESS,
+                    Messages.format(deletedPersons.get(0)));
         } else {
-            StringBuilder deletedPersons = new StringBuilder();
-            for (Person person : personsToDelete) {
-                deletedPersons.append("- ").append(Messages.format(person)).append("\n");
-            }
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS,
-                    personsToDelete.size(), deletedPersons.toString().trim()));
+            return formatMultipleDeleteMessage(deletedPersons);
         }
     }
 
+    /**
+     * Formats the success message for multiple person deletions.
+     *
+     * @param deletedPersons The list of persons that were deleted.
+     * @return A formatted success message listing all deleted persons.
+     */
+    private String formatMultipleDeleteMessage(List<Person> deletedPersons) {
+        StringBuilder deletedPersonsList = new StringBuilder();
+        for (Person person : deletedPersons) {
+            deletedPersonsList.append("- ").append(Messages.format(person)).append("\n");
+        }
+        return String.format(MESSAGE_DELETE_PERSONS_SUCCESS,
+                deletedPersons.size(), deletedPersonsList.toString().trim());
+    }
+
+    /**
+     * Checks if this DeleteCommand is equal to another object.
+     * Two DeleteCommands are equal if they target the same indices.
+     *
+     * @param other The object to compare with.
+     * @return True if the objects are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (other
@@ -99,6 +157,11 @@ public class DeleteCommand extends Command {
         return targetIndices.equals(otherDeleteCommand.targetIndices);
     }
 
+    /**
+     * Returns a string representation of this DeleteCommand.
+     *
+     * @return A string describing this command with its target indices.
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this)

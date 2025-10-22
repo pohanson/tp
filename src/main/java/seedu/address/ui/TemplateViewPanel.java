@@ -27,6 +27,8 @@ public class TemplateViewPanel extends UiPart<Region> {
 
     /**
      * Creates a {@code TemplateViewPanel} with the given template view state property.
+     *
+     * @param templateViewStateProperty The property containing the current template view state.
      */
     public TemplateViewPanel(ReadOnlyObjectProperty<TemplateViewState> templateViewStateProperty) {
         super(FXML);
@@ -47,6 +49,8 @@ public class TemplateViewPanel extends UiPart<Region> {
 
     /**
      * Updates the view with the new template state.
+     *
+     * @param state The new template state to display.
      */
     private void updateView(TemplateViewState state) {
         String statusName = formatStatusName(state.getStatus().name());
@@ -56,6 +60,8 @@ public class TemplateViewPanel extends UiPart<Region> {
 
     /**
      * Returns the current content of the template text area.
+     *
+     * @return The text currently in the template editor.
      */
     public String getTemplateContent() {
         return templateTextArea.getText();
@@ -63,6 +69,9 @@ public class TemplateViewPanel extends UiPart<Region> {
 
     /**
      * Formats the status name for display.
+     *
+     * @param statusName The status name to format (e.g., "CONTACTED").
+     * @return A formatted status name (e.g., "Contacted").
      */
     private String formatStatusName(String statusName) {
         return statusName.charAt(0) + statusName.substring(1).toLowerCase();
