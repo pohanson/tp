@@ -21,6 +21,7 @@ import seedu.address.model.StatusViewState;
 import seedu.address.model.TagsViewState;
 import seedu.address.model.TemplateViewState;
 import seedu.address.model.person.Person;
+import seedu.address.storage.JsonAddressBookUtil;
 import seedu.address.storage.Storage;
 
 /**
@@ -84,7 +85,7 @@ public class LogicManager implements Logic {
     @Override
     public void importJsonString(String jsonString) throws IOException {
         try {
-            ReadOnlyAddressBook addressBook = storage.readAddressBookFromJsonString(jsonString);
+            ReadOnlyAddressBook addressBook = JsonAddressBookUtil.readAddressBookFromJsonString(jsonString);
             model.setAddressBook(addressBook);
             storage.saveAddressBook(addressBook);
             logger.info("Successfully imported address book from JSON string");
