@@ -1,0 +1,76 @@
+
+.error {
+    -fx-text-fill: #d06651 !important; /* The error class should always override the default text-fill style */
+}
+
+.list-cell:empty {
+    /* Empty cells will not have alternating colours */
+    -fx-background: #383838;
+}
+
+.tag-selector {
+    -fx-border-width: 1;
+    -fx-border-color: white;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.tooltip-text {
+    -fx-text-fill: white;
+}
+
+/* Status label styles */
+.status_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.status_uncontacted {
+    -fx-text-fill: #808080;
+}
+
+.status_contacted {
+    -fx-text-fill: #00AA00;
+}
+
+.status_rejected {
+    -fx-text-fill: #D70040;
+}
+
+.status_accepted {
+    -fx-text-fill: #00AAAA;
+}
+
+.status_busy {
+    -fx-text-fill: #FFAA00;
+}
+
+.status_unreachable {
+    -fx-text-fill: #000000;
+}
+
+/* Template view panel styles */
+.template-view-panel {
+    -fx-background-color: derive(#1d1d1d, 20%);
+}
+
+.template-title {
+    -fx-text-fill: #3e7b91;
+    -fx-font-weight: bold;
+}
+
+.template-instruction {
+    -fx-text-fill: derive(white, -20%);
+    -fx-font-style: italic;
+}
+
+.template-text-area {
+    -fx-background-color: derive(#383838, 10%);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: derive(white, -50%);
+}
+
+.template-text-area .content {
+    -fx-background-color: derive(#383838, 10%);
+}

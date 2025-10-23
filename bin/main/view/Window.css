@@ -1,0 +1,23 @@
+.button, .message, .jsonPreviewLabel {
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-background-color: dimgray;
+}
+
+.button:hover {
+    -fx-background-color: gray;
+}
+
+.button:armed {
+    -fx-background-color: darkgray;
+}
+
+.windowMessageContainer {
+    -fx-background-color: derive(#1d1d1d, 20%);
+}
+
+.jsonPreviewLabel {
+    -fx-background-color: derive(#1d1d1d, 40%);
+}
