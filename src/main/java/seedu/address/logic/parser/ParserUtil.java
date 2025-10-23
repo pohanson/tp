@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -22,6 +23,8 @@ import seedu.address.model.tag.Tag;
  * Contains utility methods used for parsing strings in the various *Parser classes.
  */
 public class ParserUtil {
+
+    private static final Logger logger = Logger.getLogger(ParserUtil.class.getName());
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
 
@@ -160,9 +163,14 @@ public class ParserUtil {
     public static Status parseStatus(String status) throws ParseException {
         requireNonNull(status);
         String trimmedStatus = status.trim();
+        
         if (!Status.isValidStatus(trimmedStatus)) {
+            logger.warning("Invalid status provided: " + trimmedStatus);
             throw new ParseException(Status.MESSAGE_CONSTRAINTS);
         }
-        return Status.fromStringIgnoreCase(trimmedStatus);
+        
+        Status parsedStatus = Status.fromStringIgnoreCase(trimmedStatus);
+        logger.info("Parsed status successfully: " + trimmedStatus + " -> " + parsedStatus);
+        return parsedStatus;
     }
 }
