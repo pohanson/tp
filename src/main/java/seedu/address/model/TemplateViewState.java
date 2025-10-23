@@ -30,6 +30,13 @@ public class TemplateViewState {
         return content;
     }
 
+    /**
+     * Checks if this TemplateViewState is equal to another object.
+     * Two TemplateViewStates are equal if they have the same status and content.
+     *
+     * @param other The object to compare with.
+     * @return True if the objects are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -45,11 +52,21 @@ public class TemplateViewState {
                 && content.equals(otherState.content);
     }
 
+    /**
+     * Returns a hash code for this TemplateViewState.
+     *
+     * @return A hash code value for this object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(status, content);
     }
 
+    /**
+     * Returns a string representation of this TemplateViewState.
+     *
+     * @return A string describing this state with status and content length.
+     */
     @Override
     public String toString() {
         return "TemplateViewState{status=" + status + ", contentLength=" + content.length() + "}";

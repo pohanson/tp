@@ -5,7 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import seedu.address.logic.commands.TemplateCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Status;
-import seedu.address.storage.Storage;
+import seedu.address.storage.TemplateStorage;
 
 /**
  * Parses input arguments and creates a new TemplateCommand object.
@@ -15,13 +15,15 @@ public class TemplateCommandParser implements Parser<TemplateCommand> {
     private static final String SAVE_KEYWORD = "save";
     private static final Prefix PREFIX_STATUS = new Prefix("s:");
 
-    private final Storage storage;
+    private final TemplateStorage templateStorage;
 
     /**
-     * Creates a TemplateCommandParser with the given storage.
+     * Creates a TemplateCommandParser with the given template storage.
+     *
+     * @param templateStorage The storage for reading and writing templates.
      */
-    public TemplateCommandParser(Storage storage) {
-        this.storage = storage;
+    public TemplateCommandParser(TemplateStorage templateStorage) {
+        this.templateStorage = templateStorage;
     }
 
     /**
@@ -40,7 +42,7 @@ public class TemplateCommandParser implements Parser<TemplateCommand> {
 
         // Check if this is a save command
         if (trimmedArgs.equalsIgnoreCase(SAVE_KEYWORD)) {
-            return new TemplateCommand(storage);
+            return new TemplateCommand(templateStorage);
         }
 
         // Check for extra arguments after save keyword
@@ -79,7 +81,7 @@ public class TemplateCommandParser implements Parser<TemplateCommand> {
 
         try {
             Status status = Status.fromStringIgnoreCase(statusString);
-            return new TemplateCommand(status, storage);
+            return new TemplateCommand(status, templateStorage);
         } catch (IllegalArgumentException e) {
             throw new ParseException(TemplateCommand.MESSAGE_INVALID_STATUS);
         }

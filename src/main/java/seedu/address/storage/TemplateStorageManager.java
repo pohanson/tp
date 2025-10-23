@@ -34,6 +34,9 @@ public class TemplateStorageManager implements TemplateStorage {
 
     /**
      * Returns the file path for a template based on the status.
+     *
+     * @param status The status to get the file path for.
+     * @return The path to the template file for this status.
      */
     private Path getTemplateFilePath(Status status) {
         String fileName = status.name().toLowerCase() + TEMPLATE_FILE_SUFFIX;
@@ -73,9 +76,12 @@ public class TemplateStorageManager implements TemplateStorage {
 
     /**
      * Formats the status name for display (e.g., UNCONTACTED -> Uncontacted).
+     *
+     * @param statusToFormat The status to format.
+     * @return A formatted status name with proper capitalization.
      */
-    private String formatStatusName(Status status) {
-        String name = status.name();
+    private String formatStatusName(Status statusToFormat) {
+        String name = statusToFormat.name();
         return name.charAt(0) + name.substring(1).toLowerCase();
     }
 }

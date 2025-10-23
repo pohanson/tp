@@ -8,7 +8,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.TemplateViewState;
 import seedu.address.model.person.Status;
-import seedu.address.storage.Storage;
+import seedu.address.storage.TemplateStorage;
 
 /**
  * Opens a template view for editing email templates for a specific status.
@@ -36,32 +36,32 @@ public class TemplateCommand extends Command {
 
     private final Status status;
     private final boolean isSaveAction;
-    private final Storage storage;
+    private final TemplateStorage templateStorage;
 
     /**
      * Creates a TemplateCommand to open a template for the specified status.
      *
      * @param status The status for which to open the template.
-     * @param storage The storage to read/write templates.
+     * @param templateStorage The storage to read/write templates.
      */
-    public TemplateCommand(Status status, Storage storage) {
+    public TemplateCommand(Status status, TemplateStorage templateStorage) {
         requireNonNull(status);
-        requireNonNull(storage);
+        requireNonNull(templateStorage);
         this.status = status;
         this.isSaveAction = false;
-        this.storage = storage;
+        this.templateStorage = templateStorage;
     }
 
     /**
      * Creates a TemplateCommand to save the currently open template.
      *
-     * @param storage The storage to read/write templates.
+     * @param templateStorage The storage to read/write templates.
      */
-    public TemplateCommand(Storage storage) {
-        requireNonNull(storage);
+    public TemplateCommand(TemplateStorage templateStorage) {
+        requireNonNull(templateStorage);
         this.status = null;
         this.isSaveAction = true;
-        this.storage = storage;
+        this.templateStorage = templateStorage;
     }
 
     @Override
@@ -77,16 +77,19 @@ public class TemplateCommand extends Command {
 
     /**
      * Opens the template view for the specified status.
+     *
+     * @param model The model containing the application data.
+     * @return A CommandResult indicating success with the template view flag set.
+     * @throws CommandException If there's an error accessing template storage.
      */
     private CommandResult executeOpen(Model model) throws CommandException {
         try {
-            String content = storage.readTemplate(status);
+            String content = templateStorage.readTemplate(status);
             TemplateViewState state = new TemplateViewState(status, content);
             model.setTemplateViewState(state);
 
-            return new CommandResult(
-                    String.format(MESSAGE_OPEN_TEMPLATE_SUCCESS, formatStatusName(status)),
-                    false, false, true); // isShowTemplate = true
+            String successMessage = createOpenSuccessMessage();
+            return new CommandResult(successMessage, false, false, true); // isShowTemplate = true
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_STORAGE_ERROR, e.getMessage()));
         }
@@ -94,6 +97,10 @@ public class TemplateCommand extends Command {
 
     /**
      * Saves the currently displayed template.
+     *
+     * @param model The model containing the current template state.
+     * @return A CommandResult indicating success.
+     * @throws CommandException If no template is open or there's an error saving.
      */
     private CommandResult executeSave(Model model) throws CommandException {
         TemplateViewState currentState = model.getTemplateViewStateProperty().getValue();
@@ -103,22 +110,52 @@ public class TemplateCommand extends Command {
         }
 
         try {
-            storage.saveTemplate(currentState.getStatus(), currentState.getContent());
-            return new CommandResult(
-                    String.format(MESSAGE_SAVE_TEMPLATE_SUCCESS, formatStatusName(currentState.getStatus())));
+            templateStorage.saveTemplate(currentState.getStatus(), currentState.getContent());
+            String successMessage = createSaveSuccessMessage(currentState.getStatus());
+            return new CommandResult(successMessage);
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_STORAGE_ERROR, e.getMessage()));
         }
     }
 
     /**
-     * Formats the status name for display.
+     * Creates a success message for opening a template.
+     *
+     * @return The formatted success message.
      */
-    private String formatStatusName(Status status) {
-        String name = status.name();
+    private String createOpenSuccessMessage() {
+        return String.format(MESSAGE_OPEN_TEMPLATE_SUCCESS, formatStatusName(status));
+    }
+
+    /**
+     * Creates a success message for saving a template.
+     *
+     * @param statusToSave The status of the template being saved.
+     * @return The formatted success message.
+     */
+    private String createSaveSuccessMessage(Status statusToSave) {
+        return String.format(MESSAGE_SAVE_TEMPLATE_SUCCESS, formatStatusName(statusToSave));
+    }
+
+    /**
+     * Formats the status name for display.
+     *
+     * @param statusToFormat The status to format.
+     * @return A formatted status name (e.g., "Contacted" instead of "CONTACTED").
+     */
+    private String formatStatusName(Status statusToFormat) {
+        String name = statusToFormat.name();
         return name.charAt(0) + name.substring(1).toLowerCase();
     }
 
+    /**
+     * Checks if this TemplateCommand is equal to another object.
+     * Two TemplateCommands are equal if they are both save actions, or if they
+     * open templates for the same status.
+     *
+     * @param other The object to compare with.
+     * @return True if the objects are equal, false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -141,6 +178,11 @@ public class TemplateCommand extends Command {
         return status.equals(otherCommand.status);
     }
 
+    /**
+     * Returns a string representation of this TemplateCommand.
+     *
+     * @return A string describing this command.
+     */
     @Override
     public String toString() {
         if (isSaveAction) {
