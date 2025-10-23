@@ -220,4 +220,48 @@ public class JsonAddressBookStorageTest {
         JsonAddressBookStorage storage = new JsonAddressBookStorage(testFolder.resolve(TEST_FILE));
         assertThrows(DataLoadingException.class, () -> storage.readAddressBookFromJsonString(""));
     }
+
+    @Test
+    public void parse_validJson_success() throws Exception {
+        String validJson = "{"
+                                   + "\"persons\": ["
+                                   + "{"
+                                   + "\"name\": \"Alice Pauline\","
+                                   + "\"phone\": \"94351253\","
+                                   + "\"email\": \"alice@example.com\","
+                                   + "\"address\": \"123, Jurong West Ave 6, #08-111\","
+                                   + "\"tags\": [\"friends\"]"
+                                   + "}"
+                                   + "]"
+                                   + "}";
+
+        ReadOnlyAddressBook addressBook = JsonAddressBookStorage.parse(validJson);
+        Person currentPerson = addressBook.getPersonList().get(0);
+
+        assertEquals(1, addressBook.getPersonList().size());
+        assertEquals("Alice Pauline", currentPerson.getName().toString());
+        assertEquals("94351253", currentPerson.getPhone().toString());
+        assertEquals("alice@example.com", currentPerson.getEmail().toString());
+        assertEquals("123, Jurong West Ave 6, #08-111", currentPerson.getAddress().toString());
+        assertTrue(currentPerson.getTags().contains(new Tag("friends")));
+    }
+
+    @Test
+    public void parse_invalidJson_throwsDataLoadingException() {
+        String invalidJson = "invalid json";
+        assertThrows(DataLoadingException.class, () -> JsonAddressBookStorage.parse(invalidJson));
+    }
+
+    @Test
+    public void parse_emptyJson_success() throws Exception {
+        String emptyJson = "{\"persons\": []}";
+        ReadOnlyAddressBook addressBook = JsonAddressBookStorage.parse(emptyJson);
+
+        assertEquals(0, addressBook.getPersonList().size());
+    }
+
+    @Test
+    public void parse_null_throwsDataLoadingException() {
+        assertThrows(DataLoadingException.class, () -> JsonAddressBookStorage.parse(null));
+    }
 }

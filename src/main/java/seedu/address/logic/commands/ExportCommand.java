@@ -12,7 +12,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.files.FileSystemProvider;
 import seedu.address.logic.files.SystemFileSystemProvider;
 import seedu.address.model.Model;
-import seedu.address.storage.AddressBookJson;
+import seedu.address.storage.JsonAddressBookStorage;
 
 /**
  * Exports the contents of the user's address book JSON file to the clipboard.
@@ -67,7 +67,7 @@ public class ExportCommand extends Command {
             if (content == null || content.trim().isEmpty()) {
                 throw new CommandException(MESSAGE_INVALID_JSON);
             }
-            AddressBookJson.parse(content);
+            JsonAddressBookStorage.parse(content);
 
             clipboardProvider.setString(content);
 
