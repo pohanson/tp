@@ -2,11 +2,11 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,10 +23,10 @@ import seedu.address.model.person.PersonMatchesKeywordsPredicate;
 public class FindCommandParser implements Parser<FindCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the
-     * FindCommand
-     * and returns a FindCommand object for execution.
-     * 
+     * Parses the given {@code String} of arguments
+     *
+     * @param args the user input to parse
+     * @return a FindCommand object for execution
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
