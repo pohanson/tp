@@ -19,11 +19,11 @@ Class Phone
 Class Email
 Class Address
 Class Tag
-Class Status
+Class Status MODEL_COLOR_T1
 
-Class StatusViewState
-Class TagsViewState
-Class TemplateViewState
+Class StatusViewState MODEL_COLOR_T1
+Class TagsViewState MODEL_COLOR_T1
+Class TemplateViewState MODEL_COLOR_T1
 
 Class I #FFFFFF
 }
