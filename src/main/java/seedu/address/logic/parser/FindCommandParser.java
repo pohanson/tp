@@ -5,6 +5,8 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,22 +23,27 @@ import seedu.address.model.person.PersonMatchesKeywordsPredicate;
 public class FindCommandParser implements Parser<FindCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the FindCommand
+     * Parses the given {@code String} of arguments in the context of the
+     * FindCommand
      * and returns a FindCommand object for execution.
+     * 
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_STATUS);
+        ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_STATUS, PREFIX_PHONE,
+                PREFIX_EMAIL);
 
         String preamble = map.getPreamble();
 
         boolean hasName = arePrefixesPresent(map, PREFIX_NAME);
         boolean hasTag = arePrefixesPresent(map, PREFIX_TAG);
         boolean hasStatus = arePrefixesPresent(map, PREFIX_STATUS);
+        boolean hasPhone = arePrefixesPresent(map, PREFIX_PHONE);
+        boolean hasEmail = arePrefixesPresent(map, PREFIX_EMAIL);
 
         // Non-prefixed mode: no prefixes, use preamble as name keywords
-        if (!hasName && !hasTag && !hasStatus) {
+        if (!hasName && !hasTag && !hasStatus && !hasPhone && !hasEmail) {
             String trimmed = preamble.trim();
             if (trimmed.isEmpty()) {
                 throw new ParseException(
@@ -65,15 +72,25 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .flatMap(s -> Arrays.stream(s.split("\\s+")))
-                                           .toList();
+                .toList();
+
+        // Get phone keyword
+        String phoneKeyword = map.getValue(PREFIX_PHONE)
+                .map(String::trim)
+                .orElse(null);
+
+        // Get email keyword
+        String emailKeyword = map.getValue(PREFIX_EMAIL)
+                .map(String::trim)
+                .orElse(null);
 
         // Get status keyword
         String statusKeyword = map.getValue(PREFIX_STATUS)
                 .map(String::trim)
                 .orElse(null);
 
-
-        return new FindCommand(new PersonMatchesKeywordsPredicate(nameKeywords, tagKeywords, statusKeyword));
+        return new FindCommand(new PersonMatchesKeywordsPredicate(nameKeywords, tagKeywords, statusKeyword,
+                phoneKeyword, emailKeyword));
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {

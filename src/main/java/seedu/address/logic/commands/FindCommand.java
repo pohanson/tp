@@ -18,7 +18,8 @@ import seedu.address.model.person.PersonMatchesKeywordsPredicate;
 import seedu.address.model.person.Status;
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
+ * Finds and lists all persons in address book whose name contains any of the
+ * argument keywords.
  * Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
@@ -59,7 +60,8 @@ public class FindCommand extends Command {
     }
 
     /**
-     * Updates the status view state in the model based on the predicate used for filtering.
+     * Updates the status view state in the model based on the predicate used for
+     * filtering.
      *
      * @param model The model to update the status view state in.
      */
@@ -86,7 +88,8 @@ public class FindCommand extends Command {
     }
 
     /**
-     * Updates the tags view state in the model based on the predicate used for filtering.
+     * Updates the tags view state in the model based on the predicate used for
+     * filtering.
      *
      * @param model The model to update the tags view state in.
      */
