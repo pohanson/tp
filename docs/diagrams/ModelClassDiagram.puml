@@ -14,10 +14,10 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
-Class Address
-Class Email
 Class Name
 Class Phone
+Class Email
+Class Address
 Class Tag
 Class Status
 
@@ -45,23 +45,24 @@ ModelManager -down-> "1" TagsViewState
 ModelManager -down-> "1" TemplateViewState
 
 AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
-Person *--> Status
+UniquePersonList -right-> "~* all" Person
+Person -left-> Status
+Person *-down-> Name
+Person *-down-> Phone
+Person *-down-> Email
+Person *-down-> Address
+Person *-down-> "*" Tag
 
 StatusViewState --> Status
 TemplateViewState --> Status
 
-Person -[hidden]up--> I
-UniquePersonList -[hidden]right-> I
+Person -[hidden]down--> I
+UniquePersonList -[hidden]left-> I
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Name -[hidden]down-> Phone
+Phone -[hidden]down-> Email
+Email -[hidden]down-> Address
+Address -[hidden]down-> Tag
 
 ModelManager --> "~* filtered" Person
 @enduml
