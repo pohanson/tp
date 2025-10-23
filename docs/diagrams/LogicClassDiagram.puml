@@ -12,6 +12,10 @@ Class XYZCommand
 Class CommandResult
 Class "{abstract}\nCommand" as Command
 
+Class SetStatusCommand LOGIC_COLOR_T2
+Class TemplateCommand LOGIC_COLOR_T2
+Class ImportCommand LOGIC_COLOR_T2
+Class ExportCommand LOGIC_COLOR_T2
 
 Class "<<interface>>\nLogic" as Logic
 Class LogicManager
@@ -30,8 +34,16 @@ HiddenOutside ..> Logic
 LogicManager .right.|> Logic
 LogicManager -right->"1" ParserClasses
 ParserClasses ..> XYZCommand : <<create>>
+ParserClasses ..> SetStatusCommand : <<create>>
+ParserClasses ..> TemplateCommand : <<create>>
+ParserClasses ..> ImportCommand : <<create>>
+ParserClasses ..> ExportCommand : <<create>>
 
 XYZCommand -up-|> Command
+SetStatusCommand -up-|> Command
+TemplateCommand -up-|> Command
+ImportCommand -up-|> Command
+ExportCommand -up-|> Command
 LogicManager .left.> Command : <<call>>
 
 LogicManager --> Model
@@ -39,7 +51,7 @@ LogicManager --> Storage
 Storage --[hidden] Model
 Command .[hidden]up.> Storage
 Command .right.> Model
-note right of XYZCommand: XYZCommand = AddCommand, \nFindCommand, etc
+note right of XYZCommand: XYZCommand = AddCommand, \nFindCommand, etc found originally in AB3
 
 Logic ..> CommandResult
 LogicManager .down.> CommandResult

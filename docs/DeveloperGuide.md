@@ -87,7 +87,7 @@ The `UI` component,
 
 **API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
-Here's a (partial) class diagram of the `Logic` component:
+Here's a (partial) class diagram of the new `Logic` component, with additional classes to the AB3 being shown in light blue:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
