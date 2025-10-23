@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import seedu.address.logic.clipboard.ClipboardProvider;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.ModelManager;
 import seedu.address.model.person.Status;
@@ -204,5 +205,150 @@ public class TemplateCommandTest {
         TemplateCommand command = new TemplateCommand(storageStub);
         String expected = "TemplateCommand{save}";
         assertEquals(expected, command.toString());
+    }
+
+    // ==================== Copy Mode Tests ====================
+
+    @Test
+    public void constructor_copyNullStatus_throwsNullPointerException() {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        assertThrows(NullPointerException.class, () -> new TemplateCommand(null, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void constructor_copyNullStorage_throwsNullPointerException() {
+        ClipboardStub clipboardStub = new ClipboardStub();
+        assertThrows(NullPointerException.class, () -> new TemplateCommand(Status.CONTACTED, null, clipboardStub));
+    }
+
+    @Test
+    public void constructor_copyNullClipboard_throwsNullPointerException() {
+        StorageStub storageStub = new StorageStub();
+        assertThrows(NullPointerException.class, () -> new TemplateCommand(Status.CONTACTED, storageStub, null));
+    }
+
+    @Test
+    public void execute_copyTemplate_success() throws Exception {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        ModelManager model = new ModelManager();
+
+        TemplateCommand command = new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub);
+        CommandResult result = command.execute(model);
+
+        assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, "Contacted"),
+                result.getFeedbackToUser());
+        assertFalse(result.isShowTemplate());
+        assertEquals("Default template for CONTACTED", clipboardStub.getString());
+    }
+
+    @Test
+    public void execute_copyTemplateAllStatuses_success() throws Exception {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        ModelManager model = new ModelManager();
+
+        Status[] allStatuses = {Status.UNCONTACTED, Status.CONTACTED, Status.REJECTED,
+                                Status.ACCEPTED, Status.UNREACHABLE, Status.BUSY};
+        String[] statusNames = {"Uncontacted", "Contacted", "Rejected", "Accepted", "Unreachable", "Busy"};
+
+        for (int i = 0; i < allStatuses.length; i++) {
+            Status status = allStatuses[i];
+            String statusName = statusNames[i];
+            TemplateCommand command = new TemplateCommand(status, storageStub, clipboardStub);
+            CommandResult result = command.execute(model);
+
+            assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, statusName),
+                    result.getFeedbackToUser());
+            assertFalse(result.isShowTemplate());
+            assertEquals("Default template for " + status, clipboardStub.getString());
+        }
+    }
+
+    @Test
+    public void execute_copySavedTemplate_success() throws Exception {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        ModelManager model = new ModelManager();
+
+        // Save a custom template first
+        storageStub.saveTemplate(Status.CONTACTED, "Custom template content");
+
+        // Copy the saved template
+        TemplateCommand command = new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub);
+        CommandResult result = command.execute(model);
+
+        assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, "Contacted"),
+                result.getFeedbackToUser());
+        assertEquals("Custom template content", clipboardStub.getString());
+    }
+
+    @Test
+    public void equals_copyCommandsSameStatus_returnsTrue() {
+        StorageStub storageStub1 = new StorageStub();
+        StorageStub storageStub2 = new StorageStub();
+        ClipboardStub clipboardStub1 = new ClipboardStub();
+        ClipboardStub clipboardStub2 = new ClipboardStub();
+
+        TemplateCommand command1 = new TemplateCommand(Status.CONTACTED, storageStub1, clipboardStub1);
+        TemplateCommand command2 = new TemplateCommand(Status.CONTACTED, storageStub2, clipboardStub2);
+        assertTrue(command1.equals(command2));
+    }
+
+    @Test
+    public void equals_copyCommandsDifferentStatus_returnsFalse() {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+
+        TemplateCommand command1 = new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub);
+        TemplateCommand command2 = new TemplateCommand(Status.UNCONTACTED, storageStub, clipboardStub);
+        assertFalse(command1.equals(command2));
+    }
+
+    @Test
+    public void equals_copyAndOpenCommand_returnsFalse() {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+
+        TemplateCommand copyCommand = new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub);
+        TemplateCommand openCommand = new TemplateCommand(Status.CONTACTED, storageStub);
+        assertFalse(copyCommand.equals(openCommand));
+    }
+
+    @Test
+    public void equals_copyAndSaveCommand_returnsFalse() {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+
+        TemplateCommand copyCommand = new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub);
+        TemplateCommand saveCommand = new TemplateCommand(storageStub);
+        assertFalse(copyCommand.equals(saveCommand));
+    }
+
+    @Test
+    public void toString_copyCommand_correctFormat() {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        TemplateCommand command = new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub);
+        String expected = "TemplateCommand{copy, status=CONTACTED}";
+        assertEquals(expected, command.toString());
+    }
+
+    /**
+     * A stub implementation of ClipboardProvider for testing.
+     */
+    private static class ClipboardStub implements ClipboardProvider {
+        private String value;
+
+        @Override
+        public String getString() {
+            return value;
+        }
+
+        @Override
+        public void setString(String v) {
+            value = v;
+        }
     }
 }

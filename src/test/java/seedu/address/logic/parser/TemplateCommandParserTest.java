@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.clipboard.ClipboardProvider;
 import seedu.address.logic.commands.TemplateCommand;
 import seedu.address.model.person.Status;
 import seedu.address.storage.TemplateStorageManagerTest.StorageStub;
@@ -13,7 +14,8 @@ import seedu.address.storage.TemplateStorageManagerTest.StorageStub;
 public class TemplateCommandParserTest {
 
     private final StorageStub storageStub = new StorageStub();
-    private TemplateCommandParser parser = new TemplateCommandParser(storageStub);
+    private final ClipboardStub clipboardStub = new ClipboardStub();
+    private TemplateCommandParser parser = new TemplateCommandParser(storageStub, clipboardStub);
 
     @Test
     public void parse_validContactedStatus_returnsTemplateCommand() {
@@ -121,5 +123,108 @@ public class TemplateCommandParserTest {
     public void parse_multipleStatuses_throwsParseException() {
         assertParseFailure(parser, " s:CONTACTED s:REJECTED",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+    }
+
+    // ==================== Copy Command Tests ====================
+
+    @Test
+    public void parse_validCopyContactedStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:CONTACTED",
+                new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_validCopyUncontactedStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:UNCONTACTED",
+                new TemplateCommand(Status.UNCONTACTED, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_validCopyRejectedStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:REJECTED",
+                new TemplateCommand(Status.REJECTED, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_validCopyAcceptedStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:ACCEPTED",
+                new TemplateCommand(Status.ACCEPTED, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_validCopyUnreachableStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:UNREACHABLE",
+                new TemplateCommand(Status.UNREACHABLE, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_validCopyBusyStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:BUSY",
+                new TemplateCommand(Status.BUSY, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_copyLowercaseStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:contacted",
+                new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_copyMixedCaseStatus_returnsTemplateCommand() {
+        assertParseSuccess(parser, " copy s:CoNtAcTeD",
+                new TemplateCommand(Status.CONTACTED, storageStub, clipboardStub));
+    }
+
+    @Test
+    public void parse_copyWithoutStatus_throwsParseException() {
+        assertParseFailure(parser, " copy",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_copyInvalidStatus_throwsParseException() {
+        assertParseFailure(parser, " copy s:INVALID",
+                TemplateCommand.MESSAGE_INVALID_STATUS);
+    }
+
+    @Test
+    public void parse_copyMissingStatusPrefix_throwsParseException() {
+        assertParseFailure(parser, " copy CONTACTED",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_copyMissingStatusValue_throwsParseException() {
+        assertParseFailure(parser, " copy s:",
+                TemplateCommand.MESSAGE_INVALID_STATUS);
+    }
+
+    @Test
+    public void parse_copyWithExtraArguments_throwsParseException() {
+        assertParseFailure(parser, " copy s:CONTACTED extra",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_copyMultipleStatuses_throwsParseException() {
+        assertParseFailure(parser, " copy s:CONTACTED s:REJECTED",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TemplateCommand.MESSAGE_USAGE));
+    }
+
+    /**
+     * A stub implementation of ClipboardProvider for testing.
+     */
+    private static class ClipboardStub implements ClipboardProvider {
+        private String value;
+
+        @Override
+        public String getString() {
+            return value;
+        }
+
+        @Override
+        public void setString(String v) {
+            value = v;
+        }
     }
 }
