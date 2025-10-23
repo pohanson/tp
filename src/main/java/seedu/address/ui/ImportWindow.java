@@ -23,6 +23,25 @@ public class ImportWindow extends UiPart<Stage> {
     private static final String FXML_FILE = "ImportWindow.fxml";
     private static final String DEFAULT_PREVIEW_TEXT = "No data yet.\nPaste JSON data here";
 
+    // Success
+    private static final String ALERT_SUCCESS_TITLE = "Success";
+    private static final String ALERT_SUCCESS_HEADER = "Successfully imported data!";
+    private static final String ALERT_SUCCESS_CONTENT = "Address book data imported successfully!";
+
+    // Failed
+    private static final String ALERT_IMPORT_FAILED_TITLE = "Import Failed";
+    private static final String ALERT_IMPORT_FAILED_HEADER = "Failed to import data";
+    private static final String ALERT_IMPORT_FAILED_TEXT =
+            "Please ensure that you only paste the content of the entire address book JSON file.";
+
+    private static final String ALERT_NO_CLIPBOARD_TITLE = "Error";
+    private static final String ALERT_NO_CLIPBOARD_HEADER = "No Clipboard Data";
+    private static final String ALERT_NO_CLIPBOARD_TEXT = "No valid text found in clipboard.";
+
+    private static final String ALERT_NO_DATA_TITLE = "No Data";
+    private static final String ALERT_NO_DATA_HEADER = "No Data Found";
+    private static final String ALERT_NO_DATA_TEXT = "Please paste JSON data before saving.";
+
     private final Logic logic;
 
     @FXML
@@ -123,8 +142,9 @@ public class ImportWindow extends UiPart<Stage> {
         if (clipboard.hasString()) {
             jsonPreview.setText(clipboard.getString());
         } else {
-            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, "Error", "Error pasting",
-                    "No valid text found in clipboard.");
+            ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, ALERT_NO_CLIPBOARD_TITLE,
+                    ALERT_NO_CLIPBOARD_HEADER,
+                    ALERT_NO_CLIPBOARD_TEXT);
         }
     }
 
@@ -160,8 +180,8 @@ public class ImportWindow extends UiPart<Stage> {
      * Shows success alert and closes the import window.
      */
     private void showSuccessAlertAndClose() {
-        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.INFORMATION, "Success", "Successfully imported data!",
-                "Address book data imported successfully!");
+        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.INFORMATION, ALERT_SUCCESS_TITLE,
+                ALERT_SUCCESS_HEADER, ALERT_SUCCESS_CONTENT);
         hide();
     }
 
@@ -181,12 +201,13 @@ public class ImportWindow extends UiPart<Stage> {
     }
 
     private void showEmptyTextAlertDialog() {
-        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, "No Data", "Error:",
-                "Please paste JSON data before saving.");
+        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, ALERT_NO_DATA_TITLE, ALERT_NO_DATA_HEADER,
+                ALERT_NO_DATA_TEXT);
     }
 
     private void showImportFailedAlertDialog() {
-        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, "Import Failed", "Import Failed",
-                "Please ensure that you only paste the content of the entire address book JSON file.");
+        ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, ALERT_IMPORT_FAILED_TITLE,
+                ALERT_IMPORT_FAILED_HEADER,
+                ALERT_IMPORT_FAILED_TEXT);
     }
 }
