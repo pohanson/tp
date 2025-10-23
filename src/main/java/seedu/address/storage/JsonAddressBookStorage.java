@@ -101,6 +101,9 @@ public class JsonAddressBookStorage implements AddressBookStorage {
      */
     public static ReadOnlyAddressBook parse(String jsonString) throws DataLoadingException {
         try {
+            if (jsonString == null || jsonString.isEmpty()) {
+                throw new DataLoadingException(new Exception("JSON string is null or empty"));
+            }
             JsonSerializableAddressBook json = JsonUtil.fromJsonString(jsonString, JsonSerializableAddressBook.class);
             return json.toModelType();
         } catch (IOException | IllegalValueException e) {

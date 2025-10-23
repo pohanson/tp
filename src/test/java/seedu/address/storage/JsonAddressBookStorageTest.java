@@ -259,4 +259,9 @@ public class JsonAddressBookStorageTest {
 
         assertEquals(0, addressBook.getPersonList().size());
     }
+
+    @Test
+    public void parse_null_throwsDataLoadingException() {
+        assertThrows(DataLoadingException.class, () -> JsonAddressBookStorage.parse(null));
+    }
 }
