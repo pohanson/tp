@@ -386,3 +386,15 @@
   -fx-text-fill: #606060;
   -fx-font-style: italic;
 }
+
+.status-label {
+  -fx-font-size: 12pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: #d8d8d8;
+}
+
+.tags-label {
+  -fx-font-size: 12pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: #d8d8d8;
+}
