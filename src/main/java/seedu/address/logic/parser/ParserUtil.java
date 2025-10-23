@@ -163,12 +163,12 @@ public class ParserUtil {
     public static Status parseStatus(String status) throws ParseException {
         requireNonNull(status);
         String trimmedStatus = status.trim();
-        
+
         if (!Status.isValidStatus(trimmedStatus)) {
             logger.warning("Invalid status provided: " + trimmedStatus);
             throw new ParseException(Status.MESSAGE_CONSTRAINTS);
         }
-        
+
         Status parsedStatus = Status.fromStringIgnoreCase(trimmedStatus);
         logger.info("Parsed status successfully: " + trimmedStatus + " -> " + parsedStatus);
         return parsedStatus;
