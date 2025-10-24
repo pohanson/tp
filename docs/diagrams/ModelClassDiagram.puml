@@ -14,11 +14,16 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
-Class Address
-Class Email
 Class Name
 Class Phone
+Class Email
+Class Address
 Class Tag
+Class Status MODEL_COLOR_T1
+
+Class StatusViewState MODEL_COLOR_T1
+Class TagsViewState MODEL_COLOR_T1
+Class TemplateViewState MODEL_COLOR_T1
 
 Class I #FFFFFF
 }
@@ -35,20 +40,29 @@ ModelManager -left-> "1" AddressBook
 ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
+ModelManager -down-> "1" StatusViewState
+ModelManager -down-> "1" TagsViewState
+ModelManager -down-> "1" TemplateViewState
+
 AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+UniquePersonList -right-> "~* all" Person
+Person -left-> Status
+Person *-down-> Name
+Person *-down-> Phone
+Person *-down-> Email
+Person *-down-> Address
+Person *-down-> "*" Tag
 
-Person -[hidden]up--> I
-UniquePersonList -[hidden]right-> I
+StatusViewState --> Status
+TemplateViewState --> Status
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Person -[hidden]down--> I
+UniquePersonList -[hidden]left-> I
+
+Name -[hidden]down-> Phone
+Phone -[hidden]down-> Email
+Email -[hidden]down-> Address
+Address -[hidden]down-> Tag
 
 ModelManager --> "~* filtered" Person
 @enduml
