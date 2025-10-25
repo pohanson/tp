@@ -15,6 +15,12 @@ public class ShowAlert {
     /**
      * Shows an alert dialog on {@code owner} with the given parameters.
      * This method only returns after the user has closed the alert dialog.
+     *
+     * @param owner       Owner window of this dialog.
+     * @param type        Type of alert to be displayed.
+     * @param title       Title of the alert dialog.
+     * @param headerText  Header text of the alert dialog.
+     * @param contentText Content text of the alert dialog.
      */
     public static void showAlertDialogAndWait(Stage owner, AlertType type, String title, String headerText,
                                               String contentText) {
