@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 
 /**
@@ -197,14 +198,20 @@ public class ImportWindow extends UiPart<Stage> {
      * Checks if the provided text is empty or default preview text.
      */
     private boolean isEmptyText(String text) {
-        return text == null || text.trim().isEmpty() || text.equals(DEFAULT_PREVIEW_TEXT);
+        return StringUtil.isNullOrEmpty(text) || text.equals(DEFAULT_PREVIEW_TEXT);
     }
 
+    /**
+     * Displays alert dialog when no data is pasted.
+     */
     private void showEmptyTextAlertDialog() {
         ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.WARNING, ALERT_NO_DATA_TITLE, ALERT_NO_DATA_HEADER,
                 ALERT_NO_DATA_TEXT);
     }
 
+    /**
+     * Displays alert dialog when import fails due to IOException.
+     */
     private void showImportFailedAlertDialog() {
         ShowAlert.showAlertDialogAndWait(getRoot(), AlertType.ERROR, ALERT_IMPORT_FAILED_TITLE,
                 ALERT_IMPORT_FAILED_HEADER,
