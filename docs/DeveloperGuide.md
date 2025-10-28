@@ -633,20 +633,36 @@ _{Explain here how the data archiving feature will be implemented}_
 
 ### Glossary
 
-* **Case-insensitive**: Matching that ignores letter casing (e.g., John == john).
-* **CLI**: Command-line interface used to interact with the CMS.
-* **Command**: A textual instruction entered into the CLI (e.g., add, edit, list).
-* **Contact**: People who would be contacted by the salesperson.
-* **Email Template**: A reusable message body that can be personalized and applied to cohorts (by tag/status).
-* **Filter**: Showing customers that match specific attributes (e.g., tag, status).
-* **GUI**: Graphical user interface components that display results and lists.
-* **Mainstream OS**: Windows, Linux, Unix, MacOS.
-* **Priority**: A user-defined importance level to help triage outreach.
-* **Salesperson**: People who would be using the app to contact.
-* **Search**: Finding customers by name keywords (case-insensitive).
-* **Status**: Sales process specific tag that would denote the outcome of contacting the contacts. The meaning of each status would be decided by the company. Will be one of Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted.
-* **Tag**: A user-defined label used to categorize customers (e.g., productA).
-* **User**: The people using the app, which is the salesperson.
+* **Address Book**: The core domain model of the application. Represents the collection of all contacts and provides operations for managing them.
+* **API (Application Programming Interface)**: The set of public methods and interfaces that define how components interact with each other. Each major component (UI, Logic, Model, Storage) defines its API through an interface.
+* **Case-insensitive**: String matching that ignores letter casing (e.g., "John" matches "john", "JOHN"). Implemented using `toLowerCase()` or `equalsIgnoreCase()` in predicates.
+* **CLI (Command-Line Interface)**: Text-based user interface where users type commands. Parsed by `AddressBookParser` and individual `XYZCommandParser` classes.
+* **Clipboard**: System clipboard abstracted through the `ClipboardProvider` interface. Allows copying templates and address book data for external use. Production code uses `SystemClipboardProvider`, tests use stubs.
+* **Command**: An executable object representing a user action. All commands extend the abstract `Command` class and implement `execute(Model)`. Examples: `AddCommand`, `DeleteCommand`, `TemplateCommand`.
+* **CommandResult**: Encapsulates the outcome of command execution. Contains success/error message and flags indicating UI actions (e.g., `isShowHelp`, `isExit`, `isShowTemplate`).
+* **Contact**: Refers to a `Person` object in the domain model. Used interchangeably with "Person" in documentation.
+* **Email Template**: Persistent text content associated with a `Status` enum value. Stored in JSON files by `TemplateStorage` and managed via `TemplateCommand`.
+* **Export/Import**: Features to serialize/deserialize the entire `AddressBook` to/from clipboard as JSON. Uses `JsonAddressBookUtil` for conversion. Enables data sharing between users.
+* **Filter**: Applying a `Predicate<Person>` to the `filteredPersons` observable list in `Model`. Updates the UI to show only matching contacts.
+* **GUI (Graphical User Interface)**: The JavaFX-based visual interface. Implemented in the `UI` component with FXML layouts and corresponding controller classes.
+* **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
+* **JAR file**: Java ARchive - executable package containing compiled `.class` files and resources. Built by Gradle and run with `java -jar addressbook.jar`.
+* **JSON (JavaScript Object Notation)**: Text-based data format used for persistence. `JsonAdaptedPerson` classes bridge between domain objects and JSON representation. Handled by Jackson library.
+* **Mainstream OS**: Windows, Linux, Unix, MacOS - target platforms for the application.
+* **Model**: The component responsible for holding application data in memory. Manages `AddressBook`, `UserPrefs`, and filtered lists. Exposes data through `ObservableList` for reactive UI updates.
+* **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
+* **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
+* **Parser**: Class responsible for converting user input strings into `Command` objects. Follows the hierarchy: `AddressBookParser` → `XYZCommandParser` → `Command`. All parsers implement the `Parser` interface.
+* **PDPA (Personal Data Protection Act)**: Singapore data protection regulation. Application supports compliance through bulk deletion and data export features.
+* **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g., `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
+* **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
+* **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
+* **Storage**: The component handling data persistence. Implements both `AddressBookStorage` and `UserPrefStorage` interfaces. Uses JSON format via Jackson library.
+* **Tag**: A domain object representing a category label. Each `Person` can have multiple `Tag` objects stored in a `Set<Tag>`. Implemented as immutable value objects.
+* **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
+* **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
+* **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
+* **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
 
 --------------------------------------------------------------------------------------------------------------------
 
