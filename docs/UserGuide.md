@@ -32,6 +32,8 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
+   * `delete 1 2 3` : Deletes the 1st, 2nd, and 3rd contacts shown in the current list.
+
    * `clear` : Deletes all contacts.
 
    * `exit` : Exits the app.
@@ -130,17 +132,21 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes one or more persons from the address book.
 
-Format: `delete INDEX`
+Format: `delete INDEX [MORE_INDICES]...`
 
-* Deletes the person at the specified `INDEX`.
+* Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* Multiple indices can be specified to delete multiple persons at once.
+* Indices can be provided in any order.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
+* `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
 
 ### Clearing all entries : `clear`
 
@@ -193,7 +199,7 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
 **Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
