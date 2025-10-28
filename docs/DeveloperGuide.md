@@ -475,7 +475,7 @@ _{Explain here how the data archiving feature will be implemented}_
    Use case ends.
 
 
-#### Use case: UC06 - Create email template
+#### Use case: UC06 - Open and edit email template
 
 **System:** Contact Management System (CMS)
 
@@ -483,27 +483,68 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Guarantees:**
 
-* Generating a template or preview does not modify any contact records.
-* If template input is canceled, no template content is saved or applied.
+* Opening a template does not modify any data.
+* Template is saved only when the save command is explicitly issued.
+* If the template view is switched without saving, no changes are will be saved.
 
 **MSS:**
 
-1. Salesperson chooses to create an email template.
-2. Salesperson specifies the target tag(s) and/or status.
-3. CMS prompts for the email content.
-4. Salesperson enters the email template and submits.
-5. CMS saves the personalised email template.<br/>
+1. Salesperson chooses to open an email template for a specific status.
+2. Salesperson enters the template command with the status.
+3. CMS retrieves the template for the specified status.
+4. CMS displays the template in an editable view.
+5. Salesperson edits the template content.
+6. Salesperson issues the save command.
+7. CMS saves the updated template.<br/>
    Use case ends.
 
 **Extensions:**
 
-*a. At any time during template input, Salesperson chooses to cancel his input.<br/>
-   *a1. CMS requests confirmation of the cancellation.<br/>
-   *a2. Salesperson confirms the cancellation.<br/>
+*a. At any time, Salesperson enters a different command (e.g., list, find).<br/>
+   *a1. CMS switches back to the main view and discards any unsaved edits.<br/>
    Use case ends.
 
+2a. The specified status is invalid.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
-#### Use case: UC07 - Edit contact
+3a. No template exists for the specified status.<br/>
+   3a1. CMS displays an empty template.<br/>
+   Use case resumes from step 4.
+
+
+#### Use case: UC07 - Copy email template to clipboard
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+
+* Copying a template does not modify any data.
+* The template content is placed on the system clipboard.
+
+**MSS:**
+
+1. Salesperson chooses to copy an email template for a specific status.
+2. Salesperson enters the copy template command with the status.
+3. CMS retrieves the template for the specified status.
+4. CMS copies the template content to the clipboard.
+5. CMS displays a confirmation message.<br/>
+   Use case ends.
+
+**Extensions:**
+
+2a. The specified status is invalid.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
+
+3a. No template exists for the specified status.<br/>
+   3a1. CMS copies an empty string to the clipboard.<br/>
+   Use case resumes from step 4.
+
+
+#### Use case: UC08 - Edit contact
 
 **System:** Contact Management System (CMS)
 
@@ -533,7 +574,7 @@ _{Explain here how the data archiving feature will be implemented}_
    Use case resumes from step 2.
 
 
-#### Use case: UC08 - Delete contact
+#### Use case: UC09 - Delete contact(s)
 
 **System:** Contact Management System (CMS)
 
@@ -541,30 +582,27 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Guarantees:**
 
-* Deletion removes only the specified contact without modifying other data.
+* Deletion removes only the specified contact(s) without modifying other data.
+* All specified contacts must be valid or none will be deleted.
 * Deletion is irreversible once confirmed.
 * On failure, no deletion occurs.
 
 **MSS:**
 
-1. Salesperson chooses to delete a contact.
-2. Salesperson specifies the contact ID to delete.
-3. CMS deletes the contact and displays a confirmation.<br/>
+1. Salesperson chooses to delete one or more contacts.
+2. Salesperson specifies the contact ID(s) to delete.
+3. CMS validates all contact IDs.
+4. CMS deletes the contact(s) and displays a confirmation.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. The given contact ID is invalid.<br/>
-   3a1. CMS indicates that an error has happened.<br/>
+3a. One or more of the given contact IDs are invalid.<br/>
+   3a1. CMS indicates which contact ID(s) are invalid.<br/>
    Use case resumes at step 2.
 
-3b. CMS requests for confirmation before deletion.<br/>
-   3b1. Salesperson confirms the deletion.<br/>
-   3b2. CMS proceeds with deletion.<br/>
-   Use case ends.
 
-
-#### Use case: UC09 - Set contact status
+#### Use case: UC10 - Set contact status
 
 **System:** Contact Management System (CMS)
 
