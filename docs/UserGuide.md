@@ -110,12 +110,12 @@ Format: `list`
 
 ### Changing a person's status: `status`
 
-Changes a person's status in the address book.
+Sets a person's status in the address book.
 
 Format: `status INDEX [STATUS]`
 
 * Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​ This field is mandatory.
-* Changes the status of the person with the specified `STATUS`. The status of a person can only be "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
+* Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
 * The status input is case-insensitive.
 
 Examples
@@ -228,6 +228,7 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
+**Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
 **Help** | `help`
