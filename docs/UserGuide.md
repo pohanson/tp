@@ -103,11 +103,11 @@ Format: `status INDEX [STATUS]`
 * Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
 * The status input is case-insensitive.
 
-Examples
+Examples:
 
-* status 12 Contacted 
-* status 12 Rejected 
-* status 12 Accepted
+* `status 12 Contacted`
+* `status 12 Rejected`
+* `status 12 Accepted`
 
 ### Editing a person : `edit`
 
@@ -126,7 +126,7 @@ Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG] [s:STATUS] 
 Examples:
 *  `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
-*  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively. 
+*  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
 ### Locating persons by name: `find`
 
