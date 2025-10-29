@@ -80,15 +80,19 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG] [s:STATUS]…​`
+Format: `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​`
+
+* For `TAG` parameter, it should be a single word. Spaces will divide it into multiple tag
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tags (including 0), but only 1 status (default: "Uncontacted")
 </div>
 
 Examples:
-* `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01 s:Busy`
-* `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal`
+* `add n:John Doe p:98765432 e:johnd@example.com`
+* `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
+
+![Add Command Result](images/addCommandResult.png)
 
 ### Listing all persons : `list`
 
@@ -131,7 +135,7 @@ Examples:
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
-- `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+- `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of tse 1st person to be `91234567` and `johndoe@example.com` respectively.
 - `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 ### Locating customers: `find`
@@ -297,6 +301,19 @@ Use `template copy` for quick access to templates when you need to send emails, 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
 Templates are stored as text files in the `templates` folder in your application directory. Each status has its own template file.
 </div>
+
+### Import from json : `import`
+
+Import the Address Book that is currenly in the clipboard and replaces current address book.
+
+Format: `import`
+
+* First, copy the address book. Then, run `import` to import the addresss book.
+* Error importing when Clipboard is empty: "Clipboard does not contain any text to import"
+* Error importing when address is invalid book JSON: "Failed to import: Clipboard does not contain valid address book JSON."
+
+![Import Contact Example](images/importContact.png)
+
 
 ### Clearing all entries : `clear`
 

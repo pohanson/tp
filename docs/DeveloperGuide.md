@@ -149,8 +149,7 @@ The `Model` component,
 
 The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
-* inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
-* depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
+* inherits from both `AddressBookStorage`, `UserPrefStorage` and `TemplateStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 
 ### Common classes
 
@@ -494,7 +493,7 @@ The typical flow of operations is:
 
 **Target user profile**:
 
-- Salespersons who manage a large number of leads/contacts
+- Salespersons who manage a large number of contacts
 - Prefer desktop apps over other types
 - Can type fast and prefer typing to mouse interactions for efficiency
 - Need to categorize leads by tags and track sales-specific statuses (e.g., Contacted, Rejected, Accepted)
@@ -505,12 +504,13 @@ The typical flow of operations is:
 
 **Key features**:
 
-- Add Contact: Add single or multiple contacts in one command
+- Add Contact: Add single contacts in one command
 - Edit Contact: Update any field, add/remove tags, set status
 - Delete Contact: Remove contacts by index
 - List Contact: Display all contacts
 - Find Contact: Filter by name, tag, and/or status (case-insensitive, exact match)
-- Create Email Template: Generate email templates for selected tag/status cohorts
+- Create and Copy Email Template: Generate email templates for selected tag/status cohorts
+- Bulk Import/Export of Contact: Share contacts
 - Set Status: Quickly update a contact's status
 
 **Command format conventions**:
@@ -526,7 +526,7 @@ The typical flow of operations is:
 - Phone number: Must contain only digits and `+`
 - Email: Must contain `@` symbol
 - Status: Must be one of the valid statuses (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted)
-- Name and Address: No validation to allow flexibility
+- Tag, Name and Address: No validation to allow flexibility
 
 **Valid contact statuses**:
 
@@ -599,23 +599,53 @@ Use case ends.
 
 **Guarantees:**
 
-* If any entry is invalid, none of the contacts are added.
-* No existing contacts are modified by this operation.
+- Contact is created only if all required fields are valid.
+- On validation error, no contacts are added.
 
 **MSS:**
 
-1. Salesperson chooses to import many contacts.
-2. Salesperson enters the add command with multiple contacts separated by "|||", then submits the command.
-3. CMS validates all entries.
-4. CMS creates the contacts and displays a summary confirmation.<br/>
-Use case ends.
+1. Salesperson chooses to add a new contact.
+2. Salesperson enters the add command with contact details.
+3. CMS creates the contact and displays a confirmation message.<br/>
+   Use case ends.
 
 **Extensions:**<br/>
 
-3a. CMS detects an error in the entered data.<br/>
-   3a1. CMS indicates an error has happened.<br/>
-   Use case resumes from step 2.
+2a. CMS detects an error in the entered data.<br/>
+2a1. CMS indicates an error has happened.<br/>
+Use case resumes from step 2.
 
+2b. Contact already exists (same name).<br/>
+2b1. CMS indicates an error.
+Use case ends.
+
+#### Use case: UC02 - Import address book from clipboard
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+
+- On success, the address book on disk is replaced by the imported data and the UI reflects the new data.
+- No changes are made to the current address book if the clipboard is empty or contains invalid JSON.
+
+**MSS:**
+
+1. Salesperson copies the address book JSON to the system clipboard.
+2. Salesperson issues the `import` command.
+3. CMS reads and validate the clipboard content.
+   Use case ends.
+
+**Extensions:**
+
+3a. Clipboard is empty.<br />
+3a1. CMS displays: "Clipboard does not contain any text to import".<br />
+Use case ends.
+
+3b. Clipboard content is not valid address book JSON or fails validation.<br />
+3b1. CMS displays: "Failed to import: Clipboard does not contain valid address book JSON.".<br />
+Use case ends.
 
 #### Use case: UC03 - List all contacts
 
@@ -1048,7 +1078,101 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `delete 1 99` (where x is larger than the list size)<br>
       Expected: For `delete` and `delete x`: Invalid command format. For `delete 1 99`: Error message displays the specific invalid indices.
 
-1. _{ more test cases …​ }_
+### Adding a contact
+
+1. Adding a contact with all fields
+
+   1. Test case: `add n:John Doe p:98765432 e:johnd@example.com a:311, Clementi Ave 2, #02-25 s:Contacted t:friend t:colleague`<br>
+      Expected: New contact "John Doe" is added to the list. Success message shown with contact details. The contact appears in the list with status "Contacted" and tags "friend" and "colleague".
+
+   1. Test case: `add n:Jane Smith p:87654321 e:janes@example.com a:123 Main St s:Uncontacted`<br>
+      Expected: New contact "Jane Smith" is added with status "Uncontacted" and no tags. Success message displayed.
+
+1. Adding a contact with minimal required fields
+
+   1. Test case: `add n:Bob Lee p:91234567 e:bob@example.com a:456 Side St`<br>
+      Expected: Contact is added successfully without status or tags. Default status may be applied.
+
+1. Adding a contact with invalid or missing fields
+
+   1. Test case: `add n:Invalid p:invalid_phone e:test@example.com a:Some Address`<br>
+      Expected: Error message indicating invalid phone number format. No contact is added.
+
+   1. Test case: `add n:NoPhone e:test@example.com a:Some Address`<br>
+      Expected: Error message about missing required field (phone). No contact is added.
+
+   1. Test case: `add n:Alice p:12345678 e:invalidemail a:Some Address`<br>
+      Expected: Error message indicating invalid email format. No contact is added.
+
+   1. Test case: `add p:91234567 e:test@example.com a:Some Address`<br>
+      Expected: Error message about missing name. No contact is added.
+
+1. Adding a duplicate contact
+
+   1. Test case: `add n:John Doe p:98765432 e:different@example.com a:Different Address`<br>
+      Expected: Error message "This person already exists in the address book". No new contact is added. (Note: Duplicate detection is based on name only)
+
+
+### Importing address book from clipboard
+
+1. Importing valid address book JSON
+
+   1. Copy the following valid JSON to clipboard:
+      ```json
+      {
+        "persons": [
+          {
+            "name": "Alice Tan",
+            "phone": "91234567",
+            "email": "alice@example.com",
+            "address": "123 Street",
+            "status": "Contacted",
+            "tagged": ["friend"]
+          }
+        ]
+      }
+      ```
+
+   1. Test case: `import`<br>
+      Expected: Address book is replaced with the imported data. Success message displayed. UI shows "Alice Tan" contact. All previous contacts are replaced.
+
+1. Importing with invalid clipboard
+
+   1. Prerequisites: Ensure clipboard is empty or contains does not contain text.
+
+   1. Test case: `import`<br>
+      Expected: Error message "Clipboard does not contain any text to import". Address book remains unchanged.
+
+1. Importing with invalid JSON
+
+   1. Copy invalid JSON to clipboard (e.g., `{invalid json}`).
+
+   1. Test case: `import`<br>
+      Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
+
+   1. Copy non-address-book JSON to clipboard (e.g., `{"name": "test"}`).
+
+   1. Test case: `import`<br>
+      Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
+
+1. Importing with invalid data
+
+   1. Copy JSON with missing required fields:
+      ```json
+      {
+        "persons": [
+          {
+            "name": "Bob",
+            "phone": "invalid",
+            "email": "bob@gmail.com"
+          }
+        ]
+      }
+      ```
+
+   1. Test case: `import`<br>
+      Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
+
 
 ### Finding customers
 
