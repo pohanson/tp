@@ -740,6 +740,29 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Finding customers
+
+1. Finding customers with various criteria such as name, tag, status, phone number and email!
+
+   1. Prerequisites: List all customers using the `list` command. Multiple customers in the list with different attributes.
+
+   1. Test case: `find n:John`<br>
+      Expected: Customers with "John" in their name are displayed. Tag view and status view remain unchanged.
+
+   1. Test case: `find s:Contacted`<br>
+      Expected: Customers with "Contacted" status are displayed. Status view panel updates to show "Contacted" as active filter.
+
+   1. Test case: `find t:friends s:Contacted`<br>
+      Expected: Customers with "friends" tag AND "Contacted" status are displayed. Both tag view and status view show active filters.
+
+   1. Test case: `find`<br>
+      Expected: Error message indicating invalid command format.
+
+   1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
+      Expected: Appropriate results or empty list!
+
+
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files
