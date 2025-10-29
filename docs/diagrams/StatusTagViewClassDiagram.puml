@@ -1,0 +1,40 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+package Model <<Rectangle>> {
+    Class "<<interface>>\nModel" as Model MODEL_COLOR
+    Class ModelManager MODEL_COLOR
+    Class StatusViewState MODEL_COLOR_T1
+    Class TagsViewState MODEL_COLOR_T1
+}
+
+package Logic  <<Rectangle>> {
+    Class "<<interface>>\nLogic" as Logic LOGIC_COLOR
+    Class FindCommand LOGIC_COLOR
+}
+
+package UI  <<Rectangle>> {
+    Class StatusViewPanel UI_COLOR
+    Class TagsViewPanel UI_COLOR
+}
+
+' Core relationships
+ModelManager .up.|> Model
+ModelManager -down-> "1" StatusViewState : stores
+ModelManager -down-> "1" TagsViewState : stores
+
+Logic ..> Model
+
+FindCommand -down-> Model : updates
+
+StatusViewPanel ..> Logic : observes
+TagsViewPanel ..> Logic : observes
+
+' Layout hints
+StatusViewPanel -[hidden]right-> TagsViewPanel
+StatusViewState -[hidden]right-> TagsViewState
+
+@enduml
