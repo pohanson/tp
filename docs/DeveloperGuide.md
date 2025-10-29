@@ -494,7 +494,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
    Use case ends.
 
 
-#### Use case: UC04 - Find contact by name
+#### Use case: UC04 - Find customers by various criteria
 
 **System:** Contact Management System (CMS)
 
@@ -502,20 +502,25 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 
 **Guarantees:**
 
-* Search does not modify contact data.
+* Search does not modify customer data.
+* Tag view and status view panels update to reflect active filters.
 
 **MSS:**
 
-1. Salesperson chooses to find a specific contact by name.
-2. Salesperson enters the search command.
-3. CMS searches for contacts whose names contain the keyword(s) (case-insensitive).
-4. CMS displays the matching contacts.<br/>
+1. Salesperson chooses to find customers by one or more criteria (name, tag, status, phone, email).
+2. Salesperson enters the find command with specified search criteria.
+3. CMS searches for customers matching ALL specified criteria (AND logic between different types, OR logic within same type).
+4. CMS displays the matching customers and updates the tag view and status view panels to show active filters.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. No contacts match the search criteria.<br/>
-   3a1. CMS indicates that no contacts are found.<br/>
+2a. Invalid search criteria format provided.<br/>
+   2a1. CMS indicates invalid command format and shows usage instructions.<br/>
+   Use case ends.
+
+3a. No customers match the search criteria.<br/>
+   3a1. CMS displays an empty list while keeping the filters visible in tag view and status view to show search intent.<br/>
    Use case ends.
 
 
