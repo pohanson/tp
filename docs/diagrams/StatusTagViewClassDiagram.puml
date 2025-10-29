@@ -5,14 +5,14 @@ skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
 package Model <<Rectangle>> {
-    Class "<<interface>>\nModel" as Model MODEL_COLOR
+    Class "<<interface>>\nModel" as Model_interface MODEL_COLOR
     Class ModelManager MODEL_COLOR
     Class StatusViewState MODEL_COLOR_T1
     Class TagsViewState MODEL_COLOR_T1
 }
 
 package Logic  <<Rectangle>> {
-    Class "<<interface>>\nLogic" as Logic LOGIC_COLOR
+    Class "<<interface>>\nLogic" as Logic_interface LOGIC_COLOR
     Class FindCommand LOGIC_COLOR
 }
 
@@ -22,16 +22,16 @@ package UI  <<Rectangle>> {
 }
 
 ' Core relationships
-ModelManager .up.|> Model
+ModelManager .up.|> Model_interface
 ModelManager -down-> "1" StatusViewState : stores
 ModelManager -down-> "1" TagsViewState : stores
 
-Logic ..> Model
+Logic_interface ..> Model_interface
 
-FindCommand -down-> Model : updates
+FindCommand -down-> Model_interface : updates
 
-StatusViewPanel ..> Logic : observes
-TagsViewPanel ..> Logic : observes
+StatusViewPanel ..> Logic_interface : observes
+TagsViewPanel ..> Logic_interface : observes
 
 ' Layout hints
 StatusViewPanel -[hidden]right-> TagsViewPanel
