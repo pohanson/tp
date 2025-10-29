@@ -95,9 +95,6 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 ![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</div>
-
 How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
@@ -156,94 +153,103 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Template feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The template feature allows salespersons to create, edit, and copy email templates associated with different contact statuses. This streamlines the process of sending personalized emails to contacts at different stages of the sales process.
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+The template mechanism is facilitated by `TemplateStorage`, `TemplateCommand`, and `TemplateViewState`. It uses the following key components:
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+* `TemplateStorage` — Interface for reading and writing template files.
+* `TemplateStorageManager` — Concrete implementation that stores templates as text files in the data directory.
+* `TemplateCommand` — Command that handles both opening templates for editing and saving edited templates.
+* `TemplateViewState` — Model class that tracks the currently displayed template (status and content).
+* `TemplateViewPanel` — UI component that displays the template editor.
 
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+These operations are exposed in the `Model` interface as:
+* `Model#getTemplateViewStateProperty()` — Returns an observable property for the current template state.
+* `Model#setTemplateViewState(TemplateViewState)` — Updates the template view state.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+And in the `Storage` interface as:
+* `Storage#readTemplate(Status)` — Reads a template for a specific status.
+* `Storage#saveTemplate(Status, String)` — Saves template content for a specific status.
 
-![UndoRedoState0](images/UndoRedoState0.png)
+Given below is an example usage scenario and how the template mechanism behaves at each step.
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 1. The salesperson launches the application. The `TemplateStorage` is initialized and ready to read/write template files in the data directory. No template is currently being viewed, so `TemplateViewState` is null.
 
-![UndoRedoState1](images/UndoRedoState1.png)
+![TemplateState0](images/TemplateState0.png)
 
-Step 3. The user executes `add n:David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 2. The salesperson executes `template s:CONTACTED` to open the template for contacted clients. The `TemplateCommand` calls `Storage#readTemplate(Status.CONTACTED)` to retrieve the template content (or default template if none exists), then calls `Model#setTemplateViewState(TemplateViewState)` to display it in the template editor.
 
-![UndoRedoState2](images/UndoRedoState2.png)
+![TemplateState1](images/TemplateState1.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+Step 3. The salesperson edits the template content directly in the `TemplateViewPanel`. The changes are stored in the UI component but not yet saved to persistent storage. The model's `TemplateViewState` is updated when the salesperson types.
 
-</div>
+![TemplateState2](images/TemplateState2.png)
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-![UndoRedoState3](images/UndoRedoState3.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</div>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The template content is only saved to storage when the `template save` command is explicitly executed. Simply editing the text does not persist changes.
 
 </div>
 
-Similarly, how an undo operation goes through the `Model` component is shown below:
+Step 4. The salesperson decides to save the edited template by executing `template save`. The `TemplateCommand` retrieves the current `TemplateViewState` from the model, extracts the status and content, and calls `Storage#saveTemplate(Status, String)` to persist the changes.
 
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
+![TemplateState3](images/TemplateState3.png)
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the salesperson switches to a different view (e.g., executes `list` or `find`) without saving, the edited content is discarded and not persisted.
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+The following sequence diagram shows how the template open operation goes through the `Logic` component:
 
-![UndoRedoState4](images/UndoRedoState4.png)
+![TemplateOpenSequenceDiagram](images/TemplateOpenSequenceDiagram.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n:David …​` command. This is the behavior that most modern desktop applications follow.
+The following sequence diagram shows how the template save operation works:
 
-![UndoRedoState5](images/UndoRedoState5.png)
+![TemplateSaveSequenceDiagram](images/TemplateSaveSequenceDiagram.png)
 
-The following activity diagram summarizes what happens when a user executes a new command:
+Step 5. The salesperson can also copy a template directly to the clipboard without opening the editor by executing `copy s:CONTACTED`. This reads the template and places it on the system clipboard for pasting into an email client.
 
-<img src="images/CommitActivityDiagram.png" width="250" />
+![TemplateState4](images/TemplateState4.png)
+
+The following sequence diagram shows how the copy operation works:
+
+![TemplateCopySequenceDiagram](images/TemplateCopySequenceDiagram.png)
+
+The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, REJECTED, ACCEPTED, UNREACHABLE, BUSY), with each status having its own independent template file.
 
 #### Design considerations:
 
-**Aspect: How undo & redo executes:**
+**Aspect: How templates are stored:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+* **Alternative 1 (current choice):** Store each template as a separate text file per status.
+  * Pros: Simple to implement, easy to manually edit templates outside the application, human-readable format.
+  * Cons: Requires file I/O for each template operation, potential for file system errors.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+* **Alternative 2:** Store all templates in a single JSON file.
+  * Pros: Single file to manage, consistent with address book storage format, easier to backup.
+  * Cons: More complex serialization/deserialization, harder for users to manually edit, risk of corrupting all templates if JSON is malformed.
 
-_{more aspects and alternatives to be added}_
+**Aspect: When to save template changes:**
 
-### \[Proposed\] Data archiving
+* **Alternative 1 (current choice):** Require explicit `template save` command.
+  * Pros: Gives users control over when changes are persisted, prevents accidental overwrites, clear user intent.
+  * Cons: Users might forget to save and lose their edits.
 
-_{Explain here how the data archiving feature will be implemented}_
+* **Alternative 2:** Auto-save on every keystroke or after a delay.
+  * Pros: No risk of losing work, more convenient for users.
+  * Cons: May cause performance issues with frequent file I/O, harder to implement "cancel" functionality, could save incomplete/incorrect templates.
 
+**Aspect: Template editor vs. clipboard copy:**
+
+* **Current implementation:** Provides both `template s:STATUS` (opens editor) and `copy s:STATUS` (direct clipboard copy).
+  * Pros: Flexibility for different workflows - edit for customization, copy for quick use.
+  * Cons: Two different commands to learn and maintain.
+
+* **Alternative:** Only provide editor, remove direct copy command.
+  * Pros: Simpler command set, encourages review before sending.
+  * Cons: Less efficient for users who want to quickly copy without viewing.
 
 --------------------------------------------------------------------------------------------------------------------
 

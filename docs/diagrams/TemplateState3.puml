@@ -1,0 +1,48 @@
+@startuml
+!include style.puml
+allowmixing
+
+skinparam ClassFontColor #000000
+skinparam ClassBorderColor #000000
+skinparam ClassBackgroundColor #FFFFAA
+
+title After 'template save' - Changes Persisted
+
+package "Model" <<Rectangle>> {
+    class TemplateViewState {
+        status: CONTACTED
+        content: "Dear esteemed client,\n..."
+    }
+}
+
+package "UI" <<Rectangle>> {
+    class TemplateViewPanel {
+        Displaying saved content:
+        "Dear esteemed client,\n..."
+    }
+}
+
+package "Storage" <<Rectangle>> {
+    folder "data/" {
+        file "contactedTemplate.txt" #90EE90
+        file "rejectedTemplate.txt"
+        file "acceptedTemplate.txt"
+        file "unreachableTemplate.txt"
+        file "busyTemplate.txt"
+        file "uncontactedTemplate.txt"
+    }
+}
+
+TemplateViewState -down-> TemplateViewPanel : observes
+TemplateViewPanel -down-> "contactedTemplate.txt" : saved to
+
+note right of "contactedTemplate.txt"
+  SAVED content:
+  "Dear esteemed client,\n..."
+  
+  File now contains the
+  edited content.
+  Changes are persisted.
+end note
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":TemplateCommandParser" as TemplateCommandParser LOGIC_COLOR
+participant "t:TemplateCommand" as TemplateCommand LOGIC_COLOR
+participant ":ClipboardProvider" as Clipboard LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+end box
+
+box Storage STORAGE_COLOR_T1
+participant ":TemplateStorage" as TemplateStorage STORAGE_COLOR
+end box
+
+[-> LogicManager : execute("template copy s:CONTACTED")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("template copy s:CONTACTED")
+activate AddressBookParser
+
+create TemplateCommandParser
+AddressBookParser -> TemplateCommandParser
+activate TemplateCommandParser
+
+TemplateCommandParser -> TemplateCommandParser : parse("copy s:CONTACTED")
+TemplateCommandParser -> TemplateCommandParser : parseCopyCommand("s:CONTACTED")
+
+create TemplateCommand
+TemplateCommandParser -> TemplateCommand : new(CONTACTED, templateStorage, clipboardProvider)
+activate TemplateCommand
+
+TemplateCommand --> TemplateCommandParser
+deactivate TemplateCommand
+
+TemplateCommandParser --> AddressBookParser : t
+deactivate TemplateCommandParser
+
+AddressBookParser --> LogicManager : t
+deactivate AddressBookParser
+
+LogicManager -> TemplateCommand : execute(model)
+activate TemplateCommand
+
+TemplateCommand -> TemplateStorage : readTemplate(CONTACTED)
+activate TemplateStorage
+
+TemplateStorage --> TemplateCommand : "Dear esteemed client,\n..."
+deactivate TemplateStorage
+
+TemplateCommand -> Clipboard : setString("Dear esteemed client,\n...")
+activate Clipboard
+
+Clipboard --> TemplateCommand
+deactivate Clipboard
+
+TemplateCommand --> LogicManager : CommandResult("Copied CONTACTED template to clipboard")
+deactivate TemplateCommand
+
+[<-- LogicManager : CommandResult
+deactivate LogicManager
+
+@enduml

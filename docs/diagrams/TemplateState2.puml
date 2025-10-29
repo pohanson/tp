@@ -1,0 +1,55 @@
+@startuml
+!include style.puml
+allowmixing
+
+skinparam ClassFontColor #000000
+skinparam ClassBorderColor #000000
+skinparam ClassBackgroundColor #FFFFAA
+
+title During Edit - Changes in UI Not Yet Saved
+
+package "Model" <<Rectangle>> {
+    class TemplateViewState {
+        status: CONTACTED
+        content: "Dear valued customer,\n..."
+    }
+}
+
+package "UI" <<Rectangle>> {
+    class TemplateViewPanel {
+        Displaying EDITED content:
+        "Dear esteemed client,\n..."
+    }
+}
+
+package "Storage" <<Rectangle>> {
+    folder "data/" {
+        file "contactedTemplate.txt" #FFCCCC
+        file "rejectedTemplate.txt"
+        file "acceptedTemplate.txt"
+        file "unreachableTemplate.txt"
+        file "busyTemplate.txt"
+        file "uncontactedTemplate.txt"
+    }
+}
+
+TemplateViewState -down-> TemplateViewPanel : observes
+TemplateViewPanel -[dashed]down-> "contactedTemplate.txt" : NOT yet saved
+
+note right of TemplateViewPanel
+  User has edited the template
+  in the UI, but changes are
+  only in memory.
+  
+  File still has old content.
+end note
+
+note left of "contactedTemplate.txt"
+  OLD content:
+  "Dear valued customer,\n..."
+  
+  File unchanged until
+  'template save'
+end note
+
+@enduml
