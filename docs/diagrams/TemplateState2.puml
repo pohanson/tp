@@ -40,16 +40,14 @@ note right of TemplateViewPanel
   User has edited the template
   in the UI, but changes are
   only in memory.
-  
   File still has old content.
 end note
 
 note left of "contactedTemplate.txt"
   OLD content:
   "Dear valued customer,\n..."
-  
   File unchanged until
-  'template save'
+  "template save" is executed
 end note
 
 @enduml

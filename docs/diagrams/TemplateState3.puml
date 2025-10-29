@@ -39,7 +39,6 @@ TemplateViewPanel -down-> "contactedTemplate.txt" : saved to
 note right of "contactedTemplate.txt"
   SAVED content:
   "Dear esteemed client,\n..."
-  
   File now contains the
   edited content.
   Changes are persisted.
