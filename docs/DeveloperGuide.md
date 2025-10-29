@@ -164,6 +164,80 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Status View and Tag View Feature
+
+#### Overview
+
+The Status View and Tag View feature provides visual feedback to users about which filters are currently active when using the `find` command. When users search for customers by status (e.g., `find s:Contacted`) or tags (e.g., `find t:friends`), dedicated UI panels automatically update to display the active filters, making it easy to see what subset of data is being viewed.
+
+#### Architecture
+
+The implementation follows the **Observer Pattern** using JavaFX's property binding mechanism to automatically sync UI state with model state.
+
+![Status/Tag View Class Diagram](images/StatusTagViewClassDiagram.png)
+
+**Key Components:**
+
+1. **Model Layer:**
+   - `StatusViewState` and `TagsViewState`: Immutable state objects that represent current filter states
+   - `ModelManager`: Stores these states as `ObjectProperty` objects and exposes them via the `Model` interface
+
+2. **Logic Layer:**
+   - `Logic` interface: Exposes `getStatusViewStateProperty()` and `getTagsViewStateProperty()` methods
+   - `FindCommand`: Updates the view states in `Model` when executing filter operations
+
+3. **UI Layer:**
+   - `StatusViewPanel` and `TagsViewPanel`: Observe the properties exposed by `Logic` and automatically update their display
+   - UI components depend on the `Logic` abstraction, maintaining proper architectural layering
+
+#### Implementation Details
+
+The following sequence diagram shows how the view states are updated when a user executes `find s:Contacted t:friends`:
+
+![Status/Tag View Sequence Diagram](images/StatusTagViewSequenceDiagram.png)
+
+**Step-by-step flow:**
+
+1. User executes a `find` command with status/tag filters
+2. `LogicManager` parses and creates a `FindCommand`
+3. `FindCommand.execute()` is called:
+   - Updates the filtered person list in `Model`
+   - Calls `model.setStatusViewState()` with the appropriate `StatusViewState`
+   - Calls `model.setTagsViewState()` with the appropriate `TagsViewState`
+4. `ModelManager` updates its `ObjectProperty` fields
+5. JavaFX property listeners in `StatusViewPanel` and `TagsViewPanel` are automatically triggered
+6. UI panels update their labels to display the active filters
+
+#### Design Considerations
+
+**Aspect: How to represent filter state in the UI**
+
+* **Alternative 1 (Chosen):** Use explicit state objects (`StatusViewState`, `TagsViewState`) to track user intent
+  * Pros: UI displays what the user explicitly searched for (intent), not just the consequence. Handles edge cases where multiple filter combinations produce the same result. Clear separation of concerns.
+  * Cons: Additional state management complexity, requires synchronization between filter predicates and view states
+
+* **Alternative 2:** Derive view state from `FilteredPersonList`
+  * Pros: Single source of truth, no state synchronization needed, simpler implementation
+  * Cons: UI displays consequence rather than intent. For example, if a user searches for `s:Contacted` but no customers have that status, the filtered list would be empty and the UI couldn't distinguish whether filters were applied or not. Cannot accurately determine which specific filters were applied if multiple filter combinations produce the same filtered list.
+
+**Aspect: How to communicate filter state to UI**
+
+* **Alternative 1:** Direct UI method calls from Command classes
+  * Pros: Simpler to understand, explicit control flow
+  * Cons: Violates architectural boundaries (Logic calling UI directly) and tight coupling!!
+
+**Aspect: Where to store view state**
+
+* **Alternative 1 (Chosen):** Store in `Model` layer
+  * Pros: Centralized state management, follows MVC pattern, testable
+  * Cons: Model becomes slightly more complex
+
+* **Alternative 2:** Store in UI components only
+  * Pros: Simpler Model layer
+  * Cons: State is scattered, harder to test, UI must deduce state from filtered list
+
+
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
