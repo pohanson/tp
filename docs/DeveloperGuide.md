@@ -438,7 +438,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 3. Salesperson submits the command.
 4. CMS validates the details.
 5. CMS creates the contact and displays a confirmation message.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**<br/>
 
@@ -464,7 +464,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson enters the add command with multiple contacts separated by "|||", then submits the command.
 3. CMS validates all entries.
 4. CMS creates the contacts and displays a summary confirmation.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**<br/>
 
@@ -489,7 +489,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 1. Salesperson chooses to view all contacts.
 2. Salesperson enters the list command.
 3. CMS displays all contacts.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -515,7 +515,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson enters the find command with specified search criteria.
 3. CMS searches for customers matching ALL specified criteria (AND logic between different types, OR logic within same type).
 4. CMS displays the matching customers and updates the tag view and status view panels to show active filters.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -544,7 +544,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the status.
 3. CMS searches for contacts with the specified status.
 4. CMS displays the matching contacts.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -578,7 +578,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 5. Salesperson edits the template content.
 6. Salesperson issues the save command.
 7. CMS saves the updated template.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -613,7 +613,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 3. CMS retrieves the template for the specified status.
 4. CMS copies the template content to the clipboard.
 5. CMS displays a confirmation message.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -643,7 +643,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the contact ID and fields to edit.
 3. CMS validates the updated details.
 4. CMS updates the contact information.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -675,7 +675,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the contact ID(s) to delete.
 3. CMS validates all contact IDs.
 4. CMS deletes the contact(s) and displays a confirmation.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -700,18 +700,90 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the contact ID and new status.
 3. CMS validates the contact ID and status.
 4. CMS updates the contact's status and displays a confirmation message.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
-2b. No status is specified.<br/>
-   2b1. CMS indicates that an error has happened.<br/>
+2a. No status is specified.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
 3a. The specified status is invalid.<br/>
    3a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
+3b. The specified contact ID does not exist.<br/>
+   3b1. CMS indicates that an error has happened.<br/>
+   Use case ends.
+
+#### Use case: UC11 - Export Contacts
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+* Export copies the exact state of the address book to clipboard as JSON.
+* All contact data is preserved during export.
+* The operation does not modify any existing data.
+
+**MSS:**
+
+1. Salesperson chooses to export contacts.
+2. Salesperson enters the export command or presses F8.
+3. CMS reads the address book data.
+4. CMS converts the data to JSON format.
+5. CMS copies the JSON to the system clipboard.
+6. CMS displays a success message.<br/>
+Use case ends.
+
+**Extensions:**
+
+3a. CMS cannot read the address book file.<br/>
+   3a1. CMS shows an error message.<br/>
+   Use case ends.
+
+5a. System clipboard is unavailable.<br/>
+   5a1. CMS shows an error message.<br/>
+   Use case ends.
+
+#### Use case: UC12 - Import Contacts
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+* Import either succeeds completely or fails without modifying existing data.
+
+**MSS:**
+
+1. Salesperson chooses to import contacts.
+2. Salesperson enters the import command.
+3. CMS retrieves JSON data from the system clipboard.
+4. CMS validates the JSON format and contact data.
+5. CMS overwrites the existing address book with the imported data.
+6. CMS displays a success message.<br/>
+Use case ends.
+
+**Extensions:**
+1a. Salesperson presses F7 or clicks the import button under File.<br/>
+   1a1. CMS shows an import contact preview window.<br/>
+   1a2. User clicks paste JSON button.<br/>
+   Use case resumes at step 3.
+
+3a. Clipboard is empty.<br/>
+   3a1. CMS shows an error message.<br/>
+   Use case ends.
+
+3b. Cannot access system clipboard.<br/>
+   3b1. CMS shows an error message.<br/>
+   Use case ends.
+
+4a. The JSON data is invalid or malformed.<br/>
+   4a1. CMS shows an error message describing the issue.<br/>
+   4a2. No changes are made to the existing data.<br/>
+   Use case ends.
 
 ### Non-Functional Requirements
 
