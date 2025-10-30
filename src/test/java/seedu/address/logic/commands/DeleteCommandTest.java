@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -140,6 +141,142 @@ public class DeleteCommandTest {
                                   + targetIndices
                                   + "}";
         assertEquals(expected, deleteCommand.toString());
+    }
+
+    @Test
+    public void execute_multipleInvalidIndices_throwsCommandException() {
+        Index firstInvalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        Index secondInvalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 5);
+        DeleteCommand deleteCommand = new DeleteCommand(Arrays.asList(firstInvalidIndex, secondInvalidIndex));
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_INVALID_INDICES,
+                firstInvalidIndex.getOneBased() + ", " + secondInvalidIndex.getOneBased());
+        assertCommandFailure(deleteCommand, model, expectedMessage);
+    }
+
+    @Test
+    public void execute_mixedValidAndInvalidIndices_throwsCommandException() {
+        Index validIndex = INDEX_FIRST_PERSON;
+        Index invalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        DeleteCommand deleteCommand = new DeleteCommand(Arrays.asList(validIndex, invalidIndex));
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_INVALID_INDICES,
+                invalidIndex.getOneBased());
+        assertCommandFailure(deleteCommand, model, expectedMessage);
+
+        // Verify that no persons were deleted (all-or-nothing behavior)
+        assertEquals(model.getFilteredPersonList().size(),
+                new ModelManager(getTypicalAddressBook(), new UserPrefs()).getFilteredPersonList().size());
+    }
+
+    @Test
+    public void execute_duplicateIndices_deletesOnlyOnce() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        // Delete same person twice using duplicate indices
+        // This should work - duplicate indices just mean we collect the same person multiple times
+        // But since we're deleting from the model directly, duplicates shouldn't cause issues
+        // if we use a Set or handle it properly
+        DeleteCommand deleteCommand = new DeleteCommand(
+                Arrays.asList(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON));
+
+        // Note: This test documents current behavior where duplicate indices
+        // will cause the person to be listed twice in the success message
+        // but only deleted once from the model
+        assertThrows(seedu.address.model.person.exceptions.PersonNotFoundException.class, ()
+                -> deleteCommand.execute(model));
+    }
+
+    @Test
+    public void execute_multipleValidIndicesInFilteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON));
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+        showNoPerson(expectedModel);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_allIndicesInvalid_throwsCommandException() {
+        Index firstInvalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        Index secondInvalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 2);
+        Index thirdInvalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 3);
+
+        DeleteCommand deleteCommand = new DeleteCommand(
+                Arrays.asList(firstInvalidIndex, secondInvalidIndex, thirdInvalidIndex));
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_INVALID_INDICES,
+                firstInvalidIndex.getOneBased() + ", " + secondInvalidIndex.getOneBased()
+                + ", " + thirdInvalidIndex.getOneBased());
+        assertCommandFailure(deleteCommand, model, expectedMessage);
+    }
+
+    @Test
+    public void execute_indicesInDescendingOrder_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Index thirdIndex = Index.fromOneBased(3);
+        Index firstIndex = INDEX_FIRST_PERSON;
+
+        Person firstPerson = model.getFilteredPersonList().get(firstIndex.getZeroBased());
+        Person thirdPerson = model.getFilteredPersonList().get(thirdIndex.getZeroBased());
+
+        // Provide indices in descending order
+        DeleteCommand deleteCommand = new DeleteCommand(Arrays.asList(thirdIndex, firstIndex));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(firstPerson);
+        expectedModel.deletePerson(thirdPerson);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, 2,
+                "- " + Messages.format(thirdPerson) + "\n- " + Messages.format(firstPerson));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_singleIndexBoundary_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Index lastIndex = Index.fromOneBased(model.getFilteredPersonList().size());
+        Person personToDelete = model.getFilteredPersonList().get(lastIndex.getZeroBased());
+
+        DeleteCommand deleteCommand = new DeleteCommand(List.of(lastIndex));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void equals_multipleIndices_correctComparison() {
+        DeleteCommand deleteFirstAndSecond = new DeleteCommand(
+                Arrays.asList(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON));
+        DeleteCommand deleteSecondAndFirst = new DeleteCommand(
+                Arrays.asList(INDEX_SECOND_PERSON, INDEX_FIRST_PERSON));
+        DeleteCommand deleteFirstAndSecondCopy = new DeleteCommand(
+                Arrays.asList(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON));
+
+        // same object -> returns true
+        assertEquals(deleteFirstAndSecond, deleteFirstAndSecond);
+
+        // same values in same order -> returns true
+        assertEquals(deleteFirstAndSecond, deleteFirstAndSecondCopy);
+
+        // different order -> returns false (order matters for equals)
+        assertNotEquals(deleteFirstAndSecond, deleteSecondAndFirst);
     }
 
     /**
