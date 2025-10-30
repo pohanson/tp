@@ -530,7 +530,7 @@ The typical flow of operations is:
 
 **Valid contact statuses**:
 
-- **Uncontacted**: Default status when a contact is added (indicates not yet contacted)
+- **Uncontacted**: Contact has not been contacted yet (default)
 - **Contacted**: Contact has been contacted
 - **Rejected**: Contact has rejected the sale
 - **Accepted**: Contact has accepted the sale
