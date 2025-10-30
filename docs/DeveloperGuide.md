@@ -150,6 +150,11 @@ The `Model` component,
 The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage`, `UserPrefStorage` and `TemplateStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
+* uses a facade pattern and delegates storage operations to three specialized storage implementations:
+  * `JsonAddressBookStorage` — Handles address book persistence using JSON format
+  * `JsonUserPrefsStorage` — Handles user preferences persistence using JSON format
+  * `TemplateStorageManager` — Handles email templates persistence as individual text files
+
 
 ### Common classes
 
@@ -504,7 +509,7 @@ The typical flow of operations is:
 
 **Key features**:
 
-- Add Contact: Add single contacts in one command
+- Add Contact: Add a single contacts in one command
 - Edit Contact: Update any field, add/remove tags, set status
 - Delete Contact: Remove contacts by index
 - List Contact: Display all contacts
@@ -521,12 +526,16 @@ The typical flow of operations is:
 - Leading/trailing whitespace is trimmed for all fields
 - Each named parameter continues till the end of the line or till another parameter
 
-**Field validations**:
+**Field validations for contacts**:
 
-- Phone number: Must contain only digits and `+`
-- Email: Must contain `@` symbol
-- Status: Must be one of the valid statuses (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted)
-- Tag, Name and Address: No validation to allow flexibility
+| Field | Validation Rule | Rationale |
+|-------|----------------|-----------|
+| **Name** | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, and periods. Cannot be blank or start with whitespace. | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith"). |
+| **Phone** | Must contain only digits and be at least 3 digits long. | Accommodates both local and international formats without requiring country codes or special characters. Minimum length prevents trivial inputs like "1" or "12". |
+| **Email** | Must follow standard email format, which we enforce losely by checking for `@`.<br>- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric labels separated by periods, must end with at least 2-character domain label | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com" |
+| **Address** | Can contain any characters but must not exceed 200 characters. | Allows flexibility for diverse address formats while preventing unreasonably long inputs that could affect UI display. |
+| **Tag** | Must be alphanumeric only (no spaces or special characters). | Tags, used for categorising, should be a single word. Alphanumeric restriction prevents parsing conflicts with command syntax. |
+| **Status** | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified. | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience. |
 
 **Valid contact statuses**:
 
@@ -1109,8 +1118,8 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a duplicate contact
 
-   1. Test case: `add n:John Doe p:98765432 e:different@example.com a:Different Address`<br>
-      Expected: Error message "This person already exists in the address book". No new contact is added. (Note: Duplicate detection is based on name only)
+   1. Test case: `add n:Jane Doe p:98765432 e:different@example.com a:Different Address`<br>
+      Expected: Error message "This person already exists in the address book". No new contact is added. (Note: Duplicate detection is based on phone only)
 
 
 ### Importing address book from clipboard
