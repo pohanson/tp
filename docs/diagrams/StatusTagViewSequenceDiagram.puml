@@ -1,0 +1,68 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":FindCommand" as FindCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+end box
+
+box UI UI_COLOR_T1
+participant ":StatusViewPanel" as StatusViewPanel UI_COLOR
+participant ":TagsViewPanel" as TagsViewPanel UI_COLOR
+end box
+
+[-> LogicManager : execute("find s:Contacted t:friends")
+activate LogicManager
+
+LogicManager -> FindCommand : execute(model)
+activate FindCommand
+
+FindCommand -> Model : updateFilteredPersonList(predicate)
+activate Model
+Model --> FindCommand
+deactivate Model
+
+FindCommand -> Model : setStatusViewState(CONTACTED)
+activate Model
+
+note right of Model
+Updates statusViewState
+property
+end note
+
+Model ->> StatusViewPanel : notify property change
+activate StatusViewPanel
+StatusViewPanel -> StatusViewPanel : Update display
+
+Model --> FindCommand
+deactivate Model
+deactivate StatusViewPanel
+
+FindCommand -> Model : setTagsViewState(["friends"])
+activate Model
+
+note right of Model
+Updates tagsViewState
+property
+end note
+
+Model ->> TagsViewPanel : notify property change
+activate TagsViewPanel
+TagsViewPanel -> TagsViewPanel : Update display
+
+Model --> FindCommand
+deactivate Model
+deactivate TagsViewPanel
+
+FindCommand --> LogicManager : CommandResult
+deactivate FindCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
+
