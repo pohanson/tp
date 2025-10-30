@@ -134,6 +134,9 @@ Format: `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [
 - `e:EMAIL` - Search by email address
 - Multiple criteria can be combined for more precise searches
 - All searches are case-insensitive
+- You can use either prefixes (advanced search) or a basic name-only search.
+- Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
+
 
 Examples:
 
@@ -145,6 +148,7 @@ Examples:
 **Search by name with prefix:**
 
 - `find n:alice` returns all customers with "alice" in their name
+- `find n:ali` will NOT return customers with "alice" in their name
 
 **Search by tag:**
 
