@@ -82,11 +82,11 @@ public class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName());
+                && this.getPhone().equals(otherPerson.getPhone());
     }
 
     /**
-     * Returns true if both persons have the same identity and data fields.
+     * Returns true if both persons have the same identity or all data fields are the same.
      * This defines a stronger notion of equality between two persons.
      */
     @Override
