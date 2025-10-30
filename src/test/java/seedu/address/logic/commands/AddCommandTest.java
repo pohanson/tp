@@ -138,7 +138,6 @@ public class AddCommandTest {
         Person person2 = new PersonBuilder().withName("Person Two").build();
 
         new AddCommand(person1).execute(modelStub);
-        new AddCommand(person2).execute(modelStub);
 
         assertEquals(Arrays.asList(person1, person2), modelStub.personsAdded);
     }
