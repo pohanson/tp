@@ -40,8 +40,6 @@ public class FindCommand extends Command {
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_STATUS + "uncontacted";
 
-    public static final String MESSAGE_INVALID_TAG = "Tags should not contain spaces.";
-
     private final Predicate<Person> predicate;
 
     public FindCommand(Predicate<Person> predicate) {
