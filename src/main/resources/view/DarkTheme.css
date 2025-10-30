@@ -391,6 +391,10 @@
   -fx-font-size: 12pt;
   -fx-font-family: "Segoe UI Semibold";
   -fx-text-fill: #d8d8d8;
+  -fx-wrap-text: false;
+  -fx-text-alignment: right;
+  -fx-min-width: 100;
+  -fx-padding: 0 5 0 5;
 }
 
 .tags-label {
