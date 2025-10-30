@@ -9,9 +9,9 @@ package Logic {
 }
 
 package "Providers" {
-    interface ClipboardProvider
+    interface ClipboardProvider <<interface>>
     class SystemClipboardProvider
-    interface FileSystemProvider
+    interface FileSystemProvider <<interface>>
     class SystemFileSystemProvider
 }
 
