@@ -101,6 +101,6 @@ public class FindCommandParserTest {
     @Test
     public void parse_multipleStatusPrefix_throwsParseException() {
         assertParseFailure(parser, " s:contacted s:rejected",
-                "Multiple values specified for the following single-valued field(s): s:");
+                "Only one status filter is allowed at a time!");
     }
 }
