@@ -32,6 +32,10 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    - `delete 3` : Deletes the 3rd contact shown in the current list.
 
+   * `delete 1 2 3` : Deletes the 1st, 2nd, and 3rd contacts shown in the current list.
+   
+   * `template s:Contacted` : Opens the email template editor for contacts with "Contacted" status.
+
    * `clear` : Deletes all contacts.
 
    - `exit` : Exits the app.
@@ -76,14 +80,14 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​`
+Format: `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG] [s:STATUS]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
+A person can have any number of tags (including 0), but only 1 status (default: "Uncontacted")
 </div>
 
 Examples:
-* `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01`
+* `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01 s:Busy`
 * `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal`
 
 ### Listing all persons : `list`
@@ -92,15 +96,32 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
+### Changing a person's status: `status`
+
+Sets a person's status in the address book.
+
+Format: `status INDEX [STATUS]`
+
+* Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​ This field is mandatory.
+* Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
+* The status input is case-insensitive.
+
+Examples:
+
+* `status 12 Contacted`
+* `status 12 Rejected`
+* `status 12 Accepted`
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`
+Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG] [s:STATUS] …​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
+* When editing status, the existing status of the person will be removed and replaced with the new one specified.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
 * You can remove all the person’s tags by typing `t:` without
     specifying any tags after it.
@@ -108,6 +129,7 @@ Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`
 Examples:
 *  `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
 - `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 - `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
@@ -200,11 +222,11 @@ When you use `find t:friends s:Contacted`, the Tag view will highlight "friends"
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes one or more persons from the address book.
 
-Format: `delete INDEX`
+Format: `delete INDEX [MORE_INDICES]...`
 
-* Deletes the person at the specified `INDEX`.
+* Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 * Multiple indices can be specified to delete multiple persons at once.
@@ -248,19 +270,6 @@ Saves the currently open template.
 Clears all entries from the address book.
 
 Format: `clear`
-
-### Exporting contacts : `export`
-
-Exports all contacts from your address book to the system clipboard in JSON format, which you can then paste into a text file or share directly. This is useful when you want to:
-* Back up your contacts
-* Share your contacts with someone else
-* Move your contacts to another device
-
-There are two ways to export your contacts:
-* Press the <kbd>F8</kbd> key.
-* Using the `export` command directly in the command line.
-
-Note: The amount of data that can be exported is limited only by your system's available memory and clipboard capacity. The export command can handle address books of any reasonable size.
 
 ### Exiting the program : `exit`
 
@@ -307,9 +316,13 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
 **Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
 **Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
 **Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g., `find John`, `find n:alice t:friends s:Contacted`
 **List** | `list`
 **Help** | `help`
+**Template (Open)** | `template s:STATUS`<br> e.g., `template s:Contacted`
+**Template (Save)** | `template save`
+**Template (Copy)** | `template copy s:STATUS`<br> e.g., `template copy s:Rejected`
+**Exit** | `exit`
