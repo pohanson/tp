@@ -36,7 +36,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -68,7 +68,7 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
@@ -81,7 +81,7 @@ The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `Re
 * `TagsViewPanel` - Displays all currently active tag filters applied through the find command  
 * `TemplateViewPanel` - Displays and manages email templates for different customer status types
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -94,7 +94,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the new `Logic` component, with additional classes to the AB3 being shown in light blue:
 
@@ -103,9 +103,6 @@ Here's a (partial) class diagram of the new `Logic` component, with additional c
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
 ![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</div>
 
 How the `Logic` component works:
 
@@ -124,7 +121,7 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="450" />
 
@@ -133,7 +130,8 @@ The `Model` component,
 
 * stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* stores a `UserPrefs` object that represents the user's preferences. This is exposed to the outside as `ReadOnlyUserPrefs` objects.
+* stores view state objects (`StatusViewState`, `TagsViewState`, `TemplateViewState`) as observable properties that track the current UI filter and display states. These are exposed as `ReadOnlyObjectProperty` instances that the UI can observe for reactive updates.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
@@ -145,7 +143,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
@@ -236,96 +234,103 @@ The following sequence diagram shows how the view states are updated when a user
   * Pros: Simpler Model layer
   * Cons: State is scattered, harder to test, UI must deduce state from filtered list
 
+### Template Feature
 
+#### Implementation
 
-### \[Proposed\] Undo/redo feature
+The template feature allows salespersons to create, edit, and copy email templates associated with different contact statuses. This streamlines the process of sending personalized emails to contacts at different stages of the sales process.
 
-#### Proposed Implementation
+The template mechanism is facilitated by `TemplateStorage`, `TemplateCommand`, and `TemplateViewState`. It uses the following key components:
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+* `TemplateStorage` — Interface for reading and writing template files.
+* `TemplateStorageManager` — Concrete implementation that stores templates as text files in the data directory.
+* `TemplateCommand` — Command that handles both opening templates for editing and saving edited templates.
+* `TemplateViewState` — Model class that tracks the currently displayed template (status and content).
+* `TemplateViewPanel` — UI component that displays the template editor.
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+These operations are exposed in the `Model` interface as:
+* `Model#getTemplateViewStateProperty()` — Returns an observable property for the current template state.
+* `Model#setTemplateViewState(TemplateViewState)` — Updates the template view state.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+And in the `Storage` interface as:
+* `Storage#readTemplate(Status)` — Reads a template for a specific status.
+* `Storage#saveTemplate(Status, String)` — Saves template content for a specific status.
 
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+Given below is an example usage scenario and how the template mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The salesperson launches the application. The `TemplateStorage` is initialized and ready to read/write template files in the data directory. No template is currently being viewed, so `TemplateViewState` is null.
 
-![UndoRedoState0](images/UndoRedoState0.png)
+![TemplateState0](images/TemplateState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The salesperson executes `template s:CONTACTED` to open the template for contacted clients. The `TemplateCommand` calls `Storage#readTemplate(Status.CONTACTED)` to retrieve the template content (or default template if none exists), then calls `Model#setTemplateViewState(TemplateViewState)` to display it in the template editor.
 
-![UndoRedoState1](images/UndoRedoState1.png)
+![TemplateState1](images/TemplateState1.png)
 
-Step 3. The user executes `add n:David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The salesperson edits the template content directly in the `TemplateViewPanel`. The changes are stored in the UI component but not yet saved to persistent storage. The model's `TemplateViewState` is updated when the salesperson types.
 
-![UndoRedoState2](images/UndoRedoState2.png)
+![TemplateState2](images/TemplateState2.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</div>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-![UndoRedoState3](images/UndoRedoState3.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</div>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The template content is only saved to storage when the `template save` command is explicitly executed. Simply editing the text does not persist changes.
 
 </div>
 
-Similarly, how an undo operation goes through the `Model` component is shown below:
+Step 4. The salesperson decides to save the edited template by executing `template save`. The `TemplateCommand` retrieves the current `TemplateViewState` from the model, extracts the status and content, and calls `Storage#saveTemplate(Status, String)` to persist the changes.
 
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
+![TemplateState3](images/TemplateState3.png)
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the salesperson switches to a different view (e.g., executes `list` or `find`) without saving, the edited content is discarded and not persisted.
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+The following sequence diagram shows how the template open operation goes through the `Logic` component:
 
-![UndoRedoState4](images/UndoRedoState4.png)
+![TemplateOpenSequenceDiagram](images/TemplateOpenSequenceDiagram.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n:David …​` command. This is the behavior that most modern desktop applications follow.
+The following sequence diagram shows how the template save operation works:
 
-![UndoRedoState5](images/UndoRedoState5.png)
+![TemplateSaveSequenceDiagram](images/TemplateSaveSequenceDiagram.png)
 
-The following activity diagram summarizes what happens when a user executes a new command:
+Step 5. The salesperson can also copy a template directly to the clipboard without opening the editor by executing `copy s:CONTACTED`. This reads the template and places it on the system clipboard for pasting into an email client.
 
-<img src="images/CommitActivityDiagram.png" width="250" />
+![TemplateState4](images/TemplateState4.png)
+
+The following sequence diagram shows how the copy operation works:
+
+![TemplateCopySequenceDiagram](images/TemplateCopySequenceDiagram.png)
+
+The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, REJECTED, ACCEPTED, UNREACHABLE, BUSY), with each status having its own independent template file.
 
 #### Design considerations:
 
-**Aspect: How undo & redo executes:**
+**Aspect: How templates are stored:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+* **Alternative 1 (current choice):** Store each template as a separate text file per status.
+  * Pros: Simple to implement, easy to manually edit templates outside the application, human-readable format.
+  * Cons: Requires file I/O for each template operation, potential for file system errors.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+* **Alternative 2:** Store all templates in a single JSON file.
+  * Pros: Single file to manage, consistent with address book storage format, easier to backup.
+  * Cons: More complex serialization/deserialization, harder for users to manually edit, risk of corrupting all templates if JSON is malformed.
 
-_{more aspects and alternatives to be added}_
+**Aspect: When to save template changes:**
 
-### \[Proposed\] Data archiving
+* **Alternative 1 (current choice):** Require explicit `template save` command.
+  * Pros: Gives users control over when changes are persisted, prevents accidental overwrites, clear user intent.
+  * Cons: Users might forget to save and lose their edits.
 
-_{Explain here how the data archiving feature will be implemented}_
+* **Alternative 2:** Auto-save on every keystroke or after a delay.
+  * Pros: No risk of losing work, more convenient for users.
+  * Cons: May cause performance issues with frequent file I/O, harder to implement "cancel" functionality, could save incomplete/incorrect templates.
 
+**Aspect: Template editor vs. clipboard copy:**
+
+* **Current implementation:** Provides both `template s:STATUS` (opens editor) and `copy s:STATUS` (direct clipboard copy).
+  * Pros: Flexibility for different workflows - edit for customization, copy for quick use.
+  * Cons: Two different commands to learn and maintain.
+
+* **Alternative:** Only provide editor, remove direct copy command.
+  * Pros: Simpler command set, encourages review before sending.
+  * Cons: Less efficient for users who want to quickly copy without viewing.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -392,27 +397,26 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Novel (unlikely to have) - `*`
 
-| Priority | As a …               | I want to …                                                        | So that I can…                                                            |
-| -------- | -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `* * *`  | salesperson          | add contacts                                                       | see their details in the future                                           |
-| `* * *`  | salesperson          | add multiple contacts from the team IC easily                      | see their details in the future                                           |
-| `* * *`  | salesperson          | delete contacts                                                    | don't over clutter my contact book                                        |
-| `* *`    | salesperson          | delete multiple contacts                                           | ensure that PDPA retention limitation is adhered to                       |
-| `* * *`  | careless salesperson | edit typos                                                         | ensure the data is accurate                                               |
-| `* *`    | salesperson team IC  | export and share the contacts I have with others easily            | don't need my team to use each others' accounts                           |
-| `*`      | lazy salesperson     | add contacts from .vcf files                                       | don't need to add existing contacts one-by-one                            |
-| `*`      | lazy salesperson     | copy a preformatted message based on certain tags the user has     | it sounds personalised                                                    |
-| `*`      | salesperson          | create templates that can be sent to a particular type of customer | save time from writing up the same outreach materials over and over again |
-| `*`      | salesperson team IC  | edit a preformatted message                                        | edit the message when needed                                              |
-| `* *`    | salesperson          | add labels to contacts                                             | categorise them for filtering                                             |
-| `* * *`  | salesperson          | search by name                                                     | easily find by name due to the large number of contacts                   |
-| `* *`    | salesperson          | search by labels                                                   | easily find by labels due to the large number of contacts                 |
-| `* *`    | salesperson          | filter by labels                                                   | see all clients of each label                                             |
-| `* * *`  | salesperson          | list all contacts                                                  | know what contacts I have saved                                           |
-| `* * *`  | forgetful user       | autosave edits                                                     | data won't be lost if I forget to save it                                 |
-| `*`      | salesperson          | tag each customer                                                  | better remember what preference the customer has                          |
-| `*`      | salesperson          | quickly identify clients who have been called and rejected         | not waste time calling them again                                         |
-| `*`      | busy salesperson     | quickly mark clients based on how receptive they are               | focus my limited time on those likely to buy the product                  |
+| Priority | As a …               | I want to …                                                        | So that I can…                                                                 |
+| -------- | -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `* * *`  | salesperson          | add contacts                                                       | see their details in the future                                                |
+| `* * *`  | salesperson          | delete contacts                                                    | don't over clutter my contact book                                             |
+| `* *`    | salesperson          | delete multiple contacts                                           | ensure that PDPA retention limitation is adhered to                            |
+| `* * *`  | careless salesperson | edit contact details                                               | ensure the data is accurate                                                    |
+| `* * *`  | salesperson          | search by name                                                     | easily find contacts by name due to the large number of contacts               |
+| `* *`    | salesperson          | search by tags                                                     | easily find contacts by tags                                                   |
+| `* *`    | salesperson          | search by status                                                   | easily find contacts by their status                                           |
+| `* * *`  | salesperson          | list all contacts                                                  | know what contacts I have saved                                                |
+| `* * *`  | forgetful user       | have my edits autosaved                                            | data won't be lost if I forget to save it                                      |
+| `* *`    | salesperson team IC  | export and share the contacts I have with others easily            | don't need my team to use each others' accounts                                |
+| `* *`    | salesperson team IC  | import contacts shared by others                                   | quickly add contacts provided by my team                                       |
+| `* *`    | salesperson          | add tags to contacts                                               | categorise them for filtering                                                  |
+| `* *`    | salesperson          | add multiple tags to each contact                                  | better categorise contacts with different characteristics                      |
+| `* *`    | salesperson          | set a status for each contact                                      | track which contacts have been contacted, accepted, rejected, etc.             |
+| `*`      | salesperson          | create and edit email templates for different contact types        | save time from writing up the same outreach materials over and over again      |
+| `*`      | salesperson          | copy a template message to clipboard                               | quickly paste it into my email application                                     |
+| `*`      | salesperson          | mark clients as rejected                                           | avoid wasting time by contacting them again                                    |
+| `*`      | busy salesperson     | mark clients based on how receptive they are                       | focus my limited time on those likely to buy the product                       |
 
 ### Use cases
 
@@ -553,7 +557,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
    Use case ends.
 
 
-#### Use case: UC06 - Create email template
+#### Use case: UC06 - Open and edit email template
 
 **System:** Contact Management System (CMS)
 
@@ -561,27 +565,68 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 
 **Guarantees:**
 
-* Generating a template or preview does not modify any contact records.
-* If template input is canceled, no template content is saved or applied.
+* Opening a template does not modify any data.
+* Template is saved only when the save command is explicitly issued.
+* If the template view is switched without saving, no changes are will be saved.
 
 **MSS:**
 
-1. Salesperson chooses to create an email template.
-2. Salesperson specifies the target tag(s) and/or status.
-3. CMS prompts for the email content.
-4. Salesperson enters the email template and submits.
-5. CMS saves the personalised email template.<br/>
+1. Salesperson chooses to open an email template for a specific status.
+2. Salesperson enters the template command with the status.
+3. CMS retrieves the template for the specified status.
+4. CMS displays the template in an editable view.
+5. Salesperson edits the template content.
+6. Salesperson issues the save command.
+7. CMS saves the updated template.<br/>
    Use case ends.
 
 **Extensions:**
 
-*a. At any time during template input, Salesperson chooses to cancel his input.<br/>
-   *a1. CMS requests confirmation of the cancellation.<br/>
-   *a2. Salesperson confirms the cancellation.<br/>
+*a. At any time, Salesperson enters a different command (e.g., list, find).<br/>
+   *a1. CMS switches back to the main view and discards any unsaved edits.<br/>
    Use case ends.
 
+2a. The specified status is invalid.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
-#### Use case: UC07 - Edit contact
+3a. No template exists for the specified status.<br/>
+   3a1. CMS displays an empty template.<br/>
+   Use case resumes from step 4.
+
+
+#### Use case: UC07 - Copy email template to clipboard
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+
+* Copying a template does not modify any data.
+* The template content is placed on the system clipboard.
+
+**MSS:**
+
+1. Salesperson chooses to copy an email template for a specific status.
+2. Salesperson enters the copy template command with the status.
+3. CMS retrieves the template for the specified status.
+4. CMS copies the template content to the clipboard.
+5. CMS displays a confirmation message.<br/>
+   Use case ends.
+
+**Extensions:**
+
+2a. The specified status is invalid.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
+
+3a. No template exists for the specified status.<br/>
+   3a1. CMS copies an empty string to the clipboard.<br/>
+   Use case resumes from step 4.
+
+
+#### Use case: UC08 - Edit contact
 
 **System:** Contact Management System (CMS)
 
@@ -611,7 +656,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
    Use case resumes from step 2.
 
 
-#### Use case: UC08 - Delete contact
+#### Use case: UC09 - Delete contact(s)
 
 **System:** Contact Management System (CMS)
 
@@ -619,30 +664,27 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 
 **Guarantees:**
 
-* Deletion removes only the specified contact without modifying other data.
+* Deletion removes only the specified contact(s) without modifying other data.
+* All specified contacts must be valid or none will be deleted.
 * Deletion is irreversible once confirmed.
 * On failure, no deletion occurs.
 
 **MSS:**
 
-1. Salesperson chooses to delete a contact.
-2. Salesperson specifies the contact ID to delete.
-3. CMS deletes the contact and displays a confirmation.<br/>
+1. Salesperson chooses to delete one or more contacts.
+2. Salesperson specifies the contact ID(s) to delete.
+3. CMS validates all contact IDs.
+4. CMS deletes the contact(s) and displays a confirmation.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. The given contact ID is invalid.<br/>
-   3a1. CMS indicates that an error has happened.<br/>
+3a. One or more of the given contact IDs are invalid.<br/>
+   3a1. CMS indicates which contact ID(s) are invalid.<br/>
    Use case resumes at step 2.
 
-3b. CMS requests for confirmation before deletion.<br/>
-   3b1. Salesperson confirms the deletion.<br/>
-   3b2. CMS proceeds with deletion.<br/>
-   Use case ends.
 
-
-#### Use case: UC09 - Set contact status
+#### Use case: UC10 - Set contact status
 
 **System:** Contact Management System (CMS)
 
@@ -685,20 +727,36 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 
 ### Glossary
 
-* **Case-insensitive**: Matching that ignores letter casing (e.g., John == john).
-* **CLI**: Command-line interface used to interact with the CMS.
-* **Command**: A textual instruction entered into the CLI (e.g., add, edit, list).
-* **Contact**: People who would be contacted by the salesperson.
-* **Email Template**: A reusable message body that can be personalized and applied to cohorts (by tag/status).
-* **Filter**: Showing customers that match specific attributes (e.g., tag, status).
-* **GUI**: Graphical user interface components that display results and lists.
-* **Mainstream OS**: Windows, Linux, Unix, MacOS.
-* **Priority**: A user-defined importance level to help triage outreach.
-* **Salesperson**: People who would be using the app to contact.
-* **Search**: Finding customers by name keywords (case-insensitive).
-* **Status**: Sales process specific tag that would denote the outcome of contacting the contacts. The meaning of each status would be decided by the company. Will be one of Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted.
-* **Tag**: A user-defined label used to categorize customers (e.g., productA).
-* **User**: The people using the app, which is the salesperson.
+* **Address Book**: The core domain model of the application. Represents the collection of all contacts and provides operations for managing them.
+* **API (Application Programming Interface)**: The set of public methods and interfaces that define how components interact with each other. Each major component (UI, Logic, Model, Storage) defines its API through an interface.
+* **Case-insensitive**: String matching that ignores letter casing (e.g., "John" matches "john", "JOHN"). Implemented using `toLowerCase()` or `equalsIgnoreCase()` in predicates.
+* **CLI (Command-Line Interface)**: Text-based user interface where users type commands. Parsed by `AddressBookParser` and individual `XYZCommandParser` classes.
+* **Clipboard**: System clipboard abstracted through the `ClipboardProvider` interface. Allows copying templates and address book data for external use. Production code uses `SystemClipboardProvider`, tests use stubs.
+* **Command**: An executable object representing a user action. All commands extend the abstract `Command` class and implement `execute(Model)`. Examples: `AddCommand`, `DeleteCommand`, `TemplateCommand`.
+* **CommandResult**: Encapsulates the outcome of command execution. Contains success/error message and flags indicating UI actions (e.g., `isShowHelp`, `isExit`, `isShowTemplate`).
+* **Contact**: Refers to a `Person` object in the domain model. Used interchangeably with "Person" in documentation.
+* **Email Template**: Persistent text content associated with a `Status` enum value. Stored in JSON files by `TemplateStorage` and managed via `TemplateCommand`.
+* **Export/Import**: Features to serialize/deserialize the entire `AddressBook` to/from clipboard as JSON. Uses `JsonAddressBookUtil` for conversion. Enables data sharing between users.
+* **Filter**: Applying a `Predicate<Person>` to the `filteredPersons` observable list in `Model`. Updates the UI to show only matching contacts.
+* **GUI (Graphical User Interface)**: The JavaFX-based visual interface. Implemented in the `UI` component with FXML layouts and corresponding controller classes.
+* **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
+* **JAR file**: Java ARchive - executable package containing compiled `.class` files and resources. Built by Gradle and run with `java -jar addressbook.jar`.
+* **JSON (JavaScript Object Notation)**: Text-based data format used for persistence. `JsonAdaptedPerson` classes bridge between domain objects and JSON representation. Handled by Jackson library.
+* **Mainstream OS**: Windows, Linux, Unix, MacOS - target platforms for the application.
+* **Model**: The component responsible for holding application data in memory. Manages `AddressBook`, `UserPrefs`, and filtered lists. Exposes data through `ObservableList` for reactive UI updates.
+* **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
+* **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
+* **Parser**: Class responsible for converting user input strings into `Command` objects. Follows the hierarchy: `AddressBookParser` → `XYZCommandParser` → `Command`. All parsers implement the `Parser` interface.
+* **PDPA (Personal Data Protection Act)**: Singapore data protection regulation. Application supports compliance through bulk deletion and data export features.
+* **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g., `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
+* **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
+* **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
+* **Storage**: The component handling data persistence. Implements both `AddressBookStorage` and `UserPrefStorage` interfaces. Uses JSON format via Jackson library.
+* **Tag**: A domain object representing a category label. Each `Person` can have multiple `Tag` objects stored in a `Set<Tag>`. Implemented as immutable value objects.
+* **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
+* **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
+* **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
+* **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
 
 --------------------------------------------------------------------------------------------------------------------
 

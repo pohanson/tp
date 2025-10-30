@@ -31,10 +31,9 @@ We are a team based in the [School of Computing, National University of Singapor
 <img src="images/seanrh34.png" width="200px">
 
 [[github](http://github.com/seanrh34)]
-[[portfolio](team/seanrh34.md)]
 
 - Role: Developer
-- Responsibilities: UI
+- Responsibilities: UI, Logic, and Model
 
 ### Zhao Ruixuan
 

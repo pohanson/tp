@@ -1,0 +1,78 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":TemplateCommandParser" as TemplateCommandParser LOGIC_COLOR
+participant "t:TemplateCommand" as TemplateCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant "tvs:TemplateViewState" as TemplateViewState MODEL_COLOR
+end box
+
+box Storage STORAGE_COLOR_T1
+participant ":TemplateStorage" as TemplateStorage STORAGE_COLOR
+end box
+
+[-> LogicManager : execute("template save")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("template save")
+activate AddressBookParser
+
+create TemplateCommandParser
+AddressBookParser -> TemplateCommandParser
+activate TemplateCommandParser
+
+TemplateCommandParser -> TemplateCommandParser : parse("save")
+
+create TemplateCommand
+TemplateCommandParser -> TemplateCommand : new(templateStorage)
+activate TemplateCommand
+
+TemplateCommand --> TemplateCommandParser
+deactivate TemplateCommand
+
+TemplateCommandParser --> AddressBookParser : t
+deactivate TemplateCommandParser
+
+AddressBookParser --> LogicManager : t
+deactivate AddressBookParser
+
+LogicManager -> TemplateCommand : execute(model)
+activate TemplateCommand
+
+TemplateCommand -> Model : getTemplateViewState()
+activate Model
+
+Model --> TemplateCommand : tvs (CONTACTED, "Dear esteemed client,\n...")
+deactivate Model
+
+TemplateCommand -> TemplateViewState : getStatus()
+activate TemplateViewState
+
+TemplateViewState --> TemplateCommand : CONTACTED
+deactivate TemplateViewState
+
+TemplateCommand -> TemplateViewState : getContent()
+activate TemplateViewState
+
+TemplateViewState --> TemplateCommand : "Dear esteemed client,\n..."
+deactivate TemplateViewState
+
+TemplateCommand -> TemplateStorage : saveTemplate(CONTACTED, "Dear esteemed client,\n...")
+activate TemplateStorage
+
+TemplateStorage --> TemplateCommand
+deactivate TemplateStorage
+
+TemplateCommand --> LogicManager : CommandResult("Saved template for CONTACTED")
+deactivate TemplateCommand
+
+[<-- LogicManager : CommandResult
+deactivate LogicManager
+
+@enduml

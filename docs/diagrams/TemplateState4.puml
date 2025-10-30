@@ -1,0 +1,45 @@
+@startuml
+!include style.puml
+
+skinparam ClassFontColor #000000
+skinparam ClassBorderColor #000000
+skinparam ClassBackgroundColor #FFFFAA
+
+title After 'copy s:CONTACTED' - Template Copied to Clipboard
+
+package "Model" <<Rectangle>> {
+    class TemplateViewState <<null>> #AAAAAA
+}
+
+package "Logic" <<Rectangle>> {
+    class ClipboardProvider {
+        Content: "Dear esteemed client,\n..."
+    }
+}
+
+package "Storage" <<Rectangle>> {
+    class "data/" <<folder>> {
+        file "contactedTemplate.txt" #90EE90
+        file "rejectedTemplate.txt"
+        file "acceptedTemplate.txt"
+        file "unreachableTemplate.txt"
+        file "busyTemplate.txt"
+        file "uncontactedTemplate.txt"
+    }
+}
+
+"contactedTemplate.txt" -up-> ClipboardProvider : copied to
+
+note right of ClipboardProvider
+  Template content copied
+  directly to clipboard
+  without opening editor.
+  No template view shown.
+end note
+
+note left of TemplateViewState
+  Editor not opened.
+  TemplateViewState = null
+end note
+
+@enduml
