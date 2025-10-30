@@ -5,10 +5,10 @@ title: User Guide
 
 AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
 
-* Table of Contents
+- Table of Contents
   {:toc}
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Quick start
 
@@ -17,7 +17,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for your OnlySales.
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
@@ -26,11 +26,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   - `list` : Lists all contacts.
 
-   * `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   - `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   - `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `delete 1 2 3` : Deletes the 1st, 2nd, and 3rd contacts shown in the current list.
    
@@ -38,11 +38,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `clear` : Deletes all contacts.
 
-   * `exit` : Exits the app.
+   - `exit` : Exits the app.
 
 1. Refer to the [Features](#features) below for details of each command.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Features
 
@@ -50,22 +50,22 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 **:information_source: Notes about the command format:**<br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+- Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n:NAME`, `NAME` is a parameter which can be used as `add n:John Doe`.
 
-* Items in square brackets are optional.<br>
+- Items in square brackets are optional.<br>
   e.g `n:NAME [t:TAG]` can be used as `n:John Doe t:friend` or as `n:John Doe`.
 
-* Items with `…`​ after them can be used multiple times including zero times.<br>
+- Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[t:TAG]…​` can be used as ` ` (i.e. 0 times), `t:friend`, `t:friend t:family` etc.
 
-* Parameters can be in any order.<br>
+- Parameters can be in any order.<br>
   e.g. if the command specifies `n:NAME p:PHONE_NUMBER`, `p:PHONE_NUMBER n:NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+- Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+- If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
 ### Viewing help : `help`
@@ -75,7 +75,6 @@ Shows a message explaining how to access the help page.
 ![help message](images/helpMessage.png)
 
 Format: `help`
-
 
 ### Adding a person: `add`
 
@@ -132,23 +131,94 @@ Examples:
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
-### Locating persons by name: `find`
+- `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+- `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-Finds persons whose names contain any of the given keywords.
+### Locating customers: `find`
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Finds customers based on various search criteria including name, tags, status, phone number, or email.
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+Format: `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
+
+**Basic Search (by name):**
+
+- The search is case-insensitive. e.g `hans` will match `Hans`
+- The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+- Only full words will be matched e.g. `Han` will not match `Hans`
+- Customers matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
+**Advanced Search (with prefixes):**
+
+- `n:NAME` - Search by name
+- `t:TAG` - Search by tag (can specify multiple tags)
+- `s:STATUS` - Search by contact status (Uncontacted, Contacted, Rejected, Accepted, Unreachable, Busy)
+- `p:PHONE` - Search by phone number
+- `e:EMAIL` - Search by email address
+- Multiple criteria can be combined for more precise searches
+- All searches are case-insensitive
+- You can use either prefixes (advanced search) or a basic name-only search.
+- Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
+
+
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+
+**Basic name search:**
+
+- `find John` returns `john` and `John Doe`
+- `find alex david` returns `Alex Yeoh`, `David Li`
+
+**Search by name with prefix:**
+
+- `find n:alice` returns all customers with "alice" in their name
+- `find n:ali` will NOT return customers with "alice" in their name
+
+**Search by tag:**
+
+- `find t:friends` returns all customers tagged as "friends"
+- `find t:colleagues t:VIP` returns customers with either "colleagues" or "VIP" tags
+
+**Search by status:**
+
+- `find s:Contacted` returns all customers with "Contacted" status
+- `find s:Rejected` returns all customers with "Rejected" status
+
+**Search by phone:**
+
+- `find p:91234567` returns customers with matching phone number
+
+**Search by email:**
+
+- `find e:gmail.com` returns customers with Gmail addresses
+- `find e:john@example.com` returns customers with that specific email
+
+**Combined multi-criteria search:**
+
+- `find n:alice t:friends` returns customers named Alice who are tagged as friends
+- `find n:john s:Contacted` returns customers named John with "Contacted" status
+- `find t:VIP s:Uncontacted` returns VIP customers who haven't been contacted yet
+- `find n:alice t:friends s:Contacted` returns customers named Alice, tagged as friends, and with "Contacted" status
+
+### Tag View and Status View Integration
+
+When dealing with a large number of customers, it is important that salespeople can immediately identify the active filters applied to the customer list.
+
+**Key Features:**
+
+- Tag view displays all currently active tag filters
+- Status view displays all currently active status filters
+- Both views update automatically when using the `find` command with `t:` or `s:` prefixes
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+When you use `find t:friends s:Contacted`, the Tag view will highlight "friends" and the Status view will highlight "Contacted", making it easy to see your current filters at a glance.
+</div>
+
+**Visual Example:**
+
+|         Default View         |                After Find Command with Filters                 |
+| :--------------------------: | :------------------------------------------------------------: |
+| ![Default UI](images/Ui.png) | ![Filtered View with Tag & Status](images/status_tag_view.png) |
+| Before applying find filters |          Tag view and Status view show active filters          |
 
 ### Deleting a person : `delete`
 
@@ -255,21 +325,21 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 
 _Details coming soon ..._
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Command summary
 
@@ -280,7 +350,7 @@ Action | Format, Examples
 **Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
 **Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
 **Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g., `find John`, `find n:alice t:friends s:Contacted`
 **List** | `list`
 **Help** | `help`
 **Template (Open)** | `template s:STATUS`<br> e.g., `template s:Contacted`
