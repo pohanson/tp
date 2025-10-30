@@ -112,6 +112,12 @@ public interface Model {
     ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty();
 
     /**
+     * Returns the current template view state.
+     * Returns null if no template is currently being viewed/edited.
+     */
+    TemplateViewState getTemplateViewState();
+
+    /**
      * Sets the current template view state.
      * Set to null to exit template view mode.
      */

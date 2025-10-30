@@ -148,6 +148,16 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public TemplateViewState getTemplateViewState() {
+        return model.getTemplateViewState();
+    }
+
+    @Override
+    public void setTemplateViewState(TemplateViewState state) {
+        model.setTemplateViewState(state);
+    }
+
+    @Override
     public Model getModel() {
         return model;
     }
