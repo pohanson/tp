@@ -80,15 +80,26 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG] [s:STATUS]…​`
+Format: `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​`
+
+**Parameters:**
+
+- `n:NAME` - The full name of the contact (required, contains letters, numbers, spaces, and symbols such as hyphens, apostrophes, commas, slashes and periods)
+- `p:PHONE_NUMBER` - The phone number (required, consists of a single optional `+` at the start and numbers only)
+- `e:EMAIL` - The email address (required)
+- `a:ADDRESS` - The physical address (optional, max 200 characters)
+- `s:STATUS` - The contact status (optional, one of: "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted", "Unreachable"; defaults to "Uncontacted")
+- `t:TAG` - Tags for categorization (optional, can have multiple; must contain only alphanumeric characters with no spaces)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tags (including 0), but only 1 status (default: "Uncontacted")
 </div>
 
 Examples:
-* `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01 s:Busy`
-* `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal`
+* `add n:John Doe p:98765432 e:johnd@example.com`
+* `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
+
+![Add Command Result](images/addCommandResult.png)
 
 ### Listing all persons : `list`
 
@@ -116,22 +127,21 @@ Examples:
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG] [s:STATUS] …​`
+Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing status, the existing status of the person will be removed and replaced with the new one specified.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t:` without
-    specifying any tags after it.
+* You can remove all the person’s tags by typing `t:` without specifying any tags after it.
 
 Examples:
 *  `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
-- `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+- `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of tse 1st person to be `91234567` and `johndoe@example.com` respectively.
 - `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 ### Locating customers: `find`
@@ -298,6 +308,32 @@ Use `template copy` for quick access to templates when you need to send emails, 
 Templates are stored as text files in the `templates` folder in your application directory. Each status has its own template file.
 </div>
 
+### Import contacts: `import`
+
+Imports an address book from the clipboard and replaces the current address book.
+
+Format: `import`
+
+* The address book data should be copied to your clipboard before running this command.
+* Alternatively, press `F7` to open the import preview window where you can review the contacts before importing.
+* The import will validate the JSON format and ensure all contacts meet the required field constraints.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Import replaces your entire address book when data is valid. Make sure to export your current contacts first if you want to keep them.
+</div>
+
+**Common error messages:**
+
+* "Clipboard does not contain any text to import" - The clipboard is empty. Copy the address book JSON data first.
+* "Failed to import: Clipboard does not contain valid address book JSON." - The clipboard content is not valid JSON or doesn't match the expected address book format.
+
+Examples:
+* Copy address book JSON data to clipboard, then run `import` to import all contacts.
+* Press `F7` to open the import preview window and review contacts before importing.
+
+![Import Contact Example](images/importContact.png)
+
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -332,14 +368,14 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder. Alternatively, you can use the import and export commands.
 
 ---
 
 ## Known issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running. Alternatively, you can use the `import` and `export` commands.
+2. **If you minimise the Help Window or Import Preview Window**, attempting to open them again (using `help` command, `F1`, or `F7`) will not create a new window. The remedy is to manually restore the minimised window.
 
 ---
 
@@ -358,4 +394,5 @@ Action | Format, Examples
 **Template (Open)** | `template s:STATUS`<br> e.g., `template s:Contacted`
 **Template (Save)** | `template save`
 **Template (Copy)** | `template copy s:STATUS`<br> e.g., `template copy s:Rejected`
-**Exit** | `exit`
+**Import Contacts** | `import`
+**Export Contacts** | `export`

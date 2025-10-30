@@ -21,10 +21,9 @@ We are a team based in the [School of Computing, National University of Singapor
 <img src="images/pohanson.png" width="200px">
 
 [[github](http://github.com/pohanson)]
-[[portfolio](team/pohanson.md)]
 
 - Role: Developer
-- Responsibilities: Everything else
+- Responsibilities: Storage
 
 ### Sean Richardson Hardjanto
 
