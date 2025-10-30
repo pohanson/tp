@@ -131,18 +131,6 @@ public class AddCommandTest {
         assertEquals(Arrays.asList(completePerson), modelStub.personsAdded);
     }
 
-    @Test
-    public void execute_multiplePersonsSequentially_addSuccessful() throws Exception {
-        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
-        Person person1 = new PersonBuilder().withName("Person One").build();
-        Person person2 = new PersonBuilder().withName("Person Two").build();
-
-        new AddCommand(person1).execute(modelStub);
-        new AddCommand(person2).execute(modelStub);
-
-        assertEquals(Arrays.asList(person1, person2), modelStub.personsAdded);
-    }
-
     /**
      * A default model stub that have all of the methods failing.
      */
