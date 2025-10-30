@@ -265,6 +265,39 @@ Examples:
 
 Saves the currently open template.
 
+Format: `template save`
+
+* Saves any changes made to the template currently displayed in the template editor.
+* A template must be open (using `template s:STATUS`) before you can save.
+* If no template is currently open, an error message will be shown.
+
+Examples:
+* After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
+
+#### Copying a template to clipboard : `template copy s:STATUS`
+
+Copies the content of a template to your clipboard without opening the editor.
+
+Format: `template copy s:STATUS`
+
+* Copies the entire template content for the specified `STATUS` to your clipboard.
+* `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
+* Status is case-insensitive.
+* The template is copied as-is from storage - you can then paste it into your email client.
+* Does not open the template editor.
+
+Examples:
+* `template copy s:Contacted` copies the "Contacted" template to your clipboard.
+* `template copy s:unreachable` copies the "Unreachable" template to your clipboard.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `template copy` for quick access to templates when you need to send emails, and use `template s:STATUS` followed by `template save` when you need to update your templates.
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:**
+Templates are stored as text files in the `templates` folder in your application directory. Each status has its own template file.
+</div>
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
