@@ -332,6 +332,150 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
   * Pros: Simpler command set, encourages review before sending.
   * Cons: Less efficient for users who want to quickly copy without viewing.
 
+### Status Feature
+
+#### Implementation
+
+The status command feature allows users to set and track the contact status of each person in the address book. The status command is facilitated by the `SetStatusCommand` class which implements the `Command` interface. It allows users to mark contacts with predefined statuses. The only valid statuses are: "Uncontacted", "Contacted", "Rejected", "Accepted", "Unreachable", and "Busy".
+
+The implementation is supported by the following key components:
+
+* `SetStatusCommand` - Handles the execution of the status command.
+* `Status` - Represents the contact status of a person as an immutable value object.
+* `StatusValue` - An enum defining all possible status values, and is nested in the Status class.
+* `Person` - Contains a person's status along with other attributes.
+
+Below is the class diagram showing the relationship between these components:
+
+![Status Command Class Diagram](images/StatusCommandClassDiagram.png)
+
+The status command is executed through the following sequence of steps:
+
+![Status Command Sequence Diagram](images/StatusCommandSequenceDiagram.png)
+
+**Step-by-step flow:**
+
+1.  The user executes the command `status 1 Contacted`.
+2.  The `LogicManager` receives the command and passes it to the `AddressBookParser`.
+3.  The `AddressBookParser` identifies the command word as `status` and delegates the parsing of the arguments to `SetStatusCommandParser`.
+4.  `SetStatusCommandParser` parses the index `1` and the string "Contacted" to create a `SetStatusCommand` object.
+5.  The `SetStatusCommand` is returned to the `LogicManager`.
+6.  The `LogicManager` calls the `execute()` method of the `SetStatusCommand`.
+7.  The command retrieves the person at the specified index from the `Model`.
+8.  It then creates a new `Status` object from the input string.
+9.  A new `Person` object is created with the updated status.
+10. The `Model` is updated with the new `Person` object.
+11. A `CommandResult` is returned to the `LogicManager`, which is then displayed to the user.
+
+#### Design Considerations
+
+**Aspect: Status Value Implementation**
+
+* **Alternative 1 (current choice)**: Use enum-based Status class with predefined values
+   * Pros:
+      * Type-safe implementation prevents invalid status values.
+      * Clear indication of all available status options.
+      * Easy to validate input strings.
+   * Cons:
+      * Adding new status values requires code changes.
+      * Less flexible for user customisation.
+
+* **Alternative 2**: Use string-based status implementation
+   * Pros:
+      * Flexible - users could create custom status values.
+      * Easier to extend without code changes.
+    * Cons:
+      * Less type safety.
+      * More complex validation required.
+
+**Aspect: Default Status Behavior**
+
+* **Alternative 1 (current choice)**: Default to "Uncontacted" for empty/null input
+   * Pros:
+      * Consistent with the use case of tracking initial contact status
+      * Prevents null status values
+   * Cons:
+      * May not be intuitive that empty input has a default value
+
+* **Alternative 2**: Require explicit status input
+   * Pros:
+      * More explicit - users must state their intention
+      * Prevents accidental status changes
+   * Cons:
+      * More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
+
+### Export Command Feature
+
+#### Implementation
+
+The export command feature allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
+
+*   `ClipboardProvider` - For copying data to system clipboard.
+*   `FileSystemProvider` - For reading data from files.
+
+The implementation is supported by these components:
+
+*   `SystemClipboardProvider` - Concrete implementation for clipboard operations.
+*   `SystemFileSystemProvider` - Concrete implementation for file system operations.
+*   `JsonAddressBookUtil` - Handles JSON data conversion.
+
+Below is the class diagram for the export command:
+
+![Export Command Class Diagram](images/ExportCommandClassDiagram.png)
+
+The sequence diagram below shows the execution flow of the export command:
+
+![Export Command Sequence Diagram](images/ExportCommandSequenceDiagram.png)
+
+The typical flow of operations is:
+
+1.  User executes the `export` command.
+2.  `LogicManager` calls `AddressBookParser` which creates an `ExportCommand`.
+3.  The `execute()` method of `ExportCommand` is called.
+4.  The command gets the address book file path from the `Model`.
+5.  It uses the `FileSystemProvider` to read the content of the address book file.
+6.  The content is validated to ensure it is a valid JSON representation of an address book using `JsonAddressBookUtil`.
+7.  The content is then copied to the system clipboard using the `ClipboardProvider`.
+8.  A `CommandResult` is returned and displayed to the user.
+
+#### Design Considerations
+
+**Aspect: Export Format**
+
+* **Alternative 1 (current choice)**: Use JSON format
+   * Pros:
+      * Standard format with wide tool support
+      * Human-readable
+      * Preserves data structure
+   * Cons:
+      * Larger size compared to binary formats, might be too large for some systems' clipboard to handle
+      * May expose sensitive data in readable form
+
+* **Alternative 2**: Use binary format
+   * Pros:
+      * More compact
+      * Data not human-readable (better for sensitive information)
+   * Cons:
+      * Requires special tools to read/edit
+      * Less interoperable with other systems
+
+**Aspect: Export Destination**
+
+* **Alternative 1 (current choice)**: Export contacts directly to clipboard
+   * Pros:
+      * Convenient for both backup and sharing
+      * Easier for salespeople to use, since they may not be familiar with how to locate save files
+   * Cons:
+      * More complex implementation
+      * More code to maintain
+
+* **Alternative 2**: Direct user to storage file
+   * Pros:
+      * Simpler implementation
+   * Cons:
+      * Less convenient for quick sharing
+      * Requires file system access and understanding
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -386,7 +530,7 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
 
 **Valid contact statuses**:
 
-- **Uncontacted**: Default status when a contact is added (indicates not yet contacted)
+- **Uncontacted**: Contact has not been contacted yet (default)
 - **Contacted**: Contact has been contacted
 - **Rejected**: Contact has rejected the sale
 - **Accepted**: Contact has accepted the sale
@@ -438,7 +582,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 3. Salesperson submits the command.
 4. CMS validates the details.
 5. CMS creates the contact and displays a confirmation message.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**<br/>
 
@@ -464,7 +608,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson enters the add command with multiple contacts separated by "|||", then submits the command.
 3. CMS validates all entries.
 4. CMS creates the contacts and displays a summary confirmation.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**<br/>
 
@@ -489,7 +633,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 1. Salesperson chooses to view all contacts.
 2. Salesperson enters the list command.
 3. CMS displays all contacts.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -515,7 +659,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson enters the find command with specified search criteria.
 3. CMS searches for customers matching ALL specified criteria (AND logic between different types, OR logic within same type).
 4. CMS displays the matching customers and updates the tag view and status view panels to show active filters.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -544,7 +688,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the status.
 3. CMS searches for contacts with the specified status.
 4. CMS displays the matching contacts.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -578,7 +722,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 5. Salesperson edits the template content.
 6. Salesperson issues the save command.
 7. CMS saves the updated template.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -613,7 +757,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 3. CMS retrieves the template for the specified status.
 4. CMS copies the template content to the clipboard.
 5. CMS displays a confirmation message.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -643,7 +787,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the contact ID and fields to edit.
 3. CMS validates the updated details.
 4. CMS updates the contact information.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -676,7 +820,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the contact ID(s) to delete.
 3. CMS validates all contact IDs.
 4. CMS deletes the contact(s) and displays a confirmation.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
@@ -700,18 +844,90 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 2. Salesperson specifies the contact ID and new status.
 3. CMS validates the contact ID and status.
 4. CMS updates the contact's status and displays a confirmation message.<br/>
-   Use case ends.
+Use case ends.
 
 **Extensions:**
 
-2b. No status is specified.<br/>
-   2b1. CMS indicates that an error has happened.<br/>
+2a. No status is specified.<br/>
+   2a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
 3a. The specified status is invalid.<br/>
    3a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
+3b. The specified contact ID does not exist.<br/>
+   3b1. CMS indicates that an error has happened.<br/>
+   Use case ends.
+
+#### Use case: UC11 - Export Contacts
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+* Export copies the exact state of the address book to clipboard as JSON.
+* All contact data is preserved during export.
+* The operation does not modify any existing data.
+
+**MSS:**
+
+1. Salesperson chooses to export contacts.
+2. Salesperson enters the export command or presses F8.
+3. CMS reads the address book data.
+4. CMS converts the data to JSON format.
+5. CMS copies the JSON to the system clipboard.
+6. CMS displays a success message.<br/>
+Use case ends.
+
+**Extensions:**
+
+3a. CMS cannot read the address book file.<br/>
+   3a1. CMS shows an error message.<br/>
+   Use case ends.
+
+5a. System clipboard is unavailable.<br/>
+   5a1. CMS shows an error message.<br/>
+   Use case ends.
+
+#### Use case: UC12 - Import Contacts
+
+**System:** Contact Management System (CMS)
+
+**Actor:** Salesperson
+
+**Guarantees:**
+* Import either succeeds completely or fails without modifying existing data.
+
+**MSS:**
+
+1. Salesperson chooses to import contacts.
+2. Salesperson enters the import command.
+3. CMS retrieves JSON data from the system clipboard.
+4. CMS validates the JSON format and contact data.
+5. CMS overwrites the existing address book with the imported data.
+6. CMS displays a success message.<br/>
+Use case ends.
+
+**Extensions:**
+1a. Salesperson presses F7 or clicks the import button under File.<br/>
+   1a1. CMS shows an import contact preview window.<br/>
+   1a2. User clicks paste JSON button.<br/>
+   Use case resumes at step 3.
+
+3a. Clipboard is empty.<br/>
+   3a1. CMS shows an error message.<br/>
+   Use case ends.
+
+3b. Cannot access system clipboard.<br/>
+   3b1. CMS shows an error message.<br/>
+   Use case ends.
+
+4a. The JSON data is invalid or malformed.<br/>
+   4a1. CMS shows an error message describing the issue.<br/>
+   4a2. No changes are made to the existing data.<br/>
+   Use case ends.
 
 ### Non-Functional Requirements
 
@@ -747,7 +963,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 * **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
 * **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
 * **Parser**: Class responsible for converting user input strings into `Command` objects. Follows the hierarchy: `AddressBookParser` → `XYZCommandParser` → `Command`. All parsers implement the `Parser` interface.
-* **PDPA (Personal Data Protection Act)**: Singapore data protection regulation. Application supports compliance through bulk deletion and data export features.
+* **PDPA (Personal Data Protection Act)**: Singapore's data protection regulation. Application supports compliance through bulk deletion and data export features.
 * **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g., `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
 * **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
 * **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
@@ -757,6 +973,28 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 * **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
 * **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
 * **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
+* **ObservableList**: A JavaFX collection that notifies listeners about changes (additions, removals, updates). Used to keep the UI view synchronized with app data in real time.
+* **ObjectProperty**: A JavaFX property type that holds and notifies changes to a single object, supporting binding and listeners for UI updates.
+* **ClipboardProvider**: An abstraction/interface for operations that interact with the system clipboard (e.g. for copying data or templates programmatically).
+* **FileSystemProvider**: Interface that abstracts file read/write operations from the file system for portability and testing.
+* **SystemClipboardProvider**: The production implementation of `ClipboardProvider` that interacts with the real system clipboard on the user’s OS.
+* **SystemFileSystemProvider**: The production implementation of `FileSystemProvider` that uses the local file system for file operations.
+* **JsonAddressBookUtil**: A utility class that handles conversion (serialization/deserialization) between Address Book data structures and JSON format.
+* **UiPart**: Abstract Java class that defines common logic for UI components/parts (JavaFX controls) in the app. All custom UI views inherit from this base class
+* **ModelManager**: The main implementation of the `Model` interface. Manages, updates, and exposes application data in-memory and propagates property changes to the UI.
+* **MainWindow**: The primary application window in the UI, containing CommandBox, PersonListPanel, SidebarPanel, and other subcomponents.
+* **CommandBox**: The text input area in the UI where users enter commands.
+* **ImportWindow**: A separate UI window dedicated to importing customer data from the clipboard, allowing preview or validation before adding contacts.
+* **SidebarPanel**: A UI panel that contains and displays active filters; houses the StatusViewPanel and TagsViewPanel.
+* **StatusViewPanel**: UI component that displays the list of currently active status filters applied (e.g., via find command).
+* **TagsViewPanel**: UI component that displays the list of currently active tag filters applied (e.g., via find command).
+* **TemplateViewPanel**: UI component that allows users to create, edit, and view email templates corresponding to customer statuses.
+* **StatusViewState**: Model object representing the current state of selected or displayed status filters for UI update.
+* **TagsViewState**: Model object representing the current state of selected or displayed tag filters for UI update.
+* **TemplateViewState**: Model object representing which template is being edited, along with its content, for template editor synchronization.
+* **ResultDisplay**: A UI box or output panel that shows feedback, messages, and results to users following command execution.
+* **PersonListPanel**: The panel or list view in the UI that displays all persons/contacts matching the current list or filter.
+* **LogicManager**: The concrete implementation of the application’s Logic component. Orchestrates command parsing, command execution, and data flow between UI and Model.
 
 --------------------------------------------------------------------------------------------------------------------
 

@@ -1,0 +1,28 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR
+skinparam classBackgroundColor LOGIC_COLOR
+
+package Logic {
+    class ExportCommand
+}
+
+package "Providers" {
+    interface ClipboardProvider <<interface>>
+    class SystemClipboardProvider
+    interface FileSystemProvider <<interface>>
+    class SystemFileSystemProvider
+}
+
+package Storage {
+    class JsonAddressBookUtil
+}
+
+
+ExportCommand --> ClipboardProvider
+ExportCommand --> FileSystemProvider
+SystemClipboardProvider .u.|> ClipboardProvider
+SystemFileSystemProvider .u.|> FileSystemProvider
+ExportCommand ..> JsonAddressBookUtil : uses
+@enduml
