@@ -16,6 +16,7 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.TemplateViewState;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -241,7 +242,7 @@ public class MainWindow extends UiPart<Stage> {
 
             if (!commandResult.isShowTemplate()) {
                 // Any non-template command exits template view
-                logic.getModel().setTemplateViewState(null);
+                logic.setTemplateViewState(null);
             }
 
             if (commandResult.isExit()) {
@@ -292,13 +293,12 @@ public class MainWindow extends UiPart<Stage> {
      * Updates the template content in the model from the text area.
      */
     private void updateTemplateContentInModel() {
-        seedu.address.model.TemplateViewState currentState =
-            logic.getModel().getTemplateViewStateProperty().getValue();
+        TemplateViewState currentState = logic.getTemplateViewState();
         if (currentState != null) {
             String currentContent = templateViewPanel.getTemplateContent();
-            seedu.address.model.TemplateViewState updatedState =
-                new seedu.address.model.TemplateViewState(currentState.getStatus(), currentContent);
-            logic.getModel().setTemplateViewState(updatedState);
+            TemplateViewState updatedState =
+                new TemplateViewState(currentState.getStatus(), currentContent);
+            logic.setTemplateViewState(updatedState);
         }
     }
 }

@@ -812,6 +812,7 @@ Use case ends.
 * All specified contacts must be valid or none will be deleted.
 * Deletion is irreversible once confirmed.
 * On failure, no deletion occurs.
+* All specified indices must be valid; if any index is invalid, no deletions are performed.
 
 **MSS:**
 
@@ -824,9 +825,8 @@ Use case ends.
 **Extensions:**
 
 3a. One or more of the given contact IDs are invalid.<br/>
-   3a1. CMS indicates which contact ID(s) are invalid.<br/>
+   3a1. CMS displays which contact ID(s) are invalid and indicates that no deletions were performed.<br/>
    Use case resumes at step 2.
-
 
 #### Use case: UC10 - Set contact status
 
@@ -1034,10 +1034,19 @@ testers are expected to do more *exploratory* testing.
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No person is deleted. Error message indicating invalid command format is shown (index must be a non-zero unsigned integer).
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+   1. Test case: `delete -1`<br>
+      Expected: No person is deleted. Error message indicating invalid command format is shown (index must be a non-zero unsigned integer).
+
+   1. Test case: `delete 1 2 3` (assuming only 2 contacts exist)<br>
+      Expected: No persons are deleted. Error message shows "Invalid index(es) detected: 3" indicating which index is invalid.
+
+   1. Test case: `delete 1 -5 3` (mixing valid and negative indices)<br>
+      Expected: No person is deleted. Error message indicating invalid command format is shown (index must be a non-zero unsigned integer).
+
+   1. Other incorrect delete commands to try: `delete`, `delete x`, `delete 1 99` (where x is larger than the list size)<br>
+      Expected: For `delete` and `delete x`: Invalid command format. For `delete 1 99`: Error message displays the specific invalid indices.
 
 1. _{ more test cases …​ }_
 

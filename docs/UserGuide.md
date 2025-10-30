@@ -207,10 +207,41 @@ Format: `delete INDEX`
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* Multiple indices can be specified to delete multiple persons at once.
+* Indices can be provided in any order.
+* **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
+* `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
+* `delete 2 99` (when only 2 persons exist) will fail with error message "Invalid index(es) detected: 99" and no deletions will occur.
+
+### Managing email templates :
+
+Manages email templates for different contact statuses. You can open, edit, save, and copy templates to streamline your email communications.
+
+#### Opening a template for editing : `template s:STATUS`
+
+Opens the template editor for a specific contact status.
+
+Format: `template s:STATUS`
+
+* Opens the template editor window for the specified `STATUS`.
+* `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
+* Status is case-insensitive (e.g., `contacted`, `CONTACTED`, `Contacted` all work).
+* The template editor allows you to view and edit the email template.
+* Changes are not saved automatically - use `template save` to save your changes.
+
+Examples:
+* `template s:Contacted` opens the template editor for the "Contacted" status.
+* `template s:rejected` opens the template editor for the "Rejected" status.
+* `template s:BUSY` opens the template editor for the "Busy" status.
+
+#### Saving the current template : `template save`
+
+Saves the currently open template.
 
 ### Clearing all entries : `clear`
 

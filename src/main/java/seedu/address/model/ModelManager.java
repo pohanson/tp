@@ -171,6 +171,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public TemplateViewState getTemplateViewState() {
+        return templateViewState.getValue();
+    }
+
+    @Override
     public void setTemplateViewState(TemplateViewState state) {
         // state can be null to exit template view mode
         templateViewState.set(state);

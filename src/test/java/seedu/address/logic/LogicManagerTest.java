@@ -2,7 +2,6 @@ package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -68,7 +67,9 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String expectedMessage = String.format(
+                seedu.address.logic.commands.DeleteCommand.MESSAGE_INVALID_INDICES, "9");
+        assertCommandException(deleteCommand, expectedMessage);
     }
 
     @Test
@@ -278,5 +279,55 @@ public class LogicManagerTest {
         assertEquals(2, model.getFilteredPersonList().size());
         assertEquals("Alice Pauline", model.getFilteredPersonList().get(0).getName().toString());
         assertEquals("Hoon Meier", model.getFilteredPersonList().get(1).getName().toString());
+    }
+
+    @Test
+    public void getTemplateViewState_initiallyNull() {
+        assertEquals(null, logic.getTemplateViewState());
+    }
+
+    @Test
+    public void setTemplateViewState_validState_setsState() {
+        seedu.address.model.TemplateViewState state =
+                new seedu.address.model.TemplateViewState(
+                        seedu.address.model.person.Status.CONTACTED, "Test content");
+        logic.setTemplateViewState(state);
+        assertEquals(state, logic.getTemplateViewState());
+    }
+
+    @Test
+    public void setTemplateViewState_nullState_setsNull() {
+        // First set a state
+        seedu.address.model.TemplateViewState state =
+                new seedu.address.model.TemplateViewState(
+                        seedu.address.model.person.Status.CONTACTED, "Test content");
+        logic.setTemplateViewState(state);
+        assertEquals(state, logic.getTemplateViewState());
+
+        // Then set to null
+        logic.setTemplateViewState(null);
+        assertEquals(null, logic.getTemplateViewState());
+    }
+
+    @Test
+    public void getTemplateViewState_changesWithModel() {
+        seedu.address.model.TemplateViewState state =
+                new seedu.address.model.TemplateViewState(
+                        seedu.address.model.person.Status.REJECTED, "Rejection template");
+        model.setTemplateViewState(state);
+
+        // Logic should reflect model's state
+        assertEquals(state, logic.getTemplateViewState());
+    }
+
+    @Test
+    public void setTemplateViewState_updatesModel() {
+        seedu.address.model.TemplateViewState state =
+                new seedu.address.model.TemplateViewState(
+                        seedu.address.model.person.Status.ACCEPTED, "Acceptance template");
+        logic.setTemplateViewState(state);
+
+        // Model should be updated
+        assertEquals(state, model.getTemplateViewState());
     }
 }
