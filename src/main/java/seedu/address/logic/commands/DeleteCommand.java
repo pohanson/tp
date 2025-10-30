@@ -34,6 +34,8 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted %1$d Person(s):\n%2$s";
+    public static final String MESSAGE_INVALID_INDICES = "Invalid index(es) detected: %1$s\n"
+            + "Please ensure all indices are valid before deleting.";
 
     private final List<Index> targetIndices;
 
@@ -68,10 +70,20 @@ public class DeleteCommand extends Command {
      * @throws CommandException If any index is out of bounds.
      */
     private void validateAllIndices(List<Person> personList) throws CommandException {
+        List<Integer> invalidIndices = new ArrayList<>();
+        
         for (Index index : targetIndices) {
             if (index.getZeroBased() >= personList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                invalidIndices.add(index.getOneBased());
             }
+        }
+        
+        if (!invalidIndices.isEmpty()) {
+            String invalidIndicesString = invalidIndices.stream()
+                    .map(String::valueOf)
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("");
+            throw new CommandException(String.format(MESSAGE_INVALID_INDICES, invalidIndicesString));
         }
     }
 
