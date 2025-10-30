@@ -97,4 +97,10 @@ public class FindCommandParserTest {
                 new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, "94351253", "alice@example.com"));
         assertParseSuccess(parser, " p:94351253 e:alice@example.com", expectedFindCommand);
     }
+
+    @Test
+    public void parse_multipleStatusPrefix_throwsParseException() {
+        assertParseFailure(parser, " s:contacted s:rejected",
+                "Multiple values specified for the following single-valued field(s): s:");
+    }
 }
