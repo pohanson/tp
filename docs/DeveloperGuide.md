@@ -611,7 +611,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
    Use case resumes from step 2.
 
 
-#### Use case: UC08 - Delete contact
+#### Use case: UC08 - Delete contact(s)
 
 **System:** Contact Management System (CMS)
 
@@ -619,26 +619,28 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 
 **Guarantees:**
 
-* Deletion removes only the specified contact without modifying other data.
+* Deletion removes only the specified contact(s) without modifying other data.
 * Deletion is irreversible once confirmed.
 * On failure, no deletion occurs.
+* All specified indices must be valid; if any index is invalid, no deletions are performed.
 
 **MSS:**
 
-1. Salesperson chooses to delete a contact.
-2. Salesperson specifies the contact ID to delete.
-3. CMS deletes the contact and displays a confirmation.<br/>
+1. Salesperson chooses to delete one or more contacts.
+2. Salesperson specifies the contact ID(s) to delete.
+3. CMS validates all contact IDs.
+4. CMS deletes the contact(s) and displays a confirmation.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. The given contact ID is invalid.<br/>
-   3a1. CMS indicates that an error has happened.<br/>
+3a. One or more of the given contact IDs are invalid.<br/>
+   3a1. CMS displays which contact ID(s) are invalid and indicates that no deletions were performed.<br/>
    Use case resumes at step 2.
 
-3b. CMS requests for confirmation before deletion.<br/>
-   3b1. Salesperson confirms the deletion.<br/>
-   3b2. CMS proceeds with deletion.<br/>
+4a. CMS requests for confirmation before deletion.<br/>
+   4a1. Salesperson confirms the deletion.<br/>
+   4a2. CMS proceeds with deletion.<br/>
    Use case ends.
 
 
@@ -738,10 +740,19 @@ testers are expected to do more *exploratory* testing.
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No person is deleted. Error message indicating invalid command format is shown (index must be a non-zero unsigned integer).
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+   1. Test case: `delete -1`<br>
+      Expected: No person is deleted. Error message indicating invalid command format is shown (index must be a non-zero unsigned integer).
+
+   1. Test case: `delete 1 2 3` (assuming only 2 contacts exist)<br>
+      Expected: No persons are deleted. Error message shows "Invalid index(es) detected: 3" indicating which index is invalid.
+
+   1. Test case: `delete 1 -5 3` (mixing valid and negative indices)<br>
+      Expected: No person is deleted. Error message indicating invalid command format is shown (index must be a non-zero unsigned integer).
+
+   1. Other incorrect delete commands to try: `delete`, `delete x`, `delete 1 99` (where x is larger than the list size)<br>
+      Expected: For `delete` and `delete x`: Invalid command format. For `delete 1 99`: Error message displays the specific invalid indices.
 
 1. _{ more test cases …​ }_
 
