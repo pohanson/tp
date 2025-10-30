@@ -479,16 +479,16 @@ The typical flow of operations is:
    * Cons:
       * Less convenient for quick sharing
       * Requires file system access and understanding
-### Import/Export Feature
+
+### Import Feature
 
 #### Implementation
 
-The import/export feature enables salespersons to share address book data between team members via the system clipboard. This supports team collaboration workflows where managers distribute lead lists or team members share contact databases.
+The import feature enables salespersons to share address book data between team members via the system clipboard. This supports team collaboration workflows where managers distribute lead lists or team members share contact databases.
 
-The import/export mechanism is facilitated by `ImportCommand`, `ExportCommand`, and `ClipboardProvider`. It uses the following key components:
+The import mechanism is facilitated by `ImportCommand`, and `ClipboardProvider`. It uses the following key components:
 
 * `ImportCommand` — Reads JSON from clipboard and replaces the current address book
-* `ExportCommand` — Copies the address book file content to clipboard
 * `ClipboardProvider` — Abstraction for clipboard operations (enables testing with mock clipboard)
 * `FileSystemProvider` — Abstraction for file system operations (enables testing without actual file I/O)
 * `JsonAddressBookUtil` — Utility for JSON serialization/deserialization
@@ -500,7 +500,7 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 #### Design Considerations
 
-**Aspect: Clipboard vs file-based sharing**
+**Aspect: Clipboard vs file-based import**
 
 * **Alternative 1 (current choice):** Use system clipboard for data transfer.
   * Pros: Quick and convenient. Works across different file systems and network drives. No file permissions issues. Platform-independent.
