@@ -16,7 +16,7 @@ package Model {
 }
 
 Person ..> "1" Status
-Status *-- StatusValue
+Status *--> StatusValue
 
 SetStatusCommandParser ..> SetStatusCommand : creates
 SetStatusCommand ..> Person : updates
