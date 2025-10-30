@@ -20,7 +20,7 @@ public class Status {
     /**
      * Enum containing the constant status values.
      */
-    public enum StatusValue {
+    private enum StatusValue {
         UNCONTACTED,
         CONTACTED,
         REJECTED,
@@ -33,10 +33,6 @@ public class Status {
 
     private Status(StatusValue value) {
         this.value = value;
-    }
-
-    public StatusValue getValue() {
-        return value;
     }
 
     public String name() {
