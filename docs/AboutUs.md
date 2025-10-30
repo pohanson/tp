@@ -40,7 +40,6 @@ We are a team based in the [School of Computing, National University of Singapor
 <img src="images/rotarykirby.png" width="200px">
 
 [[github](http://github.com/rotarykirby)]
-[[portfolio](team/rotarykirby.md)]
 
 - Role: Developer
-- Responsibilities: Logic
+- Responsibilities: UI, Logic, and Model
