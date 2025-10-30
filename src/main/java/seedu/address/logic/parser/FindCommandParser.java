@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.ParserUtil.parseStatus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,10 @@ import seedu.address.model.person.PersonMatchesKeywordsPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
+
+    private static final String MESSAGE_INVALID_STATUS_DUPLICATE = "Only one status filter is allowed at a time!";
+    private static final String MESSAGE_INVALID_STATUS = "Invalid status provided: %s\n"
+            + "Please use one of the following: Uncontacted, Contacted, Rejected, Accepted, Unreachable, Busy";
 
     /**
      * Parses the given {@code String} of arguments
@@ -69,6 +74,13 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
+        // Verify that status prefix is not duplicated
+        try {
+            map.verifyNoDuplicatePrefixesFor(PREFIX_STATUS);
+        } catch (ParseException e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_STATUS_DUPLICATE, FindCommand.MESSAGE_USAGE));
+        }
+
         // Get name keywords
         List<String> nameKeywords = map.getValue(PREFIX_NAME)
                 .map(String::trim)
@@ -93,10 +105,18 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .map(String::trim)
                 .orElse(null);
 
-        // Get status keyword
+        // Get status keyword and validate if present
         String statusKeyword = map.getValue(PREFIX_STATUS)
                 .map(String::trim)
                 .orElse(null);
+
+        if (statusKeyword != null) {
+            try {
+                parseStatus(statusKeyword); // will throw ParseException if invalid
+            } catch (ParseException e) {
+                throw new ParseException(String.format(MESSAGE_INVALID_STATUS, statusKeyword));
+            }
+        }
 
         return new FindCommand(new PersonMatchesKeywordsPredicate(nameKeywords, tagKeywords, statusKeyword,
                 phoneKeyword, emailKeyword));

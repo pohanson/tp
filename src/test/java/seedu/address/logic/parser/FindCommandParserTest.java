@@ -123,4 +123,10 @@ public class FindCommandParserTest {
                 new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, "94351253", "alice@example.com"));
         assertParseSuccess(parser, " p:94351253 e:alice@example.com", expectedFindCommand);
     }
+
+    @Test
+    public void parse_multipleStatusPrefix_throwsParseException() {
+        assertParseFailure(parser, " s:contacted s:rejected",
+                "Only one status filter is allowed at a time!");
+    }
 }

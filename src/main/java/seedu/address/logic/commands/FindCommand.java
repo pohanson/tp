@@ -35,7 +35,7 @@ public class FindCommand extends Command {
             + "Parameters: "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "[" + PREFIX_STATUS + "STATUS]...\n"
+            + "[" + PREFIX_STATUS + "STATUS]\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_NAME + "alice\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "free\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_STATUS + "uncontacted";
