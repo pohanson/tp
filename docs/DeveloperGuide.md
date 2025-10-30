@@ -72,7 +72,14 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/AY2
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `SidebarPanel`, `TemplateViewPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+
+**New UI Components in OnlySales:**
+* `ImportWindow` - A separate window for importing customer data from clipboard
+* `SidebarPanel` - A panel that contains the `StatusViewPanel` and `TagsViewPanel` for displaying active filters
+* `StatusViewPanel` - Displays all currently active status filters applied through the find command
+* `TagsViewPanel` - Displays all currently active tag filters applied through the find command  
+* `TemplateViewPanel` - Displays and manages email templates for different customer status types
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
@@ -81,7 +88,9 @@ The `UI` component,
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component, as it displays `Person` objects residing in the `Model`.
+* The `SidebarPanel` contains nested UI components (`StatusViewPanel` and `TagsViewPanel`) that update automatically when filter commands are executed.
+* The `ImportWindow` interacts with the `Logic` component to process imported customer data.
 
 ### Logic component
 
@@ -153,7 +162,79 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Template feature
+### Status View and Tag View Feature
+
+#### Overview
+
+The Status View and Tag View feature provides visual feedback to users about which filters are currently active when using the `find` command. When users search for customers by status (e.g., `find s:Contacted`) or tags (e.g., `find t:friends`), dedicated UI panels automatically update to display the active filters, making it easy to see what subset of data is being viewed.
+
+#### Architecture
+
+The implementation follows the **Observer Pattern** using JavaFX's property binding mechanism to automatically sync UI state with model state.
+
+![Status/Tag View Class Diagram](images/StatusTagViewClassDiagram.png)
+
+**Key Components:**
+
+1. **Model Layer:**
+   - `StatusViewState` and `TagsViewState`: Immutable state objects that represent current filter states
+   - `ModelManager`: Stores these states as `ObjectProperty` objects and exposes them via the `Model` interface
+
+2. **Logic Layer:**
+   - `Logic` interface: Exposes `getStatusViewStateProperty()` and `getTagsViewStateProperty()` methods
+   - `FindCommand`: Updates the view states in `Model` when executing filter operations
+
+3. **UI Layer:**
+   - `StatusViewPanel` and `TagsViewPanel`: Observe the properties exposed by `Logic` and automatically update their display
+   - UI components depend on the `Logic` abstraction, maintaining proper architectural layering
+
+#### Implementation Details
+
+The following sequence diagram shows how the view states are updated when a user executes `find s:Contacted t:friends`:
+
+![Status/Tag View Sequence Diagram](images/StatusTagViewSequenceDiagram.png)
+
+**Step-by-step flow:**
+
+1. User executes a `find` command with status/tag filters
+2. `LogicManager` parses and creates a `FindCommand`
+3. `FindCommand.execute()` is called:
+   - Updates the filtered person list in `Model`
+   - Calls `model.setStatusViewState()` with the appropriate `StatusViewState`
+   - Calls `model.setTagsViewState()` with the appropriate `TagsViewState`
+4. `ModelManager` updates its `ObjectProperty` fields
+5. JavaFX property listeners in `StatusViewPanel` and `TagsViewPanel` are automatically triggered
+6. UI panels update their labels to display the active filters
+
+#### Design Considerations
+
+**Aspect: How to represent filter state in the UI**
+
+* **Alternative 1 (Chosen):** Use explicit state objects (`StatusViewState`, `TagsViewState`) to track user intent
+  * Pros: UI displays what the user explicitly searched for (intent), not just the consequence. Handles edge cases where multiple filter combinations produce the same result. Clear separation of concerns.
+  * Cons: Additional state management complexity, requires synchronization between filter predicates and view states
+
+* **Alternative 2:** Derive view state from `FilteredPersonList`
+  * Pros: Single source of truth, no state synchronization needed, simpler implementation
+  * Cons: UI displays consequence rather than intent. For example, if a user searches for `s:Contacted` but no customers have that status, the filtered list would be empty and the UI couldn't distinguish whether filters were applied or not. Cannot accurately determine which specific filters were applied if multiple filter combinations produce the same filtered list.
+
+**Aspect: How to communicate filter state to UI**
+
+* **Alternative 1:** Direct UI method calls from Command classes
+  * Pros: Simpler to understand, explicit control flow
+  * Cons: Violates architectural boundaries (Logic calling UI directly) and tight coupling!!
+
+**Aspect: Where to store view state**
+
+* **Alternative 1 (Chosen):** Store in `Model` layer
+  * Pros: Centralized state management, follows MVC pattern, testable
+  * Cons: Model becomes slightly more complex
+
+* **Alternative 2:** Store in UI components only
+  * Pros: Simpler Model layer
+  * Cons: State is scattered, harder to test, UI must deduce state from filtered list
+
+### Template Feature
 
 #### Implementation
 
@@ -314,27 +395,28 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
 
 ### User stories
 
-| Priority | As a …               | I want to …                                                        | So that I can…                                                                                                                     |
-| -------- | -------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `* * *`  | salesperson          | add contacts                                                       | see their details in the future                                                                                                    |
-| `* * *`  | salesperson          | delete contacts                                                    | don't over clutter my contact book                                                                                                 |
-| `* * *`  | careless salesperson | edit typos                                                         | ensure the data is accurate                                                                                                        |
-| `* * *`  | salesperson          | search by name                                                     | easily find by name due to the large number of contacts                                                                            |
-| `* * *`  | salesperson          | list all contacts                                                  | know what contacts I have saved                                                                                                    |
-| `* * *`  | forgetful user       | autosave edits                                                     | data won't be lost if I forget to save it                                                                                          |
-| `* *`    | salesperson          | delete multiple contacts                                           | ensure that PDPA retention limitation is adhered to                                                                                |
-| `* *`    | salesperson team IC  | export and share the contacts I have with others easily            | don't need my team to use each others' accounts                                                                                    |
-| `* *`    | salesperson team IC  | import contacts shared by others                                   | quickly add contacts provided by my team                                                                                           |
-| `* *`    | salesperson          | add labels to contacts                                             | categorise them for filtering                                                                                                      |
-| `* *`    | salesperson          | filter by labels                                                   | see all clients of each label                                                                                                      |
-| `* *`    | salesperson          | set a status for each contact                                      | track which contacts have been contacted, accepted, rejected, etc.                                                                 |
-| `* *`    | salesperson          | filter by status                                                   | see all clients of each status                                                                                                     |
-| `*`      | salesperson     | create templates that can be sent to a particular type of contact  | save time from writing up the same outreach materials over and over again                                                          |
-| `*`      | salesperson          | copy a preformatted template message                               | it is efficient                                                                                                                    |
-| `*`      | salesperson          | edit a preformatted message                                        | edit the message when needed                                                                                                       |
-| `*`      | salesperson          | tag each contact with multiple tags                                | better remember what preference the contact has                                                                                    |
-| `*`      | salesperson          | mark clients as rejected                                           | avoid wasting time by contacting them again                                                                                        |
-| `*`      | busy salesperson     | mark clients based on how receptive they are                       | focus my limited time on those likely to buy the product                                                                           |
+Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Novel (unlikely to have) - `*`
+
+| Priority | As a …               | I want to …                                                        | So that I can…                                                                 |
+| -------- | -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `* * *`  | salesperson          | add contacts                                                       | see their details in the future                                                |
+| `* * *`  | salesperson          | delete contacts                                                    | don't over clutter my contact book                                             |
+| `* *`    | salesperson          | delete multiple contacts                                           | ensure that PDPA retention limitation is adhered to                            |
+| `* * *`  | careless salesperson | edit contact details                                               | ensure the data is accurate                                                    |
+| `* * *`  | salesperson          | search by name                                                     | easily find contacts by name due to the large number of contacts               |
+| `* *`    | salesperson          | search by tags                                                     | easily find contacts by tags                                                   |
+| `* *`    | salesperson          | search by status                                                   | easily find contacts by their status                                           |
+| `* * *`  | salesperson          | list all contacts                                                  | know what contacts I have saved                                                |
+| `* * *`  | forgetful user       | have my edits autosaved                                            | data won't be lost if I forget to save it                                      |
+| `* *`    | salesperson team IC  | export and share the contacts I have with others easily            | don't need my team to use each others' accounts                                |
+| `* *`    | salesperson team IC  | import contacts shared by others                                   | quickly add contacts provided by my team                                       |
+| `* *`    | salesperson          | add tags to contacts                                               | categorise them for filtering                                                  |
+| `* *`    | salesperson          | add multiple tags to each contact                                  | better categorise contacts with different characteristics                      |
+| `* *`    | salesperson          | set a status for each contact                                      | track which contacts have been contacted, accepted, rejected, etc.             |
+| `*`      | salesperson          | create and edit email templates for different contact types        | save time from writing up the same outreach materials over and over again      |
+| `*`      | salesperson          | copy a template message to clipboard                               | quickly paste it into my email application                                     |
+| `*`      | salesperson          | mark clients as rejected                                           | avoid wasting time by contacting them again                                    |
+| `*`      | busy salesperson     | mark clients based on how receptive they are                       | focus my limited time on those likely to buy the product                       |
 
 ### Use cases
 
@@ -416,7 +498,7 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
    Use case ends.
 
 
-#### Use case: UC04 - Find contact by name
+#### Use case: UC04 - Find customers by various criteria
 
 **System:** Contact Management System (CMS)
 
@@ -424,20 +506,25 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
 
 **Guarantees:**
 
-* Search does not modify contact data.
+* Search does not modify customer data.
+* Tag view and status view panels update to reflect active filters.
 
 **MSS:**
 
-1. Salesperson chooses to find a specific contact by name.
-2. Salesperson enters the search command.
-3. CMS searches for contacts whose names contain the keyword(s) (case-insensitive).
-4. CMS displays the matching contacts.<br/>
+1. Salesperson chooses to find customers by one or more criteria (name, tag, status, phone, email).
+2. Salesperson enters the find command with specified search criteria.
+3. CMS searches for customers matching ALL specified criteria (AND logic between different types, OR logic within same type).
+4. CMS displays the matching customers and updates the tag view and status view panels to show active filters.<br/>
    Use case ends.
 
 **Extensions:**
 
-3a. No contacts match the search criteria.<br/>
-   3a1. CMS indicates that no contacts are found.<br/>
+2a. Invalid search criteria format provided.<br/>
+   2a1. CMS indicates invalid command format and shows usage instructions.<br/>
+   Use case ends.
+
+3a. No customers match the search criteria.<br/>
+   3a1. CMS displays an empty list while keeping the filters visible in tag view and status view to show search intent.<br/>
    Use case ends.
 
 
@@ -715,6 +802,29 @@ testers are expected to do more *exploratory* testing.
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
+
+### Finding customers
+
+1. Finding customers with various criteria such as name, tag, status, phone number and email!
+
+   1. Prerequisites: List all customers using the `list` command. Multiple customers in the list with different attributes.
+
+   1. Test case: `find n:John`<br>
+      Expected: Customers with "John" in their name are displayed. Tag view and status view remain unchanged.
+
+   1. Test case: `find s:Contacted`<br>
+      Expected: Customers with "Contacted" status are displayed. Status view panel updates to show "Contacted" as active filter.
+
+   1. Test case: `find t:friends s:Contacted`<br>
+      Expected: Customers with "friends" tag AND "Contacted" status are displayed. Both tag view and status view show active filters.
+
+   1. Test case: `find`<br>
+      Expected: Error message indicating invalid command format.
+
+   1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
+      Expected: Appropriate results or empty list!
+
+
 
 ### Saving data
 
