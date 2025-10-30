@@ -53,6 +53,16 @@ public class FindCommandParser implements Parser<FindCommand> {
             return new FindCommand(new NameContainsKeywordsPredicate(keywords));
         }
 
+        // Checks if tag is invalid
+        try {
+            for (String tag : map.getAllValues(PREFIX_TAG)) {
+                ParserUtil.parseTag(tag.trim());
+            }
+        } catch (ParseException e) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, e.getMessage()));
+        }
+
         // Prefixed mode: allow either or both prefixes, but preamble must be empty
         if (!preamble.isEmpty()) {
             throw new ParseException(
@@ -71,7 +81,6 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .stream()
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
-                .flatMap(s -> Arrays.stream(s.split("\\s+")))
                 .toList();
 
         // Get phone keyword

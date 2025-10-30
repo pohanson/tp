@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.PersonMatchesKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 
 public class FindCommandParserTest {
 
@@ -47,11 +48,36 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validTagPrefix_returnsFindCommand() {
+    public void parse_singleValidTagPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("big-spender", "colleague"), null, null,
+                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("colleague"), null, null, null));
+        assertParseSuccess(parser, " t:colleague", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_singleInvalidTagPrefix_throwsParseException() {
+        // Symbols are not allowed in tags
+        assertParseFailure(parser, " t:#friend",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, Tag.MESSAGE_CONSTRAINTS));
+
+        // No space allowed in tags
+        assertParseFailure(parser, " t:friend colleague",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, Tag.MESSAGE_CONSTRAINTS));
+    }
+
+    @Test
+    public void parse_manyValidTagPrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand = new FindCommand(
+                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("friend", "colleague"), null, null,
                         null));
-        assertParseSuccess(parser, " t:big-spender colleague", expectedFindCommand);
+        assertParseSuccess(parser, " t:friend t:colleague", expectedFindCommand);
+    }
+
+    public void parse_manyInvalidTagPrefix_throwsParseException() {
+        FindCommand expectedFindCommand = new FindCommand(
+                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("friend", "colleague"), null, null,
+                        null));
+        assertParseFailure(parser, " t:friend t:student colleague", FindCommand.MESSAGE_USAGE);
     }
 
     @Test
