@@ -332,6 +332,150 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
   * Pros: Simpler command set, encourages review before sending.
   * Cons: Less efficient for users who want to quickly copy without viewing.
 
+### Status Feature
+
+#### Implementation
+
+The status command feature allows users to set and track the contact status of each person in the address book. The status command is facilitated by the `SetStatusCommand` class which implements the `Command` interface. It allows users to mark contacts with predefined statuses. The only valid statuses are: "Uncontacted", "Contacted", "Rejected", "Accepted", "Unreachable", and "Busy".
+
+The implementation is supported by the following key components:
+
+* `SetStatusCommand` - Handles the execution of the status command.
+* `Status` - Represents the contact status of a person as an immutable value object.
+* `StatusValue` - An enum defining all possible status values, and is nested in the Status class.
+* `Person` - Contains a person's status along with other attributes.
+
+Below is the class diagram showing the relationship between these components:
+
+![Status Command Class Diagram](images/StatusCommandClassDiagram.png)
+
+The status command is executed through the following sequence of steps:
+
+![Status Command Sequence Diagram](images/StatusCommandSequenceDiagram.png)
+
+**Step-by-step flow:**
+
+1.  The user executes the command `status 1 Contacted`.
+2.  The `LogicManager` receives the command and passes it to the `AddressBookParser`.
+3.  The `AddressBookParser` identifies the command word as `status` and delegates the parsing of the arguments to `SetStatusCommandParser`.
+4.  `SetStatusCommandParser` parses the index `1` and the string "Contacted" to create a `SetStatusCommand` object.
+5.  The `SetStatusCommand` is returned to the `LogicManager`.
+6.  The `LogicManager` calls the `execute()` method of the `SetStatusCommand`.
+7.  The command retrieves the person at the specified index from the `Model`.
+8.  It then creates a new `Status` object from the input string.
+9.  A new `Person` object is created with the updated status.
+10. The `Model` is updated with the new `Person` object.
+11. A `CommandResult` is returned to the `LogicManager`, which is then displayed to the user.
+
+#### Design Considerations
+
+**Aspect: Status Value Implementation**
+
+* **Alternative 1 (current choice)**: Use enum-based Status class with predefined values
+   * Pros:
+      * Type-safe implementation prevents invalid status values.
+      * Clear indication of all available status options.
+      * Easy to validate input strings.
+   * Cons:
+      * Adding new status values requires code changes.
+      * Less flexible for user customisation.
+
+* **Alternative 2**: Use string-based status implementation
+   * Pros:
+      * Flexible - users could create custom status values.
+      * Easier to extend without code changes.
+    * Cons:
+      * Less type safety.
+      * More complex validation required.
+
+**Aspect: Default Status Behavior**
+
+* **Alternative 1 (current choice)**: Default to "Uncontacted" for empty/null input
+   * Pros:
+      * Consistent with the use case of tracking initial contact status
+      * Prevents null status values
+   * Cons:
+      * May not be intuitive that empty input has a default value
+
+* **Alternative 2**: Require explicit status input
+   * Pros:
+      * More explicit - users must state their intention
+      * Prevents accidental status changes
+   * Cons:
+      * More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
+
+### Export Command Feature
+
+#### Implementation
+
+The export command feature allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
+
+*   `ClipboardProvider` - For copying data to system clipboard.
+*   `FileSystemProvider` - For reading data from files.
+
+The implementation is supported by these components:
+
+*   `SystemClipboardProvider` - Concrete implementation for clipboard operations.
+*   `SystemFileSystemProvider` - Concrete implementation for file system operations.
+*   `JsonAddressBookUtil` - Handles JSON data conversion.
+
+Below is the class diagram for the export command:
+
+![Export Command Class Diagram](images/ExportCommandClassDiagram.png)
+
+The sequence diagram below shows the execution flow of the export command:
+
+![Export Command Sequence Diagram](images/ExportCommandSequenceDiagram.png)
+
+The typical flow of operations is:
+
+1.  User executes the `export` command.
+2.  `LogicManager` calls `AddressBookParser` which creates an `ExportCommand`.
+3.  The `execute()` method of `ExportCommand` is called.
+4.  The command gets the address book file path from the `Model`.
+5.  It uses the `FileSystemProvider` to read the content of the address book file.
+6.  The content is validated to ensure it is a valid JSON representation of an address book using `JsonAddressBookUtil`.
+7.  The content is then copied to the system clipboard using the `ClipboardProvider`.
+8.  A `CommandResult` is returned and displayed to the user.
+
+#### Design Considerations
+
+**Aspect: Export Format**
+
+* **Alternative 1 (current choice)**: Use JSON format
+   * Pros:
+      * Standard format with wide tool support
+      * Human-readable
+      * Preserves data structure
+   * Cons:
+      * Larger size compared to binary formats, might be too large for some systems' clipboard to handle
+      * May expose sensitive data in readable form
+
+* **Alternative 2**: Use binary format
+   * Pros:
+      * More compact
+      * Data not human-readable (better for sensitive information)
+   * Cons:
+      * Requires special tools to read/edit
+      * Less interoperable with other systems
+
+**Aspect: Export Destination**
+
+* **Alternative 1 (current choice)**: Export contacts directly to clipboard
+   * Pros:
+      * Convenient for both backup and sharing
+      * Easier for salespeople to use, since they may not be familiar with how to locate save files
+   * Cons:
+      * More complex implementation
+      * More code to maintain
+
+* **Alternative 2**: Direct user to storage file
+   * Pros:
+      * Simpler implementation
+   * Cons:
+      * Less convenient for quick sharing
+      * Requires file system access and understanding
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
