@@ -1,0 +1,44 @@
+@startuml
+!include style.puml
+
+skinparam ClassFontColor #000000
+skinparam ClassBorderColor #000000
+skinparam ClassBackgroundColor #FFFFAA
+
+title After 'template s:CONTACTED' - Template Opened in Editor
+
+package "Model" <<Rectangle>> {
+    class TemplateViewState {
+        status: CONTACTED
+        content: "Dear valued customer,\n..."
+    }
+}
+
+package "UI" <<Rectangle>> {
+    class TemplateViewPanel {
+        Displaying template editor
+        with CONTACTED template
+    }
+}
+
+package "Storage" <<Rectangle>> {
+    class "data/" <<folder>> {
+        file "contactedTemplate.txt" #90EE90
+        file "rejectedTemplate.txt"
+        file "acceptedTemplate.txt"
+        file "unreachableTemplate.txt"
+        file "busyTemplate.txt"
+        file "uncontactedTemplate.txt"
+    }
+}
+
+TemplateViewState -down-> TemplateViewPanel : observes
+TemplateViewPanel -down-> "contactedTemplate.txt" : read from
+
+note right of TemplateViewState
+  Template for CONTACTED status
+  is now loaded and displayed.
+  User can edit in the UI.
+end note
+
+@enduml

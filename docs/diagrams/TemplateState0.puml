@@ -1,0 +1,31 @@
+@startuml
+!include style.puml
+
+skinparam ClassFontColor #000000
+skinparam ClassBorderColor #000000
+skinparam ClassBackgroundColor #FFFFAA
+
+title Initial State - No Template Being Viewed
+
+package "Model" <<Rectangle>> {
+    class TemplateViewState <<null>> #AAAAAA
+}
+
+package "Storage" <<Rectangle>> {
+    class "data/" <<folder>> {
+        file "contactedTemplate.txt"
+        file "rejectedTemplate.txt"
+        file "acceptedTemplate.txt"
+        file "unreachableTemplate.txt"
+        file "busyTemplate.txt"
+        file "uncontactedTemplate.txt"
+    }
+}
+
+note right of TemplateViewState
+  No template is currently
+  being viewed or edited.
+  TemplateViewState = null
+end note
+
+@enduml

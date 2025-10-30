@@ -45,7 +45,7 @@ ModelManager -down-> "1" TagsViewState
 ModelManager -down-> "1" TemplateViewState
 
 AddressBook *--> "1" UniquePersonList
-UniquePersonList -right-> "~* all" Person
+UniquePersonList -right-> "~*" Person
 Person -left-> Status
 Person *-down-> Name
 Person *-down-> Phone
