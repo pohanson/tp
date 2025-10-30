@@ -22,6 +22,8 @@ import seedu.address.model.person.PersonMatchesKeywordsPredicate;
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
+    private static final String MESSAGE_INVALID_STATUS_DUPLICATE = "Only one status filter is allowed at a time!";
+
     /**
      * Parses the given {@code String} of arguments
      *
@@ -57,6 +59,13 @@ public class FindCommandParser implements Parser<FindCommand> {
         if (!preamble.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        // Verify that status prefix is not duplicated
+        try {
+            map.verifyNoDuplicatePrefixesFor(PREFIX_STATUS);
+        } catch (ParseException e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_STATUS_DUPLICATE, FindCommand.MESSAGE_USAGE));
         }
 
         // Get name keywords
