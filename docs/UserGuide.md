@@ -32,7 +32,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    - `delete 3` : Deletes the 3rd contact shown in the current list.
 
-   - `clear` : Deletes all contacts.
+   * `delete 1 2 3` : Deletes the 1st, 2nd, and 3rd contacts shown in the current list.
+   
+   * `template s:Contacted` : Opens the email template editor for contacts with "Contacted" status.
+
+   * `clear` : Deletes all contacts.
 
    - `exit` : Exits the app.
 
@@ -76,16 +80,15 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​`
+Format: `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG] [s:STATUS]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
+A person can have any number of tags (including 0), but only 1 status (default: "Uncontacted")
 </div>
 
 Examples:
-
-- `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01`
-- `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal`
+* `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01 s:Busy`
+* `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal`
 
 ### Listing all persons : `list`
 
@@ -93,20 +96,40 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
+### Changing a person's status: `status`
+
+Sets a person's status in the address book.
+
+Format: `status INDEX [STATUS]`
+
+* Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​ This field is mandatory.
+* Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
+* The status input is case-insensitive.
+
+Examples:
+
+* `status 12 Contacted`
+* `status 12 Rejected`
+* `status 12 Accepted`
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`
+Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [t:TAG] [s:STATUS] …​`
 
-- Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-- At least one of the optional fields must be provided.
-- Existing values will be updated to the input values.
-- When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-- You can remove all the person’s tags by typing `t:` without
-  specifying any tags after it.
+* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+* When editing status, the existing status of the person will be removed and replaced with the new one specified.
+* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
+* You can remove all the person’s tags by typing `t:` without
+    specifying any tags after it.
 
 Examples:
+*  `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
 - `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 - `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
@@ -199,18 +222,79 @@ When you use `find t:friends s:Contacted`, the Tag view will highlight "friends"
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes one or more persons from the address book.
 
-Format: `delete INDEX`
+Format: `delete INDEX [MORE_INDICES]...`
 
-- Deletes the person at the specified `INDEX`.
-- The index refers to the index number shown in the displayed person list.
-- The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* Multiple indices can be specified to delete multiple persons at once.
+* Indices can be provided in any order.
 
 Examples:
+* `list` followed by `delete 2` deletes the 2nd person in the address book.
+* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
+* `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
 
-- `list` followed by `delete 2` deletes the 2nd person in the address book.
-- `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+### Managing email templates :
+
+Manages email templates for different contact statuses. You can open, edit, save, and copy templates to streamline your email communications.
+
+#### Opening a template for editing : `template s:STATUS`
+
+Opens the template editor for a specific contact status.
+
+Format: `template s:STATUS`
+
+* Opens the template editor window for the specified `STATUS`.
+* `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
+* Status is case-insensitive (e.g., `contacted`, `CONTACTED`, `Contacted` all work).
+* The template editor allows you to view and edit the email template.
+* Changes are not saved automatically - use `template save` to save your changes.
+
+Examples:
+* `template s:Contacted` opens the template editor for the "Contacted" status.
+* `template s:rejected` opens the template editor for the "Rejected" status.
+* `template s:BUSY` opens the template editor for the "Busy" status.
+
+#### Saving the current template : `template save`
+
+Saves the currently open template.
+
+Format: `template save`
+
+* Saves any changes made to the template currently displayed in the template editor.
+* A template must be open (using `template s:STATUS`) before you can save.
+* If no template is currently open, an error message will be shown.
+
+Examples:
+* After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
+
+#### Copying a template to clipboard : `template copy s:STATUS`
+
+Copies the content of a template to your clipboard without opening the editor.
+
+Format: `template copy s:STATUS`
+
+* Copies the entire template content for the specified `STATUS` to your clipboard.
+* `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
+* Status is case-insensitive.
+* The template is copied as-is from storage - you can then paste it into your email client.
+* Does not open the template editor.
+
+Examples:
+* `template copy s:Contacted` copies the "Contacted" template to your clipboard.
+* `template copy s:unreachable` copies the "Unreachable" template to your clipboard.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `template copy` for quick access to templates when you need to send emails, and use `template s:STATUS` followed by `template save` when you need to update your templates.
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:**
+Templates are stored as text files in the `templates` folder in your application directory. Each status has its own template file.
+</div>
 
 ### Clearing all entries : `clear`
 
@@ -259,12 +343,17 @@ _Details coming soon ..._
 
 ## Command summary
 
-| Action     | Format, Examples                                                                                                                                                      |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add**    | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague` |
-| **Clear**  | `clear`                                                                                                                                                               |
-| **Delete** | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                   |
-| **Edit**   | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`                                           |
-| **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                            |
-| **List**   | `list`                                                                                                                                                                |
-| **Help**   | `help`                                                                                                                                                                |
+Action | Format, Examples
+--------|------------------
+**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
+**Clear** | `clear`
+**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
+**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
+**Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
+**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**List** | `list`
+**Help** | `help`
+**Template (Open)** | `template s:STATUS`<br> e.g., `template s:Contacted`
+**Template (Save)** | `template save`
+**Template (Copy)** | `template copy s:STATUS`<br> e.g., `template copy s:Rejected`
+**Exit** | `exit`
