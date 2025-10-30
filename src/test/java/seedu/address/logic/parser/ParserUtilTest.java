@@ -22,7 +22,7 @@ import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
+    private static final String INVALID_PHONE = "65+1234";
     private static final String INVALID_ADDRESS = """
             12345678901234567890123456789012345678901234567890123456789012345678901234567890
             12345678901234567890123456789012345678901234567890123456789012345678901234567890
