@@ -150,7 +150,7 @@ Examples:
 * `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
 * `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
 
-### Managing email templates : `template`
+### Managing email templates :
 
 Manages email templates for different contact statuses. You can open, edit, save, and copy templates to streamline your email communications.
 
