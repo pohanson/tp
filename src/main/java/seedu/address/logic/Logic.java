@@ -78,6 +78,19 @@ public interface Logic {
     ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty();
 
     /**
+     * Returns the current template view state.
+     * Returns null if no template is currently being viewed/edited.
+     */
+    TemplateViewState getTemplateViewState();
+
+    /**
+     * Sets the current template view state.
+     *
+     * @param state The new template view state, or null to exit template view mode.
+     */
+    void setTemplateViewState(TemplateViewState state);
+
+    /**
      * Returns the Model.
      */
     Model getModel();

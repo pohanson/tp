@@ -231,12 +231,14 @@ Format: `delete INDEX [MORE_INDICES]...`
 * The index **must be a positive integer** 1, 2, 3, …​
 * Multiple indices can be specified to delete multiple persons at once.
 * Indices can be provided in any order.
+* **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
 * `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
+* `delete 2 99` (when only 2 persons exist) will fail with error message "Invalid index(es) detected: 99" and no deletions will occur.
 
 ### Managing email templates :
 

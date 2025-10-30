@@ -129,4 +129,47 @@ public class ModelManagerTest {
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
     }
+
+    @Test
+    public void getTemplateViewState_initiallyNull() {
+        assertEquals(null, modelManager.getTemplateViewState());
+    }
+
+    @Test
+    public void setTemplateViewState_validState_setsState() {
+        TemplateViewState state = new TemplateViewState(seedu.address.model.person.Status.CONTACTED, "Test content");
+        modelManager.setTemplateViewState(state);
+        assertEquals(state, modelManager.getTemplateViewState());
+    }
+
+    @Test
+    public void setTemplateViewState_nullState_setsNull() {
+        // First set a state
+        TemplateViewState state = new TemplateViewState(seedu.address.model.person.Status.CONTACTED, "Test content");
+        modelManager.setTemplateViewState(state);
+
+        // Then set to null
+        modelManager.setTemplateViewState(null);
+        assertEquals(null, modelManager.getTemplateViewState());
+    }
+
+    @Test
+    public void getTemplateViewStateProperty_returnsCorrectProperty() {
+        TemplateViewState state = new TemplateViewState(seedu.address.model.person.Status.CONTACTED, "Test content");
+        modelManager.setTemplateViewState(state);
+
+        assertEquals(state, modelManager.getTemplateViewStateProperty().getValue());
+    }
+
+    @Test
+    public void setTemplateViewState_updatesProperty() {
+        TemplateViewState state1 = new TemplateViewState(seedu.address.model.person.Status.CONTACTED, "Content 1");
+        TemplateViewState state2 = new TemplateViewState(seedu.address.model.person.Status.REJECTED, "Content 2");
+
+        modelManager.setTemplateViewState(state1);
+        assertEquals(state1, modelManager.getTemplateViewStateProperty().getValue());
+
+        modelManager.setTemplateViewState(state2);
+        assertEquals(state2, modelManager.getTemplateViewStateProperty().getValue());
+    }
 }

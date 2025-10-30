@@ -141,7 +141,7 @@ public class TemplateCommand extends Command {
      * @throws CommandException If no template is open or there's an error saving.
      */
     private CommandResult executeSave(Model model) throws CommandException {
-        TemplateViewState currentState = model.getTemplateViewStateProperty().getValue();
+        TemplateViewState currentState = model.getTemplateViewState();
 
         if (currentState == null) {
             throw new CommandException(MESSAGE_NO_TEMPLATE_TO_SAVE);

@@ -88,6 +88,61 @@ public class AddCommandTest {
         assertEquals(expected, addCommand.toString());
     }
 
+    @Test
+    public void execute_personWithTags_addSuccessful() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person personWithTags = new PersonBuilder().withTags("friend", "colleague").build();
+
+        CommandResult commandResult = new AddCommand(personWithTags).execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(personWithTags)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(personWithTags), modelStub.personsAdded);
+    }
+
+    @Test
+    public void execute_personWithStatus_addSuccessful() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person personWithStatus = new PersonBuilder().withStatus("Contacted").build();
+
+        CommandResult commandResult = new AddCommand(personWithStatus).execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(personWithStatus)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(personWithStatus), modelStub.personsAdded);
+    }
+
+    @Test
+    public void execute_personWithAllFields_addSuccessful() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person completePerson = new PersonBuilder()
+                .withName("Complete Person")
+                .withPhone("12345678")
+                .withEmail("complete@example.com")
+                .withAddress("123 Complete St")
+                .withTags("friend", "colleague")
+                .withStatus("Accepted")
+                .build();
+
+        CommandResult commandResult = new AddCommand(completePerson).execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(completePerson)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(completePerson), modelStub.personsAdded);
+    }
+
+    @Test
+    public void execute_multiplePersonsSequentially_addSuccessful() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person person1 = new PersonBuilder().withName("Person One").build();
+        Person person2 = new PersonBuilder().withName("Person Two").build();
+
+        new AddCommand(person1).execute(modelStub);
+        new AddCommand(person2).execute(modelStub);
+
+        assertEquals(Arrays.asList(person1, person2), modelStub.personsAdded);
+    }
+
     /**
      * A default model stub that have all of the methods failing.
      */
@@ -184,6 +239,11 @@ public class AddCommandTest {
 
         @Override
         public ReadOnlyObjectProperty<TemplateViewState> getTemplateViewStateProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public TemplateViewState getTemplateViewState() {
             throw new AssertionError("This method should not be called.");
         }
 
