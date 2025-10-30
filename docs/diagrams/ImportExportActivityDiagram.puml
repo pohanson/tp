@@ -1,0 +1,31 @@
+@startuml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+
+|Salesperson A (Export)|
+start
+:Execute **export** command;
+:Read address book from file;
+if () then ([valid JSON])
+    :Copy to clipboard;
+else ([invalid/missing])
+    :Show error message;
+    stop
+endif
+
+|Messaging App|
+:Salesperson A paste JSON data from clipboard and sends;
+:Salesperson B receives JSON data and copy to clipboard;
+
+|Salesperson B (Import)|
+:Execute **import** command;
+if () then ([valid])
+    :Replace and save address book;
+else ([empty/invalid])
+    :Show error message;
+    stop
+endif
+
+stop
+@enduml

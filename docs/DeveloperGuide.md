@@ -479,6 +479,46 @@ The typical flow of operations is:
    * Cons:
       * Less convenient for quick sharing
       * Requires file system access and understanding
+### Import/Export Feature
+
+#### Implementation
+
+The import/export feature enables salespersons to share address book data between team members via the system clipboard. This supports team collaboration workflows where managers distribute lead lists or team members share contact databases.
+
+The import/export mechanism is facilitated by `ImportCommand`, `ExportCommand`, and `ClipboardProvider`. It uses the following key components:
+
+* `ImportCommand` — Reads JSON from clipboard and replaces the current address book
+* `ExportCommand` — Copies the address book file content to clipboard
+* `ClipboardProvider` — Abstraction for clipboard operations (enables testing with mock clipboard)
+* `FileSystemProvider` — Abstraction for file system operations (enables testing without actual file I/O)
+* `JsonAddressBookUtil` — Utility for JSON serialization/deserialization
+* `ImportWindow` — UI window for previewing import data before confirming
+
+The following activity diagram illustrates the complete workflow of sharing contacts between team members via an external messaging application:
+
+![Import/Export Activity Diagram](images/ImportExportActivityDiagram.png)
+
+#### Design Considerations
+
+**Aspect: Clipboard vs file-based sharing**
+
+* **Alternative 1 (current choice):** Use system clipboard for data transfer.
+  * Pros: Quick and convenient. Works across different file systems and network drives. No file permissions issues. Platform-independent.
+  * Cons: Large address books might exceed clipboard limits. Data is not persisted if clipboard is cleared. However, we accept this as a trade-off because clipboard should not be used for persistence.
+
+* **Alternative 2:** Export/import via file selection dialog.
+  * Pros: Better for very large datasets. Persistent storage.
+  * Cons: Slower workflow. Requires file system navigation. Path/permission issues. Reliance on the operating system's implementation makes it hard to ensure that it would be bug-free, and violates the constraints.
+
+**Aspect: Import replaces vs merges**
+
+* **Alternative 1 (current choice):** Import replaces entire address book.
+  * Pros: Simple and predictable behavior. No duplicate handling needed. Clean state after import.
+  * Cons: Destructive operation - loses current data if not exported first. Since sharing of contact is done to allocate the salesperson their new assignment contacts, this behaviour is acceptable.
+
+* **Alternative 2:** Merge imported contacts with existing ones.
+  * Pros: Non-destructive. Allows incremental updates.
+  * Cons: Complex duplicate detection and resolution. Unclear user expectations for what is considered a conflict or a new entry.
 
 --------------------------------------------------------------------------------------------------------------------
 
