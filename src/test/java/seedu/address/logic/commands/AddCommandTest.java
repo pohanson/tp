@@ -188,6 +188,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public TemplateViewState getTemplateViewState() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void setTemplateViewState(TemplateViewState state) {
             throw new AssertionError("This method should not be called.");
         }

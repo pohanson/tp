@@ -71,13 +71,11 @@ public class DeleteCommand extends Command {
      */
     private void validateAllIndices(List<Person> personList) throws CommandException {
         List<Integer> invalidIndices = new ArrayList<>();
-        
         for (Index index : targetIndices) {
             if (index.getZeroBased() >= personList.size()) {
                 invalidIndices.add(index.getOneBased());
             }
         }
-        
         if (!invalidIndices.isEmpty()) {
             String invalidIndicesString = invalidIndices.stream()
                     .map(String::valueOf)
