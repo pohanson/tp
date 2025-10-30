@@ -109,6 +109,7 @@ public class ImportWindow extends UiPart<Stage> {
      */
     public void show() {
         logger.fine("Showing import window.");
+        jsonPreview.setText(DEFAULT_PREVIEW_TEXT);
         getRoot().show();
         getRoot().centerOnScreen();
     }
