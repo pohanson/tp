@@ -27,7 +27,10 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar OnlySales.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+   <p align="center">
+     <img src="images/Ui.png" alt="Main UI with sample data"><br>
+     <em>Main UI with sample data</em>
+   </p>
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
@@ -78,7 +81,10 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 
 Shows a message explaining how to access the help page.
 
-![help message](images/helpMessage.png)
+<p align="center">
+  <img src="images/helpMessage.png" alt="Help message window"><br>
+  <em>Help message window</em>
+  </p>
 
 **Format:** `help`
 
@@ -105,7 +111,10 @@ Person with the same phone number, is considered as duplicate and cannot be adde
 * `add n:John Doe p:98765432 e:johnd@example.com`
 * `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
 
-![Add Command Result](images/AddCommand.png)
+<p align="center">
+  <img src="images/AddCommand.png" alt="Add command result"><br>
+  <em>Add command result</em>
+  </p>
 
 ### Listing all persons : `list`
 
@@ -282,7 +291,10 @@ Deleting a contact is an irreversible process. Once deleted, the contact informa
 * `delete 2 99` (when only 2 persons exist) will fail with error message "Invalid index(es) detected: 99" and no deletions will occur.
 * `delete 1 1 3` will fail with error message "Duplicate indices were detected! Please ensure all indices are unique." and no deletions will occur.
 
-![Delete Example](images/deleteSample.png)
+<p align="center">
+  <img src="images/deleteSample.png" alt="Delete command example"><br>
+  <em>Delete command example</em>
+  </p>
 
 ### Managing email templates :
 
@@ -310,7 +322,10 @@ Opens the template editor for a specific contact status.
 * `template s:rejected` opens the template editor for the "Rejected" status.
 * `template s:BUSY` opens the template editor for the "Busy" status.
 
-![Status Template Example](images/statusTemplate.png)
+<p align="center">
+  <img src="images/statusTemplate.png" alt="Status template editor example"><br>
+  <em>Status template editor example</em>
+  </p>
 
 #### Saving the current template : `template save`
 
@@ -328,7 +343,10 @@ Saves the currently open template.
 * After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
 * If you clear all content and save, the default template will be restored.
 
-![Save Template Example](images/saveTemplate.png)
+<p align="center">
+  <img src="images/saveTemplate.png" alt="Save template example"><br>
+  <em>Save template example</em>
+  </p>
 
 #### Copying a template to clipboard : `template copy s:STATUS`
 
@@ -348,7 +366,10 @@ Copies the content of a template to your clipboard without opening the editor.
 * `template copy s:Contacted` copies the "Contacted" template to your clipboard.
 * `template copy s:unreachable` copies the "Unreachable" template to your clipboard.
 
-![Copy Template Example](images/copyTemplate.png)
+<p align="center">
+  <img src="images/copyTemplate.png" alt="Copy template example"><br>
+  <em>Copy template example</em>
+  </p>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use `template copy` for quick access to templates when you need to send emails, and use `template s:STATUS` followed by `template save` when you need to update your templates.
@@ -381,7 +402,10 @@ Import replaces your entire address book when data is valid. Make sure to export
 * Copy address book JSON data to clipboard, then run `import` to import all contacts.
 * Press `F7` to open the import preview window and review contacts before importing.
 
-![Import Contact Example](images/importContact.png)
+<p align="center">
+  <img src="images/importContact.png" alt="Import contact example"><br>
+  <em>Import contact example</em>
+  </p>
 
 ### Export contacts: `export`
 
